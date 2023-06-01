@@ -1,6 +1,5 @@
 #include "button.h"
 
-
 #define print Serial.println
 
 #define DataSensor1 A0
@@ -17,15 +16,8 @@
 
 button ButtonValve1(A6);  //Кнопка открыть
 button ButtonValve2(A7);  //Кнопка открыть
-
-
-
-bool Valve2State, SignalKitchen, SignalBathroom, CurrentStateKitchen;
-
 unsigned long Timer1;
-int Valve1State;
 int increment, i;
-
 #include "Control.h"
 control start;
 
@@ -38,7 +30,6 @@ void setup() {
   pinMode(DataSensor4, INPUT);
   pinMode(DataSensor5, INPUT);
   pinMode(DataSensor6, INPUT);
-
   pinMode(Valve1Open, OUTPUT);
   pinMode(Valve1Close, OUTPUT);
   pinMode(Valve2Open, OUTPUT);
@@ -49,11 +40,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   start.buttons();
   start.AutoKitchen();
+  start.AutoBathroom();
   start.Signals();
   //Serial.println(analogRead(A6));
 }
-
-
-
-
-
