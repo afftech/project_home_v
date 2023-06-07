@@ -7,15 +7,19 @@ bool SensorBathroomState = false;
 int ValveKitchen, ValveBathroom;
 class control {
 public:
-
+  void Voice() {
+    voice.process();
+  }
   void buttons() {
     if (ButtonValve1.click()) {
       switch (CurrentStateKitchen) {
         case 0:
           ValveKitchen = 1;
+          voice.CloseKitchen();
           break;
         case 1:
           ValveKitchen = 2;
+          voice.OpenKitchen();
           break;
       }
     }
@@ -23,9 +27,11 @@ public:
       switch (CurrentStateBathroom) {
         case 0:
           ValveBathroom = 1;
+          voice.CloseBathroom();
           break;
         case 1:
           ValveBathroom = 2;
+          voice.OpenBathroom();
           break;
       }
     }
@@ -87,7 +93,7 @@ public:
         OpenClose(0);
       }
     }
-    if (ValveKitchen == 2 && ValveKitchen != 1) {
+    if (ValveKitchen == 2 && ValveKitchen != 1) {  //открыть
       if (OpenClose(2)) {
         CurrentStateKitchen = 0;
         ValveKitchen = 0;
@@ -101,7 +107,7 @@ public:
   bool OpenClose(int y) {
     if (y == 1) {
       if (millis() - Timer1 >= 1000) {
-        print(increment);
+
         increment++;
         Timer1 = millis();
         if (increment >= 6) {
@@ -110,7 +116,6 @@ public:
           return true;
         } else {
           digitalWrite(Valve1Open, true);
-          voice.OpenKitchen();
           return false;
         }
       }

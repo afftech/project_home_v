@@ -62,5 +62,6 @@ void loop() {
   start.AutoKitchen();
   start.AutoBathroom();
   start.Signals();
+  start.Voice();
   //Serial.println(analogRead(A6));
 }
