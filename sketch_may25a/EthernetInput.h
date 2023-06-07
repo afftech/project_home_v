@@ -44,7 +44,6 @@ public:
     formattedDate = timeClient.getFormattedDate();
     int splitT = formattedDate.indexOf("T");
     dayStamp = formattedDate.substring(0, splitT);
-    Serial.println(dayStamp);
     return dayStamp;
   }
   String getTime() {

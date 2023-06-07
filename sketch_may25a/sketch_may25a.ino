@@ -1,11 +1,11 @@
 #include "EthernetInput.h"
 Time Time;
-uint32_t TimeInitEth;
+uint32_t TimeInitEth, TimeGetDate;
 bool ethState;
+bool MonthDay, statePrevention;
 
 
-
-#define print Serial.println
+//#define print Serial.println
 
 #define DataSensor1 A0
 #define DataSensor2 A1
@@ -23,8 +23,8 @@ bool ethState;
 button ButtonValve1(A6);  //Кнопка открыть
 button ButtonValve2(A7);  //Кнопка открыть
 
-unsigned long Timer1;
-int increment, i;
+
+int i;
 #include "Control.h"
 control start;
 
@@ -45,23 +45,58 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  /*if (!ethState) {
-    if (millis() - TimeInitEth >= 3000) {
-      if (!Time.Ethernetinit())
-        ethState = 1;
+  if (!ethState) {
+    // if (millis() - TimeInitEth >= 3000) {
+    if (!Time.Ethernetinit()) {
+      ethState = 1;
       Serial.println("ok");
-      delay(5000);
     }
+    // }
   }
-  if (ethState) {
-    Serial.println(Time.getDate());
-    Serial.println(Time.getTime());
-  }*/
-
+  Prevention();
   start.buttons();
   start.AutoKitchen();
   start.AutoBathroom();
   start.Signals();
   start.Voice();
   //Serial.println(analogRead(A6));
+}
+void Prevention() {
+  if (ethState) {
+    if (millis() - TimeGetDate >= 3000) {
+      TimeGetDate = millis();
+      String Split;
+      String formattedDate;
+      formattedDate = Time.getDate();
+      int splitT = formattedDate.indexOf("-");
+      Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
+      if (Split == "06-07") {
+        //Serial.println(Split);
+        MonthDay = true;
+      }
+      if (MonthDay) {
+        formattedDate = Time.getTime();
+        splitT = formattedDate.indexOf(":");
+        Split = formattedDate.substring(0, splitT);  //час
+        if (Split == "23") {
+          if (!statePrevention) {
+            //запуск профилактики
+            statePrevention = true;
+            Serial.println("12342313");  //выполнение профилактики
+          }
+        }
+      }
+      if (statePrevention) {
+        formattedDate = Time.getDate();
+        splitT = formattedDate.indexOf("-");
+        Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
+        Serial.println("Prevention ok");
+        if (Split != "06-07") {
+          statePrevention = false;
+          MonthDay = false;
+          Serial.println("!!!!!!");
+        }
+      }
+    }
+  }
 }
