@@ -1,4 +1,9 @@
-#include "button.h"
+#include "EthernetInput.h"
+Time Time;
+uint32_t TimeInitEth;
+bool ethState;
+
+
 
 #define print Serial.println
 
@@ -14,8 +19,10 @@
 #define Valve2Open 4
 #define Valve2Close 5
 
+#include "button.h"
 button ButtonValve1(A6);  //Кнопка открыть
 button ButtonValve2(A7);  //Кнопка открыть
+
 unsigned long Timer1;
 int increment, i;
 #include "Control.h"
@@ -38,6 +45,19 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  /*if (!ethState) {
+    if (millis() - TimeInitEth >= 3000) {
+      if (!Time.Ethernetinit())
+        ethState = 1;
+      Serial.println("ok");
+      delay(5000);
+    }
+  }
+  if (ethState) {
+    Serial.println(Time.getDate());
+    Serial.println(Time.getTime());
+  }*/
+
   start.buttons();
   start.AutoKitchen();
   start.AutoBathroom();

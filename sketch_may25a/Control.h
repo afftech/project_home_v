@@ -1,3 +1,5 @@
+#include "Voice.h"
+voice voice;
 bool Valve2State, SignalKitchen, CurrentStateKitchen,
   SignalBathroom, CurrentStateBathroom;
 bool SensorKitchenState = false;
@@ -108,6 +110,7 @@ public:
           return true;
         } else {
           digitalWrite(Valve1Open, true);
+          voice.OpenKitchen();
           return false;
         }
       }
