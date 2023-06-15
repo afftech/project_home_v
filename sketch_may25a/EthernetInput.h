@@ -1,4 +1,3 @@
-#include "HardwareSerial.h"
 #include <SPI.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>
@@ -40,7 +39,6 @@ public:
   }
   String getDate() {
     String dayStamp;
-    timeClient.update();
     formattedDate = timeClient.getFormattedDate();
     int splitT = formattedDate.indexOf("T");
     dayStamp = formattedDate.substring(0, splitT);
@@ -48,15 +46,22 @@ public:
   }
   String getTime() {
     String timeStamp;
-    timeClient.update();
     formattedDate = timeClient.getFormattedDate();
     int splitT = formattedDate.indexOf("T");
     timeStamp = formattedDate.substring(splitT + 1, formattedDate.length() - 1);
     return timeStamp;
   }
-  char getWeek() {
+  bool Update() {
     timeClient.update();
-    return daysOfTheWeek[timeClient.getDay()];
+  }
+  bool linkStatus() {
+    if (Ethernet.linkStatus() == LinkOFF) {
+      return false;
+    }
+    if (Ethernet.hardwareStatus() == EthernetNoHardware) {
+      return false;
+    }
+    return true;
   }
 private:
 };

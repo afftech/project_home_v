@@ -1,3 +1,4 @@
+#include "Server.h"
 #include "Voice.h"
 voice voice;
 bool Valve2State, SignalKitchen, CurrentStateKitchen,
@@ -6,12 +7,23 @@ bool SensorKitchenState = false;
 bool SensorBathroomState = false;
 int ValveKitchen, ValveBathroom;
 class control {
+
 public:
+  control(int sec) {
+    _sec = sec;
+  }
   void Voice() {
     voice.process();
   }
   void buttons() {
     if (ButtonValve1.click()) {
+      if (ValveKitchen != 0) {
+        digitalWrite(Valve1Open, false);
+        digitalWrite(Valve1Close, false);
+        CurrentStateKitchen = !CurrentStateKitchen;
+        increment = 0;
+      }
+      /*  */
       switch (CurrentStateKitchen) {
         case 0:
           ValveKitchen = 1;
@@ -22,9 +34,16 @@ public:
           voice.OpenKitchen();
           break;
       }
-    }
+    } 
     if (ButtonValve2.click()) {
+      if (ValveBathroom != 0) {
+        digitalWrite(Valve2Open, false);
+        digitalWrite(Valve2Close, false);
+        CurrentStateBathroom = !CurrentStateBathroom;
+        increment1 = 0;
+      }
       switch (CurrentStateBathroom) {
+        CurrentStateBathroom = !CurrentStateBathroom;
         case 0:
           ValveBathroom = 1;
           voice.CloseBathroom();
@@ -38,8 +57,9 @@ public:
   }
   void AutoBathroom() {
     if (SignalBathroom && ValveBathroom == 0 && CurrentStateBathroom != 1) {  //закрыть по датчику
-      SensorBathroomState = true;
-      voice.CloseBathroom();
+      if (voice.CloseBathroom()) {
+        SensorBathroomState = true;
+      }
     }
     if (SensorBathroomState) {
       if (OpenCloseBathroom(3)) {
@@ -68,8 +88,9 @@ public:
   }
   void AutoKitchen() {
     if (SignalKitchen && ValveKitchen == 0 && CurrentStateKitchen != 1) {  //закрыть по датчику
-      SensorKitchenState = true;
-      voice.CloseKitchen();
+      if (voice.CloseKitchen()) {
+        SensorKitchenState = true;
+      }
     }
     if (SensorKitchenState) {
       if (OpenClose(1)) {
@@ -102,7 +123,7 @@ public:
 
         increment++;
         Timer1 = millis();
-        if (increment >= 30) {
+        if (increment >= _sec) {
           digitalWrite(Valve1Open, false);
           increment = 0;
           return true;
@@ -117,7 +138,7 @@ public:
       if (millis() - Timer1 >= 1000) {
         Timer1 = millis();
         increment++;
-        if (increment >= 30) {
+        if (increment >= _sec) {
           digitalWrite(Valve1Close, false);
           increment = 0;
           return true;
@@ -138,7 +159,7 @@ public:
       if (millis() - Timer2 >= 1000) {
         Timer2 = millis();
         increment1++;
-        if (increment1 >= 30) {
+        if (increment1 >= _sec) {
           digitalWrite(Valve2Open, false);
           increment1 = 0;
           return true;
@@ -153,7 +174,7 @@ public:
       if (millis() - Timer2 >= 1000) {
         Timer2 = millis();
         increment1++;
-        if (increment1 >= 30) {
+        if (increment1 >= _sec) {
           digitalWrite(Valve2Close, false);
           increment1 = 0;
           return true;
@@ -170,18 +191,18 @@ public:
     }
   }
   void Signals() {
-    if (analogRead(DataSensor1) <= 200 || analogRead(DataSensor2) <= 200 || analogRead(DataSensor3) <= 200) {
+    if ((analogRead(DataSensor1) <= 200 || analogRead(DataSensor2) <= 200 || analogRead(DataSensor3) <= 200) && !SensorKitchenState) {
       SignalKitchen = 1;
     } else {
       SignalKitchen = 0;
     }
-    if (analogRead(DataSensor4) <= 200 || analogRead(DataSensor5) <= 200 || analogRead(DataSensor6) <= 200) {
+    if ((analogRead(DataSensor4) <= 200 || analogRead(DataSensor5) <= 200 || analogRead(DataSensor6) <= 200) && !SensorBathroomState) {
       SignalBathroom = 1;
     } else {
       SignalBathroom = 0;
     }
   }
 private:
-  int increment, increment1;
+  int increment, increment1, _sec;
   unsigned long Timer1, Timer2;
 };

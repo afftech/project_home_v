@@ -1,9 +1,11 @@
 #include "EthernetInput.h"
 Time Time;
 uint32_t TimeInitEth, TimeGetDate;
-bool ethState;
+bool ethState, error;
 bool MonthDay, statePrevention;
 
+String datePrevention1 = "06-10";  //месяц и день для проведения 1 обслуживания
+String datePrevention2 = "06-07";  //месяц и день для проведения 2 обслуживания
 
 //#define print Serial.println
 
@@ -20,13 +22,16 @@ bool MonthDay, statePrevention;
 #define Valve2Close 5
 
 #include "button.h"
-button ButtonValve1(A6);  //Кнопка открыть
-button ButtonValve2(A7);  //Кнопка открыть
+button ButtonValve1(A6, 6);  //Кнопка открыть/закрыть Kitchen, время ожидания
+button ButtonValve2(A7, 6);  //Кнопка открыть/закрыть Bathroom, время ожидания
 
 
-int i;
+uint32_t i;
+uint32_t T1;
+bool Attempt;
+
 #include "Control.h"
-control start;
+control start(30);  //длительность подачи питания на открытие или закрытия крана
 
 void setup() {
   Serial.begin(9600);
@@ -45,58 +50,92 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if (!ethState) {
-    // if (millis() - TimeInitEth >= 3000) {
+  if (!ethState && !error) {
     if (!Time.Ethernetinit()) {
       ethState = 1;
       Serial.println("ok");
+      Attempt = false;
+    } else {
+      Serial.println("Ethernetinit ERROR");
+      ethState = true;
+      error = true;
+      Attempt = false;
     }
-    // }
   }
-  Prevention();
-  start.buttons();
-  start.AutoKitchen();
-  start.AutoBathroom();
-  start.Signals();
-  start.Voice();
+
+  if (ethState) {
+    if (millis() - TimeGetDate >= 1000 && !error) {
+      TimeGetDate = millis();
+      if (!Time.linkStatus()) {
+        Serial.println("error = true");
+        error = true;
+      }
+      if (!error) {
+        Prevention();
+      }
+    }
+    if (error) {
+      if (timer() && !Attempt) {
+        ethState = false;
+        error = false;
+        Attempt == true;
+      }
+    }
+    start.buttons();
+    start.AutoKitchen();
+    start.AutoBathroom();
+    start.Signals();
+    start.Voice();
+  }
   //Serial.println(analogRead(A6));
 }
 void Prevention() {
-  if (ethState) {
-    if (millis() - TimeGetDate >= 3000) {
-      TimeGetDate = millis();
-      String Split;
-      String formattedDate;
-      formattedDate = Time.getDate();
-      int splitT = formattedDate.indexOf("-");
-      Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
-      if (Split == "06-07") {
-        //Serial.println(Split);
-        MonthDay = true;
-      }
-      if (MonthDay) {
-        formattedDate = Time.getTime();
-        splitT = formattedDate.indexOf(":");
-        Split = formattedDate.substring(0, splitT);  //час
-        if (Split == "23") {
-          if (!statePrevention) {
-            //запуск профилактики
-            statePrevention = true;
-            Serial.println("12342313");  //выполнение профилактики
-          }
-        }
-      }
-      if (statePrevention) {
-        formattedDate = Time.getDate();
-        splitT = formattedDate.indexOf("-");
-        Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
-        Serial.println("Prevention ok");
-        if (Split != "06-07") {
-          statePrevention = false;
-          MonthDay = false;
-          Serial.println("!!!!!!");
-        }
+  Time.Update();
+  TimeGetDate = millis();
+  String Split;
+  String formattedDate;
+  formattedDate = Time.getDate();
+  Serial.println(formattedDate);
+  int splitT = formattedDate.indexOf("-");
+  Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
+  if ((Split == datePrevention1) || (Split == datePrevention2)) {
+    //Serial.println(Split);
+    MonthDay = true;
+  }
+  if (MonthDay) {
+    formattedDate = Time.getTime();
+    splitT = formattedDate.indexOf(":");
+    Split = formattedDate.substring(0, splitT);  //час
+    if (Split == "12") {
+      if (!statePrevention) {
+        //запуск профилактики
+        statePrevention = true;
+        Serial.println("12342313");  //выполнение профилактики
       }
     }
   }
+  if (statePrevention) {
+    formattedDate = Time.getDate();
+    splitT = formattedDate.indexOf("-");
+    Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
+    Serial.println("Prevention ok");
+    if (Split != datePrevention1) {
+      statePrevention = false;
+      MonthDay = false;
+      Serial.println("!!!!!!");
+    }
+  }
+}
+bool timer() {
+  if (millis() - T1 >= 1000) {
+    T1 = millis();
+    i++;
+    Serial.println("Attempt to start the network via 60 dey or 43200 sec.");
+    Serial.println(i);
+    if (i >= 7200) {
+      i = 0;
+      return true;
+    }
+  }
+  return false;
 }
