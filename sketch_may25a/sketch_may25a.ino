@@ -4,6 +4,8 @@ uint32_t TimeInitEth, TimeGetDate;
 bool ethState, error;
 bool MonthDay, statePrevention;
 
+#include "OnPrevention.h"
+onPrevention onPrevention(10);     //10 секунд выдержка комманды открыть и закрыть
 String datePrevention1 = "06-10";  //месяц и день для проведения 1 обслуживания
 String datePrevention2 = "06-07";  //месяц и день для проведения 2 обслуживания
 
@@ -72,6 +74,7 @@ void loop() {
       }
       if (!error) {
         Prevention();
+        onPrevention.run();
       }
     }
     if (error) {
@@ -95,7 +98,7 @@ void Prevention() {
   String Split;
   String formattedDate;
   formattedDate = Time.getDate();
-  Serial.println(formattedDate);
+  //Serial.println(formattedDate);
   int splitT = formattedDate.indexOf("-");
   Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
   if ((Split == datePrevention1) || (Split == datePrevention2)) {
@@ -107,14 +110,14 @@ void Prevention() {
     splitT = formattedDate.indexOf(":");
     Split = formattedDate.substring(0, splitT);  //час
     if (Split == "12") {
-      if (!statePrevention) {
-        //запуск профилактики
+      if (!statePrevention) {//запуск профилактики 
+        onPrevention.start();
         statePrevention = true;
         Serial.println("12342313");  //выполнение профилактики
       }
     }
   }
-  if (statePrevention) {
+  if (statePrevention) { //Обнуляем цикл профилактики
     formattedDate = Time.getDate();
     splitT = formattedDate.indexOf("-");
     Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
