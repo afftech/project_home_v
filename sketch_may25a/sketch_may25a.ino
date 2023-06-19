@@ -1,15 +1,4 @@
 #include "EthernetInput.h"
-Time Time;
-uint32_t TimeInitEth, TimeGetDate;
-bool ethState, error;
-bool MonthDay, statePrevention;
-
-#include "OnPrevention.h"
-onPrevention onPrevention(10);     //10 секунд выдержка комманды открыть и закрыть
-String datePrevention1 = "06-10";  //месяц и день для проведения 1 обслуживания
-String datePrevention2 = "06-07";  //месяц и день для проведения 2 обслуживания
-
-//#define print Serial.println
 
 #define DataSensor1 A0
 #define DataSensor2 A1
@@ -23,9 +12,19 @@ String datePrevention2 = "06-07";  //месяц и день для провед�
 #define Valve2Open 4
 #define Valve2Close 5
 
+Time Time;
+uint32_t TimeInitEth, TimeGetDate;
+bool ethState, error;
+bool MonthDay, statePrevention;
+
+#include "OnPrevention.h"
+onPrevention onPrevention(30);     //10 секунд выдержка комманды открыть и закрыть
+String datePrevention1 = "06-18";  //месяц и день для проведения 1 обслуживания
+String datePrevention2 = "06-07";  //месяц и день для проведения 2 обслуживания
+
 #include "button.h"
-button ButtonValve1(A6, 6);  //Кнопка открыть/закрыть Kitchen, время ожидания
-button ButtonValve2(A7, 6);  //Кнопка открыть/закрыть Bathroom, время ожидания
+button ButtonValve1(A6, 6);  //Кнопка открыть/закрыть Kitchen, время удерживания
+button ButtonValve2(A7, 6);  //Кнопка открыть/закрыть Bathroom, время удерживания
 
 
 uint32_t i;
@@ -109,7 +108,7 @@ void Prevention() {
     formattedDate = Time.getTime();
     splitT = formattedDate.indexOf(":");
     Split = formattedDate.substring(0, splitT);  //час
-    if (Split == "12") {
+    if (Split == "15") {
       if (!statePrevention) {//запуск профилактики 
         onPrevention.start();
         statePrevention = true;
@@ -122,7 +121,7 @@ void Prevention() {
     splitT = formattedDate.indexOf("-");
     Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
     Serial.println("Prevention ok");
-    if (Split != datePrevention1) {
+    if ((Split != datePrevention1)&&(Split != datePrevention2)) {
       statePrevention = false;
       MonthDay = false;
       Serial.println("!!!!!!");
@@ -133,7 +132,7 @@ bool timer() {
   if (millis() - T1 >= 1000) {
     T1 = millis();
     i++;
-    Serial.println("Attempt to start the network via 60 dey or 43200 sec.");
+    Serial.println("Attempt to start the network via 7200 sec.");
     Serial.println(i);
     if (i >= 7200) {
       i = 0;

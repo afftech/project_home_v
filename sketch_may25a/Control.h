@@ -62,7 +62,7 @@ public:
       }
     }
     if (SensorBathroomState) {
-      if (OpenCloseBathroom(3)) {
+      if (OpenCloseBathroom(4)) {
         CurrentStateBathroom = 1;
         ValveBathroom = 0;
         SignalBathroom = 0;
@@ -71,7 +71,7 @@ public:
       }
     }
     if (ValveBathroom == 1 && ValveBathroom != 2) {  //закрыть по кнопке
-      if (OpenCloseBathroom(3)) {
+      if (OpenCloseBathroom(4)) {
         CurrentStateBathroom = 1;
         ValveBathroom = 0;
         SignalBathroom = 0;
@@ -79,7 +79,7 @@ public:
       }
     }
     if (ValveBathroom == 2 && ValveBathroom != 1) {
-      if (OpenCloseBathroom(4)) {
+      if (OpenCloseBathroom(3)) {
         CurrentStateBathroom = 0;
         ValveBathroom = 0;
         OpenCloseBathroom(0);
@@ -93,7 +93,7 @@ public:
       }
     }
     if (SensorKitchenState) {
-      if (OpenClose(1)) {
+      if (OpenClose(2)) {
         CurrentStateKitchen = 1;
         ValveKitchen = 0;
         SignalKitchen = 0;
@@ -102,7 +102,7 @@ public:
       }
     }
     if (ValveKitchen == 1 && ValveKitchen != 2) {  //закрыть по кнопке
-      if (OpenClose(1)) {
+      if (OpenClose(2)) {
         CurrentStateKitchen = 1;
         ValveKitchen = 0;
         SignalKitchen = 0;
@@ -110,7 +110,7 @@ public:
       }
     }
     if (ValveKitchen == 2 && ValveKitchen != 1) {  //открыть
-      if (OpenClose(2)) {
+      if (OpenClose(1)) {
         CurrentStateKitchen = 0;
         ValveKitchen = 0;
         OpenClose(0);
