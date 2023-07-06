@@ -1,4 +1,4 @@
-#include "EthernetInput.h"
+#include "  .h"
 
 #define DataSensor1 A0
 #define DataSensor2 A1
@@ -20,7 +20,7 @@ bool MonthDay, statePrevention;
 #include "OnPrevention.h"
 onPrevention onPrevention(30);     //10 секунд выдержка комманды открыть и закрыть
 String datePrevention1 = "06-18";  //месяц и день для проведения 1 обслуживания
-String datePrevention2 = "06-07";  //месяц и день для проведения 2 обслуживания
+String datePrevention2 = "06-07";  //месяц и день для проведения 2 обслуживания 
 
 #include "button.h"
 button ButtonValve1(A6, 6);  //Кнопка открыть/закрыть Kitchen, время удерживания

@@ -1,4 +1,6 @@
-#include "Arduino.h"
+
+
+
 class ButtonGroup {
 public:
   ButtonGroup(char pin, int BtnMode1, int BtnMode2, int expectation, int condition1, int condition2, int condition3) {
