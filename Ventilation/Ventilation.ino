@@ -19,6 +19,10 @@
 #define FanKitchen3 4
 #define FanKitchen4 5
 
+int RangeHood_Slave[3][3] = { { 0, 0, 0 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+                              { 0, 0, 0 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+                              { 0, 0, 0 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+
 #include "Control.h"
 Control control;
 
@@ -28,9 +32,7 @@ ButtonGroup BtnGroup2(RangeHood3_KitchenBtn, 0, 1, 1023, 816, 463, 415);
 ButtonGroup BtnGroup4(BathroomBtn_Light, 0, 1, 1023, 817, 463, 415);
 ButtonGroup BtnGroup3(ToiletBtn_Light, 0, 1, 1023, 816, 460, 413);
 
-int RangeHood_Slave[3][3] = { { 0, 0, 0 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
-                              { 0, 0, 0 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
-                              { 0, 0, 0 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+
 
 int SpeedBathroom[] = { 0, 0 };   //Это массив скорости ванной. например {2,4} значит что после первого нажатия включится 2, после второго 4.
 int Bathroom_Slave[] = { 0, 0 };  //Задать скорость вентиляторов в {Кухня, туалет} когда вентилятор в ванне включен;
@@ -50,13 +52,14 @@ void loop() {
   BtnGroup3.check();
   BtnGroup4.check();
   control.RangeHood(BtnGroup1.click1(), BtnGroup1.click2(), BtnGroup2.click1());
-  if (BtnGroup2.click2) {
+
+  if (BtnGroup2.click2()) {
     control.KitchenFan();
   }
-  if (BtnGroup2.click2) {
+  if (BtnGroup2.click2()) {
     control.BathroomFan();
   }
-  if (BtnGroup3.click2) {
+  if (BtnGroup3.click2()) {
     control.ToileFan();
   }
   // Serial.println(analogRead(BathroomBtn_Light));

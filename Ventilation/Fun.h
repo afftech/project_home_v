@@ -13,7 +13,8 @@ public:
     pinMode(pinSpeed3, OUTPUT);
     pinMode(pinSpeed4, OUTPUT);
   }
-  int Speed(int speed, bool light) {
+  int Speed(int speed) {
+    bool light;
     if (speed != OldSpeed) {
       digitalWrite(_pinSpeed1, false);
       digitalWrite(_pinSpeed2, false);

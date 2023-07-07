@@ -5,7 +5,7 @@ Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 5, 10);
 class Control {
 public:
   void RangeHood(bool RangeHoodspeed1, bool RangeHoodspeed2, bool RangeHoodspeed3) {
-    if (!RangeHoodspeed1 && !RangeHoodspeed2, !RangeHoodspeed3) {
+    if (!RangeHoodspeed1 && !RangeHoodspeed2 && !RangeHoodspeed3) {
       Flag1 = false;
       Flag2 = false;
       Flag3 = false;
@@ -28,7 +28,7 @@ public:
       KitchenCurrentSpeed = RangeHood_Slave[1][0];
       FanBathroom.Speed(RangeHood_Slave[1][1]);
       BathroomCurrentSpeed = RangeHood_Slave[1][1];
-      FanToilet.Speed(RangeHood_Slave[1][2];);
+      FanToilet.Speed(RangeHood_Slave[1][2]);
       ToileCurrentSpeed = RangeHood_Slave[1][2];
       Flag_rangeHoodspeed = 2;
       Flag1 = false;
