@@ -51,6 +51,7 @@ void loop() {
   BtnGroup2.check();
   BtnGroup3.check();
   BtnGroup4.check();
+  
   control.RangeHood(BtnGroup1.click1(), BtnGroup1.click2(), BtnGroup2.click1());
 
   if (BtnGroup2.click2()) {
