@@ -1,3 +1,4 @@
+#include "HardwareSerial.h"
 
 class Fun {
 public:
@@ -15,6 +16,8 @@ public:
   }
   int Speed(int speed) {
     bool light;
+    Serial.println(speed);
+    Serial.println(OldSpeed);
     if (speed != OldSpeed) {
       digitalWrite(_pinSpeed1, false);
       digitalWrite(_pinSpeed2, false);
@@ -25,43 +28,40 @@ public:
     if (speed != 0) {  //сбрасываем таймер
       i = 0;
     }
-    if (millis() - Timer1 >= 200) {
-      if (speed == 1) {
-        digitalWrite(_pinSpeed1, true);
-        OldSpeed = speed;
-        return speed;
-      } else if (speed == 2) {
-        digitalWrite(_pinSpeed2, true);
-        OldSpeed = speed;
-        return speed;
-      } else if (speed == 3) {
-        digitalWrite(_pinSpeed3, true);
-        OldSpeed = speed;
-        return speed;
-      } else if (speed == 4) {
-        digitalWrite(_pinSpeed4, true);
-        OldSpeed = speed;
-        return speed;
-      } else if (speed == 0) {
-        if (light) {
-          if (timer_switch(_Time1)) {  // если есть свет
-            digitalWrite(_pinSpeed1, false);
-            digitalWrite(_pinSpeed2, false);
-            digitalWrite(_pinSpeed3, false);
-            digitalWrite(_pinSpeed4, false);
-          }
-        } else {
-          if (timer_switch(_Time2)) {
-            digitalWrite(_pinSpeed1, false);
-            digitalWrite(_pinSpeed2, false);
-            digitalWrite(_pinSpeed3, false);
-            digitalWrite(_pinSpeed4, false);
-          }
+    if (speed == 1) {
+      digitalWrite(_pinSpeed1, true);
+      OldSpeed = speed;
+      return speed;
+    } else if (speed == 2) {
+      digitalWrite(_pinSpeed2, true);
+      OldSpeed = speed;
+      return speed;
+    } else if (speed == 3) {
+      digitalWrite(_pinSpeed3, true);
+      OldSpeed = speed;
+      return speed;
+    } else if (speed == 4) {
+      digitalWrite(_pinSpeed4, true);
+      OldSpeed = speed;
+      return speed;
+    } else if (speed == 0) {
+      if (light) {
+        if (timer_switch(_Time1)) {  // если есть свет
+          digitalWrite(_pinSpeed1, false);
+          digitalWrite(_pinSpeed2, false);
+          digitalWrite(_pinSpeed3, false);
+          digitalWrite(_pinSpeed4, false);
         }
-
-        OldSpeed = speed;
-        return speed;
+      } else {
+        if (timer_switch(_Time2)) {
+          digitalWrite(_pinSpeed1, false);
+          digitalWrite(_pinSpeed2, false);
+          digitalWrite(_pinSpeed3, false);
+          digitalWrite(_pinSpeed4, false);
+        }
       }
+      OldSpeed = speed;
+      return speed;
     }
   }
 private:
