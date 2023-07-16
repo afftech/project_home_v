@@ -19,18 +19,18 @@
 #define FanKitchen3 4
 #define FanKitchen4 5
 
-int RangeHood_Slave[3][3] = { { 3, 0, 0 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
-                              { 3, 0, 0 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
-                              { 3, 0, 0 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+int RangeHood_Slave[3][3] = { { 4, 4, 4 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+                              { 3, 3, 3 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+                              { 2, 2, 2 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
 
 #include "Control.h"
 Control control;
 
 #include "ButtonGroup.h"
-ButtonGroup BtnGroup1(RangeHood_1and2, 0, 0, 1023, 816, 465, 417);
+ButtonGroup BtnGroup1(RangeHood_1and2, 0, 0, 1023, 465, 816, 417);
 ButtonGroup BtnGroup2(RangeHood3_KitchenBtn, 0, 1, 1023, 463, 816, 415);
-ButtonGroup BtnGroup4(BathroomBtn_Light, 0, 1, 1023, 817, 463, 415);
-ButtonGroup BtnGroup3(ToiletBtn_Light, 0, 1, 1023, 816, 460, 413);
+ButtonGroup BtnGroup4(BathroomBtn_Light, 0, 1, 1023, 463, 817, 415);
+ButtonGroup BtnGroup3(ToiletBtn_Light, 0, 1, 1023, 460, 816, 413);
 
 
 
@@ -54,15 +54,15 @@ void loop() {
 
   control.RangeHood(BtnGroup1.click1(), BtnGroup1.click2(), BtnGroup2.click1());
 
-  if (BtnGroup2.click2()) {
+  if (BtnGroup2.click1()) {
     control.KitchenFan(true);
-    Serial.println("Hello");
+    //Serial.println("Hello");
   }
   if (BtnGroup2.click2()) {
-    control.BathroomFan();
+    //control.BathroomFan(true);
   }
   if (BtnGroup3.click2()) {
-    control.ToileFan();
+    //control.ToileFan(true);
   }
   // Serial.println(analogRead(BathroomBtn_Light));
   //delay(10);
