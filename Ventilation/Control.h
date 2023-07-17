@@ -1,12 +1,13 @@
 #include "HardwareSerial.h"
 #include "Fun.h"
 
-Fun FanKitchen(FanKitchen1, FanKitchen2, FanKitchen3,'!', FanKitchen4, 0, 0);
-Fun FanBathroom(FanBathroom1, FanBathroom2, FanBathroom3, FanBathroom4, 5, 10);
-Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 5, 10);
+Fun FanKitchen(FanKitchen1, FanKitchen2, FanKitchen3, FanKitchen4, 1, 2, 3);
+Fun FanBathroom(FanBathroom1, FanBathroom2, FanBathroom3, FanBathroom4, 1, 2, 3);
+Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 1, 2, 3);
 class Control {
 public:
   void RangeHood(bool RangeHoodspeed1, bool RangeHoodspeed2, bool RangeHoodspeed3) {
+    FanKitchen.run(false);
     if (!RangeHoodspeed1 && !RangeHoodspeed2 && !RangeHoodspeed3 && Flag_rangeHoodspeed != 3) {
       Flag1 = false;
       Flag2 = false;
@@ -20,14 +21,20 @@ public:
     }
     /*скорость 1*/
     if (RangeHoodspeed1 && !Flag1) {
-      KitchenCurrentSpeed = RangeHood_Slave[0][0];
-      KitchenRun(KitchenCurrentSpeed);
+      if (ManualFlag1) {  //передаём параметры для кухки если ручн. р. не активен
+        if (KitchenCurrentSpeed < RangeHood_Slave[0][0]) {
+          KitchenCurrentSpeed = RangeHood_Slave[0][0];
+          KitchenRun(KitchenCurrentSpeed);
+        }
+      } else {
+        KitchenCurrentSpeed = RangeHood_Slave[0][0];
+        KitchenRun(KitchenCurrentSpeed);
+      }
       //////////
-      FanBathroom.Speed(RangeHood_Slave[0][1]);
+      /*FanBathroom.Speed(RangeHood_Slave[0][1]);
       BathroomCurrentSpeed = RangeHood_Slave[0][1];
-
       FanToilet.Speed(RangeHood_Slave[0][2]);
-      ToileCurrentSpeed = RangeHood_Slave[0][2];
+      ToileCurrentSpeed = RangeHood_Slave[0][2];*/
       //Serial.println(OldSpeed);
       Flag_rangeHoodspeed = 0;
       Flag1 = true;
@@ -39,12 +46,10 @@ public:
       KitchenCurrentSpeed = RangeHood_Slave[1][0];
       KitchenRun(KitchenCurrentSpeed);
       //////////
-      FanBathroom.Speed(RangeHood_Slave[1][1]);
-      BathroomCurrentSpeed = RangeHood_Slave[1][1];
-
-      FanToilet.Speed(RangeHood_Slave[1][2]);
-      ToileCurrentSpeed = RangeHood_Slave[1][2];
-
+      //FanBathroom.Speed(RangeHood_Slave[1][1]);
+      // BathroomCurrentSpeed = RangeHood_Slave[1][1];
+      //FanToilet.Speed(RangeHood_Slave[1][2]);
+      //ToileCurrentSpeed = RangeHood_Slave[1][2];
       Flag_rangeHoodspeed = 1;
       Flag1 = false;
       Flag2 = true;
@@ -55,17 +60,16 @@ public:
       ToileCurrentSpeed =  0;
       FanBathroom.Speed(0);
     }*/
-
     /*скорость 3*/
     if (RangeHoodspeed3 && !Flag3) {
       KitchenCurrentSpeed = RangeHood_Slave[2][0];
       KitchenRun(KitchenCurrentSpeed);
       ///////
-      FanBathroom.Speed(RangeHood_Slave[2][1]);
-      BathroomCurrentSpeed = RangeHood_Slave[2][1];
+      // FanBathroom.Speed(RangeHood_Slave[2][1]);
+      //BathroomCurrentSpeed = RangeHood_Slave[2][1];
 
-      FanToilet.Speed(RangeHood_Slave[2][2]);
-      ToileCurrentSpeed = RangeHood_Slave[2][2];
+      // FanToilet.Speed(RangeHood_Slave[2][2]);
+      //ToileCurrentSpeed = RangeHood_Slave[2][2];
 
       Flag_rangeHoodspeed = 2;
       Flag1 = false;
@@ -73,7 +77,6 @@ public:
       Flag3 = true;
     }
   }
-
   void KitchenFan(bool click) {
     ManualFlag1 = true;  //флаг ручнгого вкл
     if (click) {

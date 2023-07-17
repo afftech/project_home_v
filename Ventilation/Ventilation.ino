@@ -19,7 +19,7 @@
 #define FanKitchen3 4
 #define FanKitchen4 5
 
-int RangeHood_Slave[3][3] = { { 4, 4, 4 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+int RangeHood_Slave[3][3] = { { 2, 2, 2 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
                               { 3, 3, 3 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
                               { 2, 2, 2 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
 
@@ -53,10 +53,11 @@ void loop() {
   BtnGroup4.check();
 
   control.RangeHood(BtnGroup1.click1(), BtnGroup1.click2(), BtnGroup2.click1());
-
   if (BtnGroup2.click1()) {
+    Serial.println("Hello");
+  }
+  if (BtnGroup2.click2()) {
     control.KitchenFan(true);
-    //Serial.println("Hello");
   }
   if (BtnGroup2.click2()) {
     //control.BathroomFan(true);
