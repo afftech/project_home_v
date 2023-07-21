@@ -2,7 +2,7 @@
 
 class Fun {
 public:
-  Fun(int pinSpeed1, int pinSpeed2, int pinSpeed3, int pinSpeed4, int Time1, int Time2, int Time3) {  //если есть свет это Time1 = 5, если нет Time2 =10
+  Fun(int pinSpeed1, int pinSpeed2, int pinSpeed3, int pinSpeed4, int Time1, int Time2, int Time3) {  //если свет включен Time1 = 5, если свет выключен Time2 =10, если свет включен дольше  то тоже выкд.чаемTime3 =30
     _pinSpeed1 = pinSpeed1;
     _pinSpeed2 = pinSpeed2;
     _pinSpeed3 = pinSpeed3;
@@ -16,49 +16,86 @@ public:
     pinMode(pinSpeed4, OUTPUT);
   }
   void run(bool Light) {
-    if (!FunOff) {
-      if (!OldSpeed) {  // получили сигнал 0 скорости
-        //Serial.println("!OldSpeed");
-        if (LightState && !Light) {  //если свет был включен потом выключен ждем 10 мин и вырубаем вытяку
-          Serial.println("On and off");
-          if (timer_switch(_Time2)) {
-            digitalWrite(_pinSpeed1, false);
-            digitalWrite(_pinSpeed2, false);
-            digitalWrite(_pinSpeed3, false);
-            digitalWrite(_pinSpeed4, false);
-            FunOff = true;
-          }
+    if (!FunOff) {   //скорость изменена
+      if (!Check) {  //проверка света и скорости
+        if (Light) {
+          LightState = true;
+        } else {
+          LightState = false;
         }
-        if (!LightState && !Light) {  //если свет не был включен ждем 5 мин и вырубаем вытяку
-          Serial.println("off");
+        Serial.println("waiting");
+        Check = true;
+      }
+    }
+    if (Check) {  //если свет долго включен ждем 30 мин и вырубаем вытяку
+      if (Light) {
+        Serial.println("on");
+        if (!LightState) {
+          LightState = true;
+        }
+        if (timer_switch(_Time3)) {
+          digitalWrite(_pinSpeed1, false);
+          digitalWrite(_pinSpeed2, false);
+          digitalWrite(_pinSpeed3, false);
+          digitalWrite(_pinSpeed4, false);
+          FunOff = true;
+          Check = false;
+          modManual = false;
+        }
+      } else {
+        if (!LightState) {  //если свет не был включен ждем 5 мин и вырубаем вытяжку
+          Serial.println("off 1");
           if (timer_switch(_Time1)) {
             digitalWrite(_pinSpeed1, false);
             digitalWrite(_pinSpeed2, false);
             digitalWrite(_pinSpeed3, false);
             digitalWrite(_pinSpeed4, false);
             FunOff = true;
+            Check = false;
+            modManual = false;
           }
         }
-      } else {
-        if (Light && !LightState) {
-          LightState = true;
-          Serial.println("LightState");
-        }
-        if (LightState && Light) {  //если свет долго включен ждем 30 мин и вырубаем вытяку
-          Serial.println("on");
-          if (timer_switch(_Time3)) {
+        if (LightState) {  //если свет  был включен ждем 10 мин и вырубаем вытякжу
+          Serial.println("off 2");
+          if (timer_switch(_Time2)) {
             digitalWrite(_pinSpeed1, false);
             digitalWrite(_pinSpeed2, false);
             digitalWrite(_pinSpeed3, false);
             digitalWrite(_pinSpeed4, false);
             FunOff = true;
+            Check = false;
+            modManual = false;
           }
         }
       }
     }
   }
-  int Speed(int speed) {
-    FunOff = false;  //обнуляем флаг остановки
+  int Speed(int speed, bool Auto) {
+    if (Auto) {
+      if (speed == 0) {
+        modAuto = false;
+        if (!modManual) {  //если ручн. режим выключен то обычная остановка, если вкл. то остановка по времени
+          Change(0);
+        } else {
+          FunOff = false;  //обнуляем флаг остановки и останавливаем как в ручном режиме
+        }
+      } else {
+        modAuto = true;
+        FunOff = true;  //если был включен ручной режим рвньше чем авто то сбрасываем его
+        Check = false;
+        Change(speed);
+      }
+    } else {
+      if (modAuto) {
+        Change(speed);
+        modManual = true;
+      } else {
+        FunOff = false;  //обнуляем флаг остановки
+        Change(speed);
+      }
+    }
+  }
+  int Change(bool speed) {
     if (speed != 0) {
       if (speed != OldSpeed) {
         digitalWrite(_pinSpeed1, false);
@@ -88,6 +125,12 @@ public:
         return speed;
       }
     } else {
+      digitalWrite(_pinSpeed1, false);
+      digitalWrite(_pinSpeed2, false);
+      digitalWrite(_pinSpeed3, false);
+      digitalWrite(_pinSpeed4, false);
+      FunOff = true;  //обнуляем флаг остановки
+      Check = false;
       OldSpeed = speed;
       return speed;
     }
@@ -96,7 +139,7 @@ private:
   unsigned long Timer, Timer1;
   int _pinSpeed1, _pinSpeed2, _pinSpeed3, _pinSpeed4, OldSpeed;
   int _Time1, _Time2, _Time3;
-  bool lightOn, FunOff = true, LightState;
+  bool LightState, lightOn, FunOff = true, Check, modAuto, modManual;
   int i;
   bool timer_switch(int v) {
     if (v == 0) {
