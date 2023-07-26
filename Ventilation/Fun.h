@@ -16,6 +16,7 @@ public:
     pinMode(pinSpeed4, OUTPUT);
   }
   void run(bool Light) {
+    //Serial.println(modManual);
     if (!FunOff) {   //скорость изменена
       if (!Check) {  //проверка света и скорости
         if (Light) {
@@ -71,6 +72,8 @@ public:
     }
   }
   int Speed(int speed, bool Auto) {
+    Serial.println(speed);
+     Serial.println(Auto);
     if (Auto) {
       if (speed == 0) {
         modAuto = false;
@@ -91,11 +94,13 @@ public:
         modManual = true;
       } else {
         FunOff = false;  //обнуляем флаг остановки
+        modManual = true;
         Change(speed);
       }
     }
   }
-  int Change(bool speed) {
+  int Change(int speed) {
+    //Serial.println(speed);
     if (speed != 0) {
       if (speed != OldSpeed) {
         digitalWrite(_pinSpeed1, false);
@@ -147,7 +152,7 @@ private:
     }
     if (millis() - Timer >= 1000) {
       i++;
-      Serial.println(i);
+      //Serial.println(i);
       Timer = millis();
       if (i >= v * 60) {
         i = 0;

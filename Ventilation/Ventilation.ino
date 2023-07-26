@@ -23,15 +23,15 @@ int RangeHood_Slave[3][3] = { { 2, 2, 2 },    //1 СКОРОСТЬ вытяжк�
                               { 3, 3, 3 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
                               { 2, 2, 2 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
 
-#include "Control.h"
-Control control;
-
 #include "ButtonGroup.h"
 ButtonGroup BtnGroup1(RangeHood_1and2, 0, 0, 1023, 465, 816, 417);
 ButtonGroup BtnGroup2(RangeHood3_KitchenBtn, 0, 1, 1023, 463, 816, 415);
-ButtonGroup BtnGroup4(BathroomBtn_Light, 0, 1, 1023, 463, 817, 415);
-ButtonGroup BtnGroup3(ToiletBtn_Light, 0, 1, 1023, 460, 816, 413);
+ButtonGroup BtnGroup3(BathroomBtn_Light, 0, 1, 1023, 463, 817, 415);
+ButtonGroup BtnGroup4(ToiletBtn_Light, 0, 1, 1023, 460, 816, 413);
 
+
+#include "Control.h"
+Control control;
 
 
 int SpeedBathroom[] = { 0, 0 };   //Это массив скорости ванной. например {2,4} значит что после первого нажатия включится 2, после второго 4.
@@ -53,13 +53,14 @@ void loop() {
   BtnGroup4.check();
 
   control.RangeHood(BtnGroup1.click1(), BtnGroup1.click2(), BtnGroup2.click1());
-  if (BtnGroup2.click1()) {
-    Serial.println("Hello");
-  }
   if (BtnGroup2.click2()) {
     control.KitchenFan(true);
+    Serial.println("Hello");
   }
-  if (BtnGroup2.click2()) {
+  /*if (BtnGroup3.click1()) {
+    Serial.println("Hello");//control.KitchenFan(true);
+  }
+  /*if (BtnGroup2.click2()) {
     //control.BathroomFan(true);
   }
   if (BtnGroup3.click2()) {
@@ -67,5 +68,5 @@ void loop() {
   }
   // Serial.println(analogRead(BathroomBtn_Light));
   //delay(10);
-  // put your main code here, to run repeatedly:
+  // put your main code here, to run repeatedly:*/
 }

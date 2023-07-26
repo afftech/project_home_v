@@ -7,17 +7,17 @@ Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 1, 2, 3);
 class Control {
 public:
   void RangeHood(bool RangeHoodspeed1, bool RangeHoodspeed2, bool RangeHoodspeed3) {
-    FanKitchen.run(false);
+    FanKitchen.run(BtnGroup3.click1());
     if (!RangeHoodspeed1 && !RangeHoodspeed2 && !RangeHoodspeed3 && Flag_rangeHoodspeed != 3) {
       Flag1 = false;
       Flag2 = false;
       Flag3 = false;
       Flag_rangeHoodspeed = 3;  //состояние 3 при котором все выключено
                                 /*скорость 0*/
-      if (!ManualFlag1) {       //передаём параметры для кухки если ручн. р. не активен
+      //if (!ManualFlag1) {       //передаём параметры для кухки если ручн. р. не активен
         KitchenCurrentSpeed = 0;
         KitchenRunAuto(KitchenCurrentSpeed);
-      }
+     // }
     }
     /*скорость 1*/
     if (RangeHoodspeed1 && !Flag1) {
