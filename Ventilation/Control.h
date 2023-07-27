@@ -8,56 +8,71 @@ class Control {
 public:
   void RangeHood(bool RangeHoodspeed1, bool RangeHoodspeed2, bool RangeHoodspeed3) {
     FanKitchen.run(BtnGroup3.click1());
+    if (FanKitchen.reset()) {  //сброс счетчика скорости кухни
+      KitchenCurrentSpeed = 0;
+    }
     if (!RangeHoodspeed1 && !RangeHoodspeed2 && !RangeHoodspeed3 && Flag_rangeHoodspeed != 3) {
+      /*общие флаги*/
       Flag1 = false;
       Flag2 = false;
       Flag3 = false;
       Flag_rangeHoodspeed = 3;  //состояние 3 при котором все выключено
                                 /*скорость 0*/
-      //if (!ManualFlag1) {       //передаём параметры для кухки если ручн. р. не активен
-        KitchenCurrentSpeed = 0;
-        KitchenRunAuto(KitchenCurrentSpeed);
-     // }
+                                //if (!ManualFlag1) {       //передаём параметры для кухки если ручн. р. не активен
+
+      /*управление кухней*/
+      KitchenCurrentSpeed = 0;
+      KitchenRunAuto(KitchenCurrentSpeed);
+      // }
     }
     /*скорость 1*/
     if (RangeHoodspeed1 && !Flag1) {
-      if (ManualFlag1) {  //передаём параметры для кухки если ручн. р. не активен
+      /*if (ManualFlag1) {  //передаём параметры для кухки если ручн. р. не активен
         if (KitchenCurrentSpeed < RangeHood_Slave[0][0]) {
           KitchenCurrentSpeed = RangeHood_Slave[0][0];
           KitchenRunAuto(KitchenCurrentSpeed);
         }
-      } else {
-        KitchenCurrentSpeed = RangeHood_Slave[0][0];
-        KitchenRunAuto(KitchenCurrentSpeed);
-      }
+    } else {
+     
+    }*/
+      /*управление кухней*/
+      KitchenCurrentSpeed = RangeHood_Slave[0][0];
+      KitchenRunAuto(KitchenCurrentSpeed);
+      /*общие флаги*/
       Flag_rangeHoodspeed = 0;
       Flag1 = true;
       Flag2 = false;
       Flag3 = false;
     }
+
     /*скорость 2*/
     if (RangeHoodspeed2 && !Flag2) {
+      /*управление кухней*/
       KitchenCurrentSpeed = RangeHood_Slave[1][0];
       KitchenRunAuto(KitchenCurrentSpeed);
-
+      /*общие флаги*/
       Flag_rangeHoodspeed = 1;
       Flag1 = false;
       Flag2 = true;
       Flag3 = false;
     }
+
     /*скорость 3*/
     if (RangeHoodspeed3 && !Flag3) {
+      /*управление кухней*/
       KitchenCurrentSpeed = RangeHood_Slave[2][0];
       KitchenRunAuto(KitchenCurrentSpeed);
-
+      /*общие флаги*/
       Flag_rangeHoodspeed = 2;
       Flag1 = false;
       Flag2 = false;
       Flag3 = true;
     }
   }
-  void KitchenFan(bool click) {
-    ManualFlag1 = true;  //флаг ручнгого вкл
+
+  void
+  KitchenFan(bool click) {
+    //ManualFlag1 = true;  //флаг ручнгого вкл
     if (click) {
       KitchenCurrentSpeed++;
       if (Flag_rangeHoodspeed != 3) {  //активированна ли вытяжка?
@@ -67,7 +82,7 @@ public:
       } else {
         if (KitchenCurrentSpeed > 4) {
           KitchenCurrentSpeed = 0;
-          ManualFlag1 = false;  //флаг ручнгого выкл
+          //ManualFlag1 = false;  //флаг ручнгого выкл
         }
       }
     }

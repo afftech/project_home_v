@@ -1,3 +1,4 @@
+#include <avr/interrupt.h>
 #include "HardwareSerial.h"
 
 class Fun {
@@ -42,6 +43,7 @@ public:
           FunOff = true;
           Check = false;
           modManual = false;
+          resetOn = true;
         }
       } else {
         if (!LightState) {  //если свет не был включен ждем 5 мин и вырубаем вытяжку
@@ -54,6 +56,7 @@ public:
             FunOff = true;
             Check = false;
             modManual = false;
+            resetOn = true;
           }
         }
         if (LightState) {  //если свет  был включен ждем 10 мин и вырубаем вытякжу
@@ -66,6 +69,7 @@ public:
             FunOff = true;
             Check = false;
             modManual = false;
+            resetOn = true;
           }
         }
       }
@@ -73,7 +77,7 @@ public:
   }
   int Speed(int speed, bool Auto) {
     Serial.println(speed);
-     Serial.println(Auto);
+    Serial.println(Auto);
     if (Auto) {
       if (speed == 0) {
         modAuto = false;
@@ -140,12 +144,21 @@ public:
       return speed;
     }
   }
+  bool reset() {
+    if (resetOn) {
+      resetOn = false;
+      return true;
+    } else {
+      return false;
+    }
+  }
 private:
   unsigned long Timer, Timer1;
   int _pinSpeed1, _pinSpeed2, _pinSpeed3, _pinSpeed4, OldSpeed;
   int _Time1, _Time2, _Time3;
   bool LightState, lightOn, FunOff = true, Check, modAuto, modManual;
   int i;
+  bool resetOn;
   bool timer_switch(int v) {
     if (v == 0) {
       return true;
