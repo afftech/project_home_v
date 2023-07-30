@@ -25,12 +25,10 @@ public:
           CheckCondition = false;
           _flag1 = true;
           _flag2 = false;
-          //Serial.println("123");
         } else if ((_condition2 - 5) < dataBtn && dataBtn < (_condition2 + 5) && millis() - TimerCondition >= 10) {
           CheckCondition = false;
           _flag1 = false;
           _flag2 = true;
-          //Serial.println("321");
         } else if ((_condition3 - 5) < dataBtn && dataBtn < (_condition3 + 5) && millis() - TimerCondition >= 10) {
           CheckCondition = false;
           _flag1 = true;

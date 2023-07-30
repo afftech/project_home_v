@@ -19,31 +19,40 @@
 #define FanKitchen3 4
 #define FanKitchen4 5
 
+#include "Fun.h"
+
+Fun FanKitchen(FanKitchen1, FanKitchen2, FanKitchen3, FanKitchen4, 10, 5, 60); /*вентилятор кухни          (Pin 1 скорости,Pin 2 скорости,
+                                                                                                            Pin 3 скорости,Pin 4 скорости, 
+                                                                                                            Время выкл без света, 
+                                                                                                            время выкл когда свет потух, 
+                                                                                                            время выкл когда свет непотух)*/
+Fun FanBathroom(FanBathroom1, FanBathroom2, FanBathroom3, FanBathroom4, 10, 5, 30);
+Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 10, 5, 30);
+
 int RangeHood_Slave[3][3] = { { 2, 2, 2 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
                               { 3, 3, 3 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
-                              { 2, 2, 2 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+                              { 4, 4, 4 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
 
 #include "ButtonGroup.h"
-ButtonGroup BtnGroup1(RangeHood_1and2, 0, 0, 1023, 465, 816, 417);
+ButtonGroup BtnGroup1(RangeHood_1and2, 0, 0, 1023, 465, 816, 417); /*BtnGroup**(аналоговый пин, 
+                                                                                тип сигнала,
+                                                                                тип сигнала,
+                                                                                состояние без нажатия,
+                                                                                состояние 1 сигнала,
+                                                                                состояние 2 сигнала) */
+                                                                   /*тип сигнала может быть:
+                                                                                1 - это обычная кнопка 
+                                                                                0 - это постоянный сигнал с залипанием*/
 ButtonGroup BtnGroup2(RangeHood3_KitchenBtn, 0, 1, 1023, 463, 816, 415);
-ButtonGroup BtnGroup3(BathroomBtn_Light, 0, 1, 1023, 463, 817, 415);
-ButtonGroup BtnGroup4(ToiletBtn_Light, 0, 1, 1023, 460, 816, 413);
+ButtonGroup BtnGroup3(BathroomBtn_Light, 1, 0, 1023, 463, 817, 415);
+ButtonGroup BtnGroup4(ToiletBtn_Light, 1, 0, 1023, 460, 816, 413);
 
 
 #include "Control.h"
 Control control;
 
-
-int SpeedBathroom[] = { 0, 0 };   //Это массив скорости ванной. например {2,4} значит что после первого нажатия включится 2, после второго 4.
-int Bathroom_Slave[] = { 0, 0 };  //Задать скорость вентиляторов в {Кухня, туалет} когда вентилятор в ванне включен;
-int Toilet_Slave[] = { 0, 0 };
-int SpeedToilet[] = { 0, 0 };  //Это массив скорости туалета. например {2,4} значит что после первого нажатия включится 2, после второго 4.
-
-
 void setup() {
   Serial.begin(9600);
-  // put your setup code here, to run once:
-  //control.init();
 }
 
 void loop() {
@@ -55,18 +64,14 @@ void loop() {
   control.RangeHood(BtnGroup1.click1(), BtnGroup1.click2(), BtnGroup2.click1());
   if (BtnGroup2.click2()) {
     control.KitchenFan(true);
-    Serial.println("Hello");
+    Serial.println("Button: KitchenFan");
   }
-  /*if (BtnGroup3.click1()) {
-    Serial.println("Hello");//control.KitchenFan(true);
+  if (BtnGroup3.click1()) {
+    control.BathroomFan(true);
+    Serial.println("Button: BathroomFan");
   }
-  /*if (BtnGroup2.click2()) {
-    //control.BathroomFan(true);
+  if (BtnGroup4.click1()) {
+    control.ToiletFan(true);
+    Serial.println("Button: ToileFan");
   }
-  if (BtnGroup3.click2()) {
-    //control.ToileFan(true);
-  }
-  // Serial.println(analogRead(BathroomBtn_Light));
-  //delay(10);
-  // put your main code here, to run repeatedly:*/
 }

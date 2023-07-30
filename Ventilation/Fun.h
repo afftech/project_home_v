@@ -22,8 +22,10 @@ public:
       if (!Check) {  //проверка света и скорости
         if (Light) {
           LightState = true;
+          Serial.println("Light On");
         } else {
           LightState = false;
+          Serial.println("Light Off");
         }
         Serial.println("waiting");
         Check = true;
@@ -31,7 +33,7 @@ public:
     }
     if (Check) {  //если свет долго включен ждем 30 мин и вырубаем вытяку
       if (Light) {
-        Serial.println("on");
+        //Serial.println("on");
         if (!LightState) {
           LightState = true;
         }
@@ -44,10 +46,11 @@ public:
           Check = false;
           modManual = false;
           resetOn = true;
+          Serial.println("resetOn");  //срабатывает какогото фига
         }
       } else {
         if (!LightState) {  //если свет не был включен ждем 5 мин и вырубаем вытяжку
-          Serial.println("off 1");
+          //Serial.println("off 1");
           if (timer_switch(_Time1)) {
             digitalWrite(_pinSpeed1, false);
             digitalWrite(_pinSpeed2, false);
@@ -60,7 +63,7 @@ public:
           }
         }
         if (LightState) {  //если свет  был включен ждем 10 мин и вырубаем вытякжу
-          Serial.println("off 2");
+          //Serial.println("off 2");
           if (timer_switch(_Time2)) {
             digitalWrite(_pinSpeed1, false);
             digitalWrite(_pinSpeed2, false);
@@ -76,15 +79,19 @@ public:
     }
   }
   int Speed(int speed, bool Auto) {
-    Serial.println(speed);
-    Serial.println(Auto);
     if (Auto) {
+      if (!modAuto) {  //если ручной режим был вкл раньше, то берём установленную скорость, а после откл режима авто возвращаем на нее
+        if (OldSpeed != 0) {
+          OldSpeedManual = OldSpeed;
+        } /*как вариант*/
+      }
       if (speed == 0) {
         modAuto = false;
         if (!modManual) {  //если ручн. режим выключен то обычная остановка, если вкл. то остановка по времени
           Change(0);
         } else {
-          FunOff = false;  //обнуляем флаг остановки и останавливаем как в ручном режиме
+          Change(OldSpeedManual);  //ставим скорость ручного режима который был задействован до автоматического
+          FunOff = false;          //обнуляем флаг остановки и останавливаем как в ручном режиме
         }
       } else {
         modAuto = true;
@@ -120,7 +127,6 @@ public:
         OldSpeed = speed;
         return speed;
       } else if (speed == 2) {
-        //Serial.println(_pinSpeed2);
         digitalWrite(_pinSpeed2, true);
         OldSpeed = speed;
         return speed;
@@ -141,6 +147,7 @@ public:
       FunOff = true;  //обнуляем флаг остановки
       Check = false;
       OldSpeed = speed;
+      modManual = false;
       return speed;
     }
   }
@@ -154,12 +161,12 @@ public:
   }
 private:
   unsigned long Timer, Timer1;
-  int _pinSpeed1, _pinSpeed2, _pinSpeed3, _pinSpeed4, OldSpeed;
+  int _pinSpeed1, _pinSpeed2, _pinSpeed3, _pinSpeed4, OldSpeed, OldSpeedManual;
   int _Time1, _Time2, _Time3;
   bool LightState, lightOn, FunOff = true, Check, modAuto, modManual;
   int i;
   bool resetOn;
-  bool timer_switch(int v) {
+  bool timer_switch(long v) {
     if (v == 0) {
       return true;
     }

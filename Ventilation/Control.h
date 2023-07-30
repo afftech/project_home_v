@@ -1,15 +1,23 @@
 #include "HardwareSerial.h"
-#include "Fun.h"
 
-Fun FanKitchen(FanKitchen1, FanKitchen2, FanKitchen3, FanKitchen4, 1, 2, 3);
-Fun FanBathroom(FanBathroom1, FanBathroom2, FanBathroom3, FanBathroom4, 1, 2, 3);
-Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 1, 2, 3);
 class Control {
 public:
   void RangeHood(bool RangeHoodspeed1, bool RangeHoodspeed2, bool RangeHoodspeed3) {
-    FanKitchen.run(BtnGroup3.click1());
-    if (FanKitchen.reset()) {  //сброс счетчика скорости кухни
-      KitchenCurrentSpeed = 0;
+    {  //передача сигнала включенного света
+      FanKitchen.run(true);
+      FanBathroom.run(BtnGroup3.click2());
+      FanToilet.run(BtnGroup4.click2());
+    }
+    {
+      if (FanKitchen.reset()) {  //сброс счетчика скорости кухни
+        KitchenCurrentSpeed = 0;
+      }
+      if (FanBathroom.reset()) {  //сброс счетчика скорости ванной
+        BathroomCurrentSpeed = 0;
+      }
+      if (FanToilet.reset()) {  //сброс счетчика скорости туалета
+        ToiletCurrentSpeed = 0;
+      }
     }
     if (!RangeHoodspeed1 && !RangeHoodspeed2 && !RangeHoodspeed3 && Flag_rangeHoodspeed != 3) {
       /*общие флаги*/
@@ -18,26 +26,32 @@ public:
       Flag3 = false;
       Flag_rangeHoodspeed = 3;  //состояние 3 при котором все выключено
                                 /*скорость 0*/
-                                //if (!ManualFlag1) {       //передаём параметры для кухки если ручн. р. не активен
-
       /*управление кухней*/
       KitchenCurrentSpeed = 0;
       KitchenRunAuto(KitchenCurrentSpeed);
-      // }
+
+      /*управление Ванной*/
+      BathroomCurrentSpeed = 0;
+      BathroomRunAuto(BathroomCurrentSpeed);
+
+      /*управление Туалетом*/
+      ToiletCurrentSpeed = 0;
+      ToiletRunAuto(ToiletCurrentSpeed);
     }
     /*скорость 1*/
     if (RangeHoodspeed1 && !Flag1) {
-      /*if (ManualFlag1) {  //передаём параметры для кухки если ручн. р. не активен
-        if (KitchenCurrentSpeed < RangeHood_Slave[0][0]) {
-          KitchenCurrentSpeed = RangeHood_Slave[0][0];
-          KitchenRunAuto(KitchenCurrentSpeed);
-        }
-    } else {
-     
-    }*/
       /*управление кухней*/
       KitchenCurrentSpeed = RangeHood_Slave[0][0];
       KitchenRunAuto(KitchenCurrentSpeed);
+
+      /*управление ванной*/
+      BathroomCurrentSpeed = RangeHood_Slave[0][1];
+      BathroomRunAuto(BathroomCurrentSpeed);
+
+      /*управление Туалетом*/
+      ToiletCurrentSpeed = RangeHood_Slave[0][2];
+      ToiletRunAuto(ToiletCurrentSpeed);
+
       /*общие флаги*/
       Flag_rangeHoodspeed = 0;
       Flag1 = true;
@@ -50,6 +64,15 @@ public:
       /*управление кухней*/
       KitchenCurrentSpeed = RangeHood_Slave[1][0];
       KitchenRunAuto(KitchenCurrentSpeed);
+
+      /*управление ванной*/
+      BathroomCurrentSpeed = RangeHood_Slave[1][1];
+      BathroomRunAuto(BathroomCurrentSpeed);
+
+      /*управление Туалетом*/
+      ToiletCurrentSpeed = RangeHood_Slave[1][2];
+      ToiletRunAuto(ToiletCurrentSpeed);
+
       /*общие флаги*/
       Flag_rangeHoodspeed = 1;
       Flag1 = false;
@@ -62,6 +85,15 @@ public:
       /*управление кухней*/
       KitchenCurrentSpeed = RangeHood_Slave[2][0];
       KitchenRunAuto(KitchenCurrentSpeed);
+
+      /*управление Ванной*/
+      BathroomCurrentSpeed = RangeHood_Slave[2][1];
+      BathroomRunAuto(BathroomCurrentSpeed);
+
+      /*управление Туалетом*/
+      ToiletCurrentSpeed = RangeHood_Slave[2][2];
+      ToiletRunAuto(ToiletCurrentSpeed);
+
       /*общие флаги*/
       Flag_rangeHoodspeed = 2;
       Flag1 = false;
@@ -69,10 +101,8 @@ public:
       Flag3 = true;
     }
   }
-
-  void
-  KitchenFan(bool click) {
-    //ManualFlag1 = true;  //флаг ручнгого вкл
+  /*все что касается кухни*/
+  void KitchenFan(bool click) {
     if (click) {
       KitchenCurrentSpeed++;
       if (Flag_rangeHoodspeed != 3) {  //активированна ли вытяжка?
@@ -82,25 +112,86 @@ public:
       } else {
         if (KitchenCurrentSpeed > 4) {
           KitchenCurrentSpeed = 0;
-          //ManualFlag1 = false;  //флаг ручнгого выкл
         }
       }
     }
-    //Serial.println(KitchenCurrentSpeed);
     KitchenRunManual(KitchenCurrentSpeed);
   }
 
   void KitchenRunManual(int i) {
+    Serial.print("KitchenRunManual Speed:");
+    Serial.println(i);
     FanKitchen.Speed(i, 0);
   }
   void KitchenRunAuto(int i) {
+    Serial.print("KitchenRunAuto Speed:");
+    Serial.println(i);
     FanKitchen.Speed(i, 1);
   }
+  /*==все что касается кухни==*/
 
+  /*все что касается ванной*/
+  void BathroomFan(bool click) {
+    if (click) {
+      BathroomCurrentSpeed++;
+      if (Flag_rangeHoodspeed != 3) {  //активированна ли вытяжка?
+        if (BathroomCurrentSpeed > 4) {
+          BathroomCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][0];
+        }
+      } else {
+        if (BathroomCurrentSpeed > 4) {
+          BathroomCurrentSpeed = 0;
+        }
+      }
+    }
+    BathroomRunManual(BathroomCurrentSpeed);
+  }
+
+  void BathroomRunManual(int i) {
+    Serial.print("BathroomRunManual Speed:");
+    Serial.println(i);
+    FanBathroom.Speed(i, 0);
+  }
+  void BathroomRunAuto(int i) {
+    Serial.print("BathroomRunAuto Speed:");
+    Serial.println(i);
+    FanBathroom.Speed(i, 1);
+  }
+  /*==все что касается ванной==*/
+
+
+  /*все что касается ванной*/
+  void ToiletFan(bool click) {
+    if (click) {
+      ToiletCurrentSpeed++;
+      if (Flag_rangeHoodspeed != 3) {  //активированна ли вытяжка?
+        if (ToiletCurrentSpeed > 4) {
+          ToiletCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][0];
+        }
+      } else {
+        if (ToiletCurrentSpeed > 4) {
+          ToiletCurrentSpeed = 0;
+        }
+      }
+    }
+    ToiletRunManual(ToiletCurrentSpeed);
+  }
+
+  void ToiletRunManual(int i) {
+    Serial.print("ToiletRunManual Speed:");
+    Serial.println(i);
+    FanToilet.Speed(i, 0);
+  }
+  void ToiletRunAuto(int i) {
+    Serial.print("ToiletRunAuto Speed:");
+    Serial.println(i);
+    FanToilet.Speed(i, 1);
+  }
+  /*==все что касается ванной==*/
 private:
   bool Flag1, Flag2, Flag3;
-  bool ManualFlag1, ManualFlag2, ManualFlag3;
+  //bool ManualFlag1, ManualFlag2, ManualFlag3;
   int Flag_rangeHoodspeed;
-  int KitchenCurrentSpeed, BathroomCurrentSpeed, ToileCurrentSpeed;
+  int KitchenCurrentSpeed, BathroomCurrentSpeed, ToiletCurrentSpeed;
   int OldSpeedKitchen;
 };
