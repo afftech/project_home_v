@@ -27,30 +27,25 @@ public:
       Flag_rangeHoodspeed = 3;  //состояние 3 при котором все выключено
                                 /*скорость 0*/
       /*управление кухней*/
-      KitchenCurrentSpeed = 0;
-      KitchenRunAuto(KitchenCurrentSpeed);
+      KitchenRunAuto(0);
 
       /*управление Ванной*/
-      BathroomCurrentSpeed = 0;
-      BathroomRunAuto(BathroomCurrentSpeed);
+      BathroomRunAuto(0);
 
       /*управление Туалетом*/
-      ToiletCurrentSpeed = 0;
-      ToiletRunAuto(ToiletCurrentSpeed);
+      ToiletRunAuto(0);
     }
     /*скорость 1*/
     if (RangeHoodspeed1 && !Flag1) {
       /*управление кухней*/
-      KitchenCurrentSpeed = RangeHood_Slave[0][0];
-      KitchenRunAuto(KitchenCurrentSpeed);
+      //KitchenCurrentSpeed = RangeHood_Slave[0][0];
+      KitchenRunAuto(RangeHood_Slave[0][0]);
 
       /*управление ванной*/
-      BathroomCurrentSpeed = RangeHood_Slave[0][1];
-      BathroomRunAuto(BathroomCurrentSpeed);
+      BathroomRunAuto(RangeHood_Slave[0][1]);
 
       /*управление Туалетом*/
-      ToiletCurrentSpeed = RangeHood_Slave[0][2];
-      ToiletRunAuto(ToiletCurrentSpeed);
+      ToiletRunAuto(RangeHood_Slave[0][2]);
 
       /*общие флаги*/
       Flag_rangeHoodspeed = 0;
@@ -62,16 +57,13 @@ public:
     /*скорость 2*/
     if (RangeHoodspeed2 && !Flag2) {
       /*управление кухней*/
-      KitchenCurrentSpeed = RangeHood_Slave[1][0];
-      KitchenRunAuto(KitchenCurrentSpeed);
+      KitchenRunAuto(RangeHood_Slave[1][0]);
 
       /*управление ванной*/
-      BathroomCurrentSpeed = RangeHood_Slave[1][1];
-      BathroomRunAuto(BathroomCurrentSpeed);
+      BathroomRunAuto(RangeHood_Slave[1][1]);
 
       /*управление Туалетом*/
-      ToiletCurrentSpeed = RangeHood_Slave[1][2];
-      ToiletRunAuto(ToiletCurrentSpeed);
+      ToiletRunAuto(RangeHood_Slave[1][2]);
 
       /*общие флаги*/
       Flag_rangeHoodspeed = 1;
@@ -83,16 +75,13 @@ public:
     /*скорость 3*/
     if (RangeHoodspeed3 && !Flag3) {
       /*управление кухней*/
-      KitchenCurrentSpeed = RangeHood_Slave[2][0];
-      KitchenRunAuto(KitchenCurrentSpeed);
+      KitchenRunAuto(RangeHood_Slave[2][0]);
 
       /*управление Ванной*/
-      BathroomCurrentSpeed = RangeHood_Slave[2][1];
-      BathroomRunAuto(BathroomCurrentSpeed);
+      BathroomRunAuto(RangeHood_Slave[2][1]);
 
       /*управление Туалетом*/
-      ToiletCurrentSpeed = RangeHood_Slave[2][2];
-      ToiletRunAuto(ToiletCurrentSpeed);
+      ToiletRunAuto(RangeHood_Slave[2][2]);
 
       /*общие флаги*/
       Flag_rangeHoodspeed = 2;

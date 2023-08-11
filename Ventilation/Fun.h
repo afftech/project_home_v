@@ -79,6 +79,7 @@ public:
     }
   }
   int Speed(int speed, bool Auto) {
+    Serial.println(speed);
     if (Auto) {
       if (!modAuto) {  //если ручной режим был вкл раньше, то берём установленную скорость, а после откл режима авто возвращаем на нее
         if (OldSpeed != 0) {
@@ -90,7 +91,9 @@ public:
         if (!modManual) {  //если ручн. режим выключен то обычная остановка, если вкл. то остановка по времени
           Change(0);
         } else {
+          //Serial.println(OldSpeedManual);
           Change(OldSpeedManual);  //ставим скорость ручного режима который был задействован до автоматического
+          //Serial.println(OldSpeed);
           FunOff = false;          //обнуляем флаг остановки и останавливаем как в ручном режиме
         }
       } else {
@@ -111,7 +114,6 @@ public:
     }
   }
   int Change(int speed) {
-    //Serial.println(speed);
     if (speed != 0) {
       if (speed != OldSpeed) {
         digitalWrite(_pinSpeed1, false);
