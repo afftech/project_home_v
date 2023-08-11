@@ -93,21 +93,28 @@ public:
   /*все что касается кухни*/
   void KitchenFan(bool click) {
     if (click) {
-      KitchenCurrentSpeed++;
-      if (Flag_rangeHoodspeed != 3) {  //активированна ли вытяжка?
+      if (Flag_rangeHoodspeed != 3) {  //Если вытяжка включена то выставляем правильную скорость
+        if (KitchenCurrentSpeed < RangeHood_Slave[Flag_rangeHoodspeed][0]) {
+          KitchenCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][0];
+        }
+        KitchenCurrentSpeed++;
         if (KitchenCurrentSpeed > 4) {
           KitchenCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][0];
         }
       } else {
+        KitchenCurrentSpeed++;
         if (KitchenCurrentSpeed > 4) {
           KitchenCurrentSpeed = 0;
         }
       }
+    } else {
+      KitchenCurrentSpeed = 0;
+      KitchenRunAuto(RangeHood_Slave[Flag_rangeHoodspeed][0]);
     }
     KitchenRunManual(KitchenCurrentSpeed);
   }
-
-  void KitchenRunManual(int i) {
+  void
+  KitchenRunManual(int i) {
     Serial.print("KitchenRunManual Speed:");
     Serial.println(i);
     FanKitchen.Speed(i, 0);
@@ -122,16 +129,23 @@ public:
   /*все что касается ванной*/
   void BathroomFan(bool click) {
     if (click) {
-      BathroomCurrentSpeed++;
       if (Flag_rangeHoodspeed != 3) {  //активированна ли вытяжка?
+        if (BathroomCurrentSpeed < RangeHood_Slave[Flag_rangeHoodspeed][1]) {
+          BathroomCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][1];
+        }
+        BathroomCurrentSpeed++;
         if (BathroomCurrentSpeed > 4) {
-          BathroomCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][0];
+          BathroomCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][1];
         }
       } else {
+        BathroomCurrentSpeed++;
         if (BathroomCurrentSpeed > 4) {
           BathroomCurrentSpeed = 0;
         }
       }
+    } else {
+      BathroomCurrentSpeed = 0;
+      BathroomRunAuto(RangeHood_Slave[Flag_rangeHoodspeed][1]);
     }
     BathroomRunManual(BathroomCurrentSpeed);
   }
@@ -152,16 +166,23 @@ public:
   /*все что касается ванной*/
   void ToiletFan(bool click) {
     if (click) {
-      ToiletCurrentSpeed++;
       if (Flag_rangeHoodspeed != 3) {  //активированна ли вытяжка?
+        if (ToiletCurrentSpeed < RangeHood_Slave[Flag_rangeHoodspeed][2]) {
+          ToiletCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][2];
+        }
+        ToiletCurrentSpeed++;
         if (ToiletCurrentSpeed > 4) {
-          ToiletCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][0];
+          ToiletCurrentSpeed = RangeHood_Slave[Flag_rangeHoodspeed][2];
         }
       } else {
+        ToiletCurrentSpeed++;
         if (ToiletCurrentSpeed > 4) {
           ToiletCurrentSpeed = 0;
         }
       }
+    } else {
+      ToiletCurrentSpeed = 0;
+      ToiletRunAuto(RangeHood_Slave[Flag_rangeHoodspeed][2]);
     }
     ToiletRunManual(ToiletCurrentSpeed);
   }

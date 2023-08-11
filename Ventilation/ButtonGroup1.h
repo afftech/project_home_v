@@ -47,24 +47,13 @@ public:
       if (_flag1 && !Btn1State && millis() - TimerClick1 >= 200) {
         Btn1State = true;
         TimerClick1 = millis();
-        hold1On = true;
+        return true;
       }
       if (_flag1 && Btn1State && millis() - TimerClick1 >= 2000) {
         TimerClick1 = millis();
-        holdClick1 = true;
-        return false;
+        return true;
       }
       if (!_flag1 && Btn1State) {
-        if (hold1On && millis() - TimerClick1 < 500) {
-          hold1On = false;
-          Btn1State = false;
-          return true;
-        }
-        if (hold1On && millis() - TimerClick1 >= 500) {
-          holdClick1 = true;
-          Btn1State = false;
-          return false;
-        }
         Btn1State = false;
         TimerClick1 = millis();
         return false;
@@ -77,37 +66,18 @@ public:
       return false;
     }
   }
-  bool hold1() {
-    if (holdClick1) {
-      holdClick1 = false;
-      hold1On = false;
-      return true;
-    }
-    return false;
-  }
   bool click2() {
     if (_BtnMode2) {
       if (_flag2 && !Btn2State && millis() - TimerClick2 >= 200) {
         Btn2State = true;
         TimerClick2 = millis();
-        hold2On = true;
+        return true;
       }
       if (_flag2 && Btn2State && millis() - TimerClick2 >= 2000) {
         TimerClick2 = millis();
-        holdClick2 = true;
-        return false;
+        return true;
       }
       if (!_flag2 && Btn2State) {
-        if (hold2On && millis() - TimerClick2 < 500) {
-          Btn2State = false;
-          hold1On = false;
-          return true;
-        }
-        if (hold2On && millis() - TimerClick2 >= 500) {
-          Btn2State = false;
-          holdClick2 = true;
-          return false;
-        }
         Btn2State = false;
         TimerClick2 = millis();
         return false;
@@ -120,16 +90,8 @@ public:
       return false;
     }
   }
-  bool hold2() {
-    if (holdClick2) {
-      holdClick2 = false;
-      hold2On = false;
-      return true;
-    }
-    return false;
-  }
 private:
-  bool holdClick2, hold2On, holdClick1, hold1On;
+
   bool _flag1, _flag2, CheckCondition, CheckClick1, CheckClick2, Btn1State, Btn2State;
   int _holdTimeclick1, _holdTimeclick2;
   int _expectation;

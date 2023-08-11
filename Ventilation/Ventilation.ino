@@ -21,11 +21,11 @@
 
 #include "Fun.h"
 
-Fun FanKitchen(FanKitchen1, FanKitchen2, FanKitchen3, FanKitchen4, 10, 5, 60); /*вентилятор кухни          (Pin 1 скорости,Pin 2 скорости,
+Fun FanKitchen(FanKitchen1, FanKitchen2, FanKitchen3, FanKitchen4, 0, 0, 60); /*вентилятор кухни          (Pin 1 скорости,Pin 2 скорости,
                                                                                                             Pin 3 скорости,Pin 4 скорости, 
-                                                                                                            Время выкл без света, 
-                                                                                                            время выкл когда свет потух, 
-                                                                                                            время выкл когда свет непотух)*/
+                                                                                                            Время выкл без включенного света, 
+                                                                                                            время выкл когда свет выключен, 
+                                                                                                            время выкл когда свет не выключили и он продолжает гореть)*/
 Fun FanBathroom(FanBathroom1, FanBathroom2, FanBathroom3, FanBathroom4, 10, 5, 30);
 Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 10, 5, 30);
 
@@ -62,16 +62,31 @@ void loop() {
   BtnGroup4.check();
 
   control.RangeHood(BtnGroup1.click1(), BtnGroup1.click2(), BtnGroup2.click1());
+  //Кухна
   if (BtnGroup2.click2()) {
     control.KitchenFan(true);
     Serial.println("Button: KitchenFan");
   }
+  if (BtnGroup2.hold2()) {
+    control.KitchenFan(false);
+    Serial.println("Stop: KitchenFan");
+  }
+  //Ванная комната
   if (BtnGroup3.click1()) {
     control.BathroomFan(true);
     Serial.println("Button: BathroomFan");
   }
+  if (BtnGroup3.hold1()) {
+    control.BathroomFan(false);
+    Serial.println("Stop: BathroomFan");
+  }
+
   if (BtnGroup4.click1()) {
     control.ToiletFan(true);
     Serial.println("Button: ToileFan");
+  }
+  if (BtnGroup4.hold1()) {
+    control.ToiletFan(false);
+    Serial.println("Stop: ToileFan");
   }
 }

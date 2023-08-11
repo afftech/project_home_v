@@ -1,4 +1,3 @@
-#include <avr/interrupt.h>
 #include "HardwareSerial.h"
 
 class Fun {
@@ -94,7 +93,7 @@ public:
           //Serial.println(OldSpeedManual);
           Change(OldSpeedManual);  //ставим скорость ручного режима который был задействован до автоматического
           //Serial.println(OldSpeed);
-          FunOff = false;          //обнуляем флаг остановки и останавливаем как в ручном режиме
+          FunOff = false;  //обнуляем флаг остановки и останавливаем как в ручном режиме
         }
       } else {
         modAuto = true;
@@ -104,8 +103,13 @@ public:
       }
     } else {
       if (modAuto) {
-        Change(speed);
-        modManual = true;
+        if (speed == 0) {
+          modManual = false;
+        } else {
+          Change(speed);
+          modManual = true;
+        }
+
       } else {
         FunOff = false;  //обнуляем флаг остановки
         modManual = true;
