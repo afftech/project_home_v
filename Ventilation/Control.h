@@ -9,13 +9,13 @@ public:
       FanToilet.run(BtnGroup4.click2());
     }
     {
-      if (FanKitchen.reset()) {  //сброс счетчика скорости кухни
+      if (FanKitchen.reset(false)) {  //сброс счетчика скорости кухни
         KitchenCurrentSpeed = 0;
       }
-      if (FanBathroom.reset()) {  //сброс счетчика скорости ванной
+      if (FanBathroom.reset(false)) {  //сброс счетчика скорости ванной
         BathroomCurrentSpeed = 0;
       }
-      if (FanToilet.reset()) {  //сброс счетчика скорости туалета
+      if (FanToilet.reset(false)) {  //сброс счетчика скорости туалета
         ToiletCurrentSpeed = 0;
       }
     }
@@ -28,19 +28,20 @@ public:
                                 /*скорость 0*/
       /*управление кухней*/
       KitchenRunAuto(0);
-
+      KitchenCurrentSpeed = FanKitchen.reset(true);
       /*управление Ванной*/
       BathroomRunAuto(0);
-
+      BathroomCurrentSpeed = FanBathroom.reset(true);
       /*управление Туалетом*/
       ToiletRunAuto(0);
+      ToiletCurrentSpeed = FanToilet.reset(true);
     }
     /*скорость 1*/
     if (RangeHoodspeed1 && !Flag1) {
       /*управление кухней*/
       //KitchenCurrentSpeed = RangeHood_Slave[0][0];
       KitchenRunAuto(RangeHood_Slave[0][0]);
-
+      KitchenCurrentSpeed = RangeHood_Slave[0][0];
       /*управление ванной*/
       BathroomRunAuto(RangeHood_Slave[0][1]);
 
@@ -58,7 +59,7 @@ public:
     if (RangeHoodspeed2 && !Flag2) {
       /*управление кухней*/
       KitchenRunAuto(RangeHood_Slave[1][0]);
-
+      KitchenCurrentSpeed = RangeHood_Slave[1][0];
       /*управление ванной*/
       BathroomRunAuto(RangeHood_Slave[1][1]);
 
@@ -76,7 +77,7 @@ public:
     if (RangeHoodspeed3 && !Flag3) {
       /*управление кухней*/
       KitchenRunAuto(RangeHood_Slave[2][0]);
-
+      KitchenCurrentSpeed = RangeHood_Slave[2][0];
       /*управление Ванной*/
       BathroomRunAuto(RangeHood_Slave[2][1]);
 
@@ -193,8 +194,8 @@ public:
     FanToilet.Speed(i, 0);
   }
   void ToiletRunAuto(int i) {
-    Serial.print("ToiletRunAuto Speed:");
-    Serial.println(i);
+    /*Serial.print("ToiletRunAuto Speed:");
+    Serial.println(i);*/
     FanToilet.Speed(i, 1);
   }
   /*==все что касается ванной==*/

@@ -85,17 +85,17 @@ public:
           OldSpeedManual = OldSpeed;
         } /*как вариант*/
       }
-      if (speed == 0) {
+      if (speed == 0) {  //если скорость режима авто 0
         modAuto = false;
         if (!modManual) {  //если ручн. режим выключен то обычная остановка, если вкл. то остановка по времени
           Change(0);
+          OldSpeedManual = 0;
         } else {
-          //Serial.println(OldSpeedManual);
           Change(OldSpeedManual);  //ставим скорость ручного режима который был задействован до автоматического
-          //Serial.println(OldSpeed);
+          OldSpeedManual = 0;
           FunOff = false;  //обнуляем флаг остановки и останавливаем как в ручном режиме
         }
-      } else {
+      } else {  //ручной режим включен
         modAuto = true;
         FunOff = true;  //если был включен ручной режим рвньше чем авто то сбрасываем его
         Check = false;
@@ -105,11 +105,14 @@ public:
       if (modAuto) {
         if (speed == 0) {
           modManual = false;
+          OldSpeedManual = 0;
         } else {
           Change(speed);
+          if (speed == 4) {
+            OldSpeedManual = 4;
+          }
           modManual = true;
         }
-
       } else {
         FunOff = false;  //обнуляем флаг остановки
         modManual = true;
@@ -157,12 +160,25 @@ public:
       return speed;
     }
   }
-  bool reset() {
-    if (resetOn) {
-      resetOn = false;
-      return true;
+  int reset(bool reset) {
+    if (!reset) {
+      if (resetOn) {
+        resetOn = false;
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      if (modManual) {
+        if (OldSpeed == 4) {
+          return OldSpeedManual;
+        }
+      } else {
+        if (OldSpeed == 4) {
+          return 0;
+        }
+      }
+      return OldSpeed;
     }
   }
 private:

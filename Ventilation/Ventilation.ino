@@ -29,9 +29,9 @@ Fun FanKitchen(FanKitchen1, FanKitchen2, FanKitchen3, FanKitchen4, 0, 0, 60); /*
 Fun FanBathroom(FanBathroom1, FanBathroom2, FanBathroom3, FanBathroom4, 10, 5, 30);
 Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 10, 5, 30);
 
-int RangeHood_Slave[3][3] = { { 2, 2, 2 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+int RangeHood_Slave[3][3] = { { 2, 3, 4 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
                               { 3, 3, 3 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
-                              { 4, 4, 4 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
+                              { 4, 3, 2 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
 
 #include "ButtonGroup.h"
 ButtonGroup BtnGroup1(RangeHood_1and2, 0, 0, 1023, 465, 816, 417); /*BtnGroup**(аналоговый пин, 
