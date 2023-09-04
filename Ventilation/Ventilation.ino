@@ -21,13 +21,13 @@
 
 #include "Fun.h"
 
-Fun FanKitchen(FanKitchen1, FanKitchen2, FanKitchen3, FanKitchen4, 0, 0, 60); /*вентилятор кухни          (Pin 1 скорости,Pin 2 скорости,
+Fun FanKitchen(FanKitchen1, FanKitchen2, FanKitchen3, FanKitchen4, 0, 0, /*120*/1); /*вентилятор кухни          (Pin 1 скорости,Pin 2 скорости,
                                                                                                             Pin 3 скорости,Pin 4 скорости, 
                                                                                                             Время выкл без включенного света, 
                                                                                                             время выкл когда свет выключен, 
                                                                                                             время выкл когда свет не выключили и он продолжает гореть)*/
-Fun FanBathroom(FanBathroom1, FanBathroom2, FanBathroom3, FanBathroom4, 10, 5, 30);
-Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 10, 5, 30);
+Fun FanBathroom(FanBathroom1, FanBathroom2, FanBathroom3, FanBathroom4, 1,1 , 1);
+Fun FanToilet(FanToilet1, FanToilet2, FanToilet3, FanToilet4, 1, 1, 1);
 
 int RangeHood_Slave[3][3] = { { 2, 3, 4 },    //1 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
                               { 3, 3, 3 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}

@@ -45,7 +45,7 @@ public:
           Check = false;
           modManual = false;
           resetOn = true;
-          Serial.println("resetOn");  //срабатывает какогото фига
+          
         }
       } else {
         if (!LightState) {  //если свет не был включен ждем 5 мин и вырубаем вытяжку
@@ -163,6 +163,8 @@ public:
   int reset(bool reset) {
     if (!reset) {
       if (resetOn) {
+        Serial.println("resetOn");
+        OldSpeed = 0;
         resetOn = false;
         return true;
       } else {
@@ -180,6 +182,9 @@ public:
       }
       return OldSpeed;
     }
+  }
+  int retSpeed() {
+    return OldSpeed;
   }
 private:
   unsigned long Timer, Timer1;
