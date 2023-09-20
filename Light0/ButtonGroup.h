@@ -49,7 +49,7 @@ public:
         TimerClick1 = millis();
         hold1On = true;
       }
-      if (_flag1 && Btn1State && millis() - TimerClick1 >= 1500) {
+      if (_flag1 && Btn1State && millis() - TimerClick1 >= 1000) {
         TimerClick1 = millis();
         holdClick1_2 = true;
         return false;
@@ -100,7 +100,7 @@ public:
         TimerClick2 = millis();
         hold2On = true;
       }
-      if (_flag2 && Btn2State && millis() - TimerClick2 >= 1500) {
+      if (_flag2 && Btn2State && millis() - TimerClick2 >= 1000) {
         TimerClick2 = millis();
         holdClick2_2 = true;
         return false;

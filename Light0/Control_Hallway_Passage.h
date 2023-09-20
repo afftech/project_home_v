@@ -57,6 +57,9 @@ public:
       StateLightPassage = StateLightHallway;
     } else if (!StateLightHallway && StateLightPassage) {
       StateLightHallway = StateLightPassage;
+    } else if (StateLightHallway && StateLightPassage) {
+      StateLightHallway = false;
+      StateLightPassage = false;
     }
   }
   void long2ClickMainHallway() {
@@ -86,8 +89,11 @@ public:
     }
     TimeClickMainPassage = millis();
   }
+  void long1ClickMainPassage() {
+    StateLightHallway = 2;
+    StateLightPassage = 2;
+  }
   void long2ClickMainPassage() {
-    //выкл весь свет в кв
     StateLightHallway = false;
     StateLightPassage = false;
   }
