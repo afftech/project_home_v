@@ -1,9 +1,9 @@
 
 
 
-class ButtonGroup {
+class ButtonGroupS3 {
 public:
-  ButtonGroup(char pin, int BtnMode1, int BtnMode2, int expectation, int condition1, int condition2, int condition3) {
+  ButtonGroupS3(char pin, int BtnMode1, int BtnMode2, int expectation, int condition1, int condition2, int condition3) {
     _pin = pin;
     _BtnMode1 = BtnMode1;
     _BtnMode2 = BtnMode2;
@@ -49,7 +49,7 @@ public:
         TimerClick1 = millis();
         hold1On = true;
       }
-      if (_flag1 && Btn1State && millis() - TimerClick1 >= 1000) {
+      if (_flag1 && Btn1State && millis() - TimerClick1 >= 3000) {
         TimerClick1 = millis();
         holdClick1_2 = true;
         return false;
@@ -100,7 +100,7 @@ public:
         TimerClick2 = millis();
         hold2On = true;
       }
-      if (_flag2 && Btn2State && millis() - TimerClick2 >= 1000) {
+      if (_flag2 && Btn2State && millis() - TimerClick2 >= 3000) {
         TimerClick2 = millis();
         holdClick2_2 = true;
         return false;
@@ -144,6 +144,7 @@ public:
     }
     return false;
   }
+
 private:
   bool holdClick2, hold2On, hold1On, holdClick1_1, holdClick1_2, holdClick2_1, holdClick2_2;
   bool _flag1, _flag2, CheckCondition, CheckClick1, CheckClick2, Btn1State, Btn2State;

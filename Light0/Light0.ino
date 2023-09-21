@@ -21,6 +21,8 @@
 #define BigLightPassage 10   //Коридор */*
 
 #include "ButtonGroup.h"
+#include "ButtonGroupS3.h"
+ButtonGroupS3 BtnGroup0(MainHallway_Passage, 1, 1, 1023, 521, 836, 474);
 ButtonGroup BtnGroup1(MainHallway_Passage, 1, 1, 1023, 521, 836, 474); /*ButtonGroup**(аналоговый пин, 
                                                                                 тип сигнала,
                                                                                 тип сигнала,
@@ -60,21 +62,22 @@ void loop() {
   Control_Kitchen.run();
   Control_BalconyRL.run();
   // put your main code here, to run repeatedly:
+  BtnGroup0.check();
   BtnGroup1.check();
   BtnGroup2.check();
   BtnGroup3.check();
   BtnGroup4.check();
   BtnGroup5.check();
   {  // гл выкл
-    if (BtnGroup1.click1()) {
+    if (BtnGroup0.click1()) {
       Serial.println("click1 MainHallway");
       Control_Hallway_Passage.clickMainHallway();
     }
-    if (BtnGroup1.hold1_1()) {
+    if (BtnGroup0.hold1_1()) {
       Serial.println("hold1_1 MainHallway1");
       Control_Hallway_Passage.long1ClickMainHallway();
     }
-    if (BtnGroup1.hold1_2()) {
+    if (BtnGroup0.hold1_2()) {
       Serial.println("hold1_1 MainHallway2");
       Control_Hallway_Passage.long2ClickMainHallway();
     }
@@ -94,7 +97,9 @@ void loop() {
     }
   }
   if (Control_Hallway_Passage.apartmentOff()) {  //выкл света во всей кв
-    Serial.println("apartment Off");
+    Control_Kitchen.OffKitchen();
+    Control_BalconyRL.OffBalconyLR();
+    Serial.println("OffAll");
   }
   {  // выкл в кухни
     if (BtnGroup2.click1()) {
