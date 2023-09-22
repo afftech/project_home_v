@@ -107,7 +107,7 @@ void loop() {
       Serial.println("click1 Main Kitchen");
     }
     if (BtnGroup2.hold1_2()) {
-      Control_Kitchen.clickMainKitchen();
+      Control_Kitchen.OffKitchen();
       Serial.println("hold1_2 Main Kitchen");
     }
     if (BtnGroup2.click2()) {
