@@ -29,6 +29,8 @@ void setup() {
 void loop() {
   Light1.run();
   Light2.run();
+  Light3.run();
+  Light4.run();
   // put your main code here, to run repeatedly:
   BtnGroup0.check();
   BtnGroup1.check();
