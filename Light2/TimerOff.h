@@ -7,7 +7,7 @@ public:
     if (start) {
       if (millis() - Time >= 1000) {
         i++;
-        if (i >= 10) {
+        if (i >= DelayTimeS) {
           start = false;
           i = 0;
         } else {
