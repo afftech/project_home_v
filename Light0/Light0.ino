@@ -1,13 +1,13 @@
 //8 переключателей
-#define MainHallway_Passage A0  //1:519-523  2:834-839 12:473-476 1-2 & 12 Прихожая_Коридор
-#define Kitchen_Lamp A1         //1:520-523  2:833-837 12:474-477 1-2-12 _Гл.выкл.Кухня_Люстра
-#define Bar_Ribbon A2           //1:519-522  2:833-837 12:472-475 1-2-12 Бар_Лента
-#define Apron_Balcony_R A3      //1:519-523  2:833-837 12:472-476 1-2-12 _Гл.выкл.Кухня_Люстра
-#define Balcony_L A4            //1:519-523  2:833-837 12:472-476 1-2-12 _Гл.выкл.Кухня_Люстра
+#define MainHallway_Passage A0
+#define Kitchen_Lamp A1
+#define Bar_Ribbon A2
+#define Apron_Balcony_R A3
+#define Balcony_L_Double A4
 // 11 выходов
 /*Кухня*/
 #define Working_area 2  //рабочая зона  */*
-#define Lamp 3          //Лампа */*
+#define Lamp 3          //Люстра */*
 #define Bar 4           //Бар */*
 #define Ribbon 11       //Лента */ не горит*
 #define Apron 12        //фартук */ не горит*
@@ -19,6 +19,8 @@
 #define BigLightHallway 8    //прихожая сильный свет */*
 #define SmallLightPassage 9  //Коридор */*
 #define BigLightPassage 10   //Коридор */*
+
+#define TimeDoubleClick 350  //Время двойного клика */*
 
 #include "ButtonGroup.h"
 #include "ButtonGroupS3.h"
@@ -35,7 +37,7 @@ ButtonGroup BtnGroup1(MainHallway_Passage, 1, 1, 1023, 521, 836, 474); /*ButtonG
 ButtonGroup BtnGroup2(Kitchen_Lamp, 1, 1, 1023, 521, 836, 475);
 ButtonGroup BtnGroup3(Bar_Ribbon, 1, 1, 1023, 520, 836, 475);
 ButtonGroup BtnGroup4(Apron_Balcony_R, 1, 1, 1023, 520, 836, 475);
-ButtonGroup BtnGroup5(Balcony_L, 1, 1, 1023, 520, 836, 475);
+ButtonGroup BtnGroup5(Balcony_L_Double, 1, 1, 1023, 520, 836, 475);
 #include "Control_Hallway_Passage.h"
 Control_Hallway_Passage Control_Hallway_Passage;
 #include "Control_Kitchen.h"
@@ -160,6 +162,16 @@ void loop() {
     if (BtnGroup5.hold1_2()) {
       Control_BalconyRL.OffBalconyLR();
       Serial.println("hold1_2 BalconyL");
+    }
+  }
+  {  //Дублирует 3 вход
+    if (BtnGroup5.click2()) {
+      Control_Kitchen.clickMainKitchen();
+      Serial.println("click2 Main Kitchen 2");
+    }
+    if (BtnGroup5.hold2_2()) {
+      Control_Kitchen.OffKitchen();
+      Serial.println("hold2_2 Main Kitchen 2");
     }
   }
 }

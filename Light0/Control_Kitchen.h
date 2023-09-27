@@ -40,7 +40,7 @@ public:
         digitalWrite(Apron, 0);
       }
     }
-    if (StopTime && OldTimeMainKitchen + 500 <= millis()) {
+    if (StopTime && OldTimeMainKitchen + TimeDoubleClick <= millis()) {
       if (OldTimeMainKitchen < TimeMainKitchen) {  // один клик
         Serial.println("Two clicks.");
         OnStateLamp();
@@ -78,7 +78,7 @@ public:
     OnBar = false;
     OnRibbon = false;
     OnApron = false;
-     //Serial.println(" Off");
+    //Serial.println(" Off");
   }
   void clickBar() {
     OnBar = !OnBar;
