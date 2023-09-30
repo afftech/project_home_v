@@ -144,6 +144,12 @@ public:
     }
     return false;
   }
+  bool stateAnyBtn() {
+    if (_flag1 || _flag2) {
+      return true;
+    }
+    return false;
+  }
 private:
   bool holdClick2, hold2On, hold1On, holdClick1_1, holdClick1_2, holdClick2_1, holdClick2_2;
   bool _flag1, _flag2, CheckCondition, CheckClick1, CheckClick2, Btn1State, Btn2State;

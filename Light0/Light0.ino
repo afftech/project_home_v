@@ -20,6 +20,11 @@
 #define SmallLightPassage 9  //Коридор */*
 #define BigLightPassage 10   //Коридор */*
 
+#define PowerUnit 11  //Включение блока питания */*
+bool OnPowerUnit;     //Включение блока питания */*
+#include "TimerOff.h"
+Timer PowerOff(20);  //время выключения блока
+
 #include "ButtonGroup.h"
 #include "ButtonGroupS3.h"
 ButtonGroupS3 BtnGroup0(MainHallway_Passage, 1, 1, 1023, 521, 836, 474);
@@ -56,6 +61,7 @@ void setup() {
   pinMode(BigLightHallway, OUTPUT);
   pinMode(SmallLightPassage, OUTPUT);
   pinMode(BigLightPassage, OUTPUT);
+  pinMode(PowerUnit, OUTPUT);
 }
 void loop() {
   Control_Hallway_Passage.run();
@@ -161,5 +167,16 @@ void loop() {
       Control_BalconyRL.OffBalconyLR();
       Serial.println("hold1_2 BalconyL");
     }
+  }
+  {  //запуск Блока питания
+    PowerOff.run();
+    if (BtnGroup0.stateAnyBtn()) {
+      OnPowerUnit = true;
+      PowerOff.on();
+    }
+    if (PowerOff.resp()) {
+      OnPowerUnit = false;
+    }
+    digitalWrite(PowerUnit, OnPowerUnit);
   }
 }

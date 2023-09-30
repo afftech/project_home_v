@@ -25,6 +25,7 @@ public:
           CheckCondition = false;
           _flag1 = true;
           _flag2 = false;
+
         } else if ((_condition2 - 5) < dataBtn && dataBtn < (_condition2 + 5) && millis() - TimerCondition >= 10) {
           CheckCondition = false;
           _flag1 = false;
@@ -144,7 +145,12 @@ public:
     }
     return false;
   }
-
+  bool stateAnyBtn() {
+    if (_flag1 || _flag2) {
+      return true;
+    }
+    return false;
+  }
 private:
   bool holdClick2, hold2On, hold1On, holdClick1_1, holdClick1_2, holdClick2_1, holdClick2_2;
   bool _flag1, _flag2, CheckCondition, CheckClick1, CheckClick2, Btn1State, Btn2State;
