@@ -16,17 +16,9 @@
 #define BraTape 11  //Бра стол
 
 #include "ButtonGroup.h" /* Максимум 1s*/
-//#include "ButtonGroupS3.h"                                            /* Максимум 3s*/
-ButtonGroup BtnGroup0(MainSwitch_LBra, 1, 1, 1023, 521, 836, 474);  //1.5s
-ButtonGroup BtnGroup1(RBra_MainLight, 1, 1, 1023, 521, 836, 474);   /*ButtonGroup**(аналоговый пин, 
-                                                                                тип сигнала,
-                                                                                тип сигнала,
-                                                                                состояние без нажатия,
-                                                                                состояние 1 сигнала,
-                                                                                состояние 2 сигнала) */
-                                                                    /*тип сигнала может быть:
-                                                                                1 - это обычная кнопка 
-                                                                                0 - это постоянный сигнал с залипанием*/
+//#include "ButtonGroupS3.h"                                           
+ButtonGroup BtnGroup0(MainSwitch_LBra, 1, 1, 1023, 521, 836, 474);
+ButtonGroup BtnGroup1(RBra_MainLight, 1, 1, 1023, 521, 836, 474);  
 ButtonGroup BtnGroup2(Ribbon_BraTable, 1, 1, 1023, 521, 836, 475);
 
 
@@ -61,7 +53,7 @@ void loop() {
       Room.OffMainRoom();
     }
     if (BtnGroup1.click2()) {
-      Serial.println("hold1_2 MainSwitch 2");
+      Serial.println("click2 MainSwitch 2");
       Room.clickMainSwitch();
     }
     if (BtnGroup1.hold2_2()) {
@@ -71,11 +63,11 @@ void loop() {
   }
   {  //бра
     if (BtnGroup0.click2()) {
-      Serial.println("click1 BraL");
+      Serial.println("click2 BraL");
       Room.clickBraLSwitch();
     }
     if (BtnGroup0.hold2_2()) {
-      Serial.println("hold1_2 BraL");
+      Serial.println("hold2_2 BraL");
       Room.OffMainRoom();
     }
     if (BtnGroup1.click1()) {
@@ -89,7 +81,7 @@ void loop() {
   }
   {  //Выкл ленты
     if (BtnGroup2.click1()) {
-      Serial.println("Ribbon");
+      Serial.println("click1 Ribbon");
       Room.clickRibbonSwitch();
     }
     if (BtnGroup2.hold1_2()) {
