@@ -16,11 +16,11 @@
 
 #define LitleBraLRLight3 8
 #define ToiletLight 9
-#define BathroomLight 10
-
 
 #define LoggiaLight 12
+
 #define BathMirorLight 13
+#define BathroomLight 10
 
 #define TimeOffDT 90  //Время в секундах выключения управления освещением комнаты
 
@@ -35,7 +35,12 @@ ButtonGroup BtnGroup4(Sensor, 1, 1, 1023, 521, 836, 475);
 Little_Room little_Room;
 #include "Middle_Room.h"
 Middle_Room middle_Room;
-
+#include "Bathroom.h"
+Bathroom bathroom;
+#include "Loggia.h"
+Loggia loggia;
+#include "Toilet.h"
+Toilet toilet;
 void setup() {
   // put your setup code here, to run once:
   pinMode(MiddleRoomLight1, OUTPUT);
@@ -56,6 +61,9 @@ void setup() {
 void loop() {
   little_Room.run();
   middle_Room.run();
+  bathroom.run();
+  loggia.run();
+  toilet.run();
   // put your main code here, to run repeatedly:
   BtnGroup0.check();
   BtnGroup1.check();
@@ -96,6 +104,42 @@ void loop() {
     if (BtnGroup1.hold2_2()) {
       Serial.println("hold2_2 MiddleRoomBra Off");
       middle_Room.OffRoom();
+    }
+  }
+  {  //лоджия
+    if (BtnGroup2.click1()) {
+      Serial.println("click1 loggia");
+      loggia.clickLoggia();
+    }
+    if (BtnGroup2.hold1_2()) {
+      Serial.println("hold1_2 loggia Off");
+      loggia.OffRoom();
+    }
+    if (BtnGroup2.click2()) {
+      Serial.println("click2 Toilet");
+      toilet.clickToilet();
+    }
+    if (BtnGroup2.hold2_2()) {
+      Serial.println("hold2_2 Toilet Off");
+      toilet.OffRoom();
+    }
+  }
+  {  //Ванна и зеркало
+    if (BtnGroup3.click1()) {
+      Serial.println("click1 Bathroom");
+      bathroom.clickBathroom();
+    }
+    if (BtnGroup3.hold1_2()) {
+      Serial.println("hold1_2 Bathroom Off");
+      bathroom.OffRoom();
+    }
+    if (BtnGroup3.click2()) {
+      Serial.println("click2 Mirror");
+      bathroom.clickMirror();
+    }
+    if (BtnGroup3.hold2_2()) {
+      Serial.println("hold2_2 Mirror Off");
+      bathroom.OffRoom();
     }
   }
 }
