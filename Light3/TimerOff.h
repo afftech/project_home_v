@@ -24,6 +24,7 @@ public:
   void on() {
     start = true;
     Time = millis();
+	i = 0;
   }
   void stop() {
     start = false;

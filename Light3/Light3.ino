@@ -10,7 +10,7 @@
 #define MiddleRoomLight3 4
 #define MiddleRoomBra 11
 
-#define RibbonWBrightly 5
+
 #define LitleRoomLight1 6
 #define LitleRoomLight2 7
 
@@ -21,15 +21,16 @@
 
 #define BathMirorLight 13
 #define BathroomLight 10
+#define RibbonWBrightly 5
 
 #define TimeOffDT 90  //Время в секундах выключения управления освещением комнаты
 
 #include "ButtonGroup.h" /* Максимум 1s*/
-ButtonGroup BtnGroup0(LitleRoom_LitleRBra, 1, 1, 1023, 521, 836, 474);
-ButtonGroup BtnGroup1(MiddleRoom_MiddleRBra, 1, 1, 1023, 521, 836, 474);
-ButtonGroup BtnGroup2(Loggia_Toilet, 1, 1, 1023, 521, 836, 475);
-ButtonGroup BtnGroup3(Bathroom_Miror, 1, 1, 1023, 521, 836, 475);
-ButtonGroup BtnGroup4(Sensor, 1, 1, 1023, 521, 836, 475);
+ButtonGroup BtnGroup0(LitleRoom_LitleRBra, 1, 1, 1023, 461, 815, 413);
+ButtonGroup BtnGroup1(MiddleRoom_MiddleRBra, 1, 1, 1023, 461, 815, 413);
+ButtonGroup BtnGroup2(Loggia_Toilet, 1, 1, 1023, 461, 815, 413);
+ButtonGroup BtnGroup3(Bathroom_Miror, 1, 1, 1023, 461, 815, 413);
+ButtonGroup BtnGroup4(Sensor, 0, 0, 1023, 461, 815, 413);
 
 #include "Little_Room.h"
 Little_Room little_Room;
@@ -141,5 +142,13 @@ void loop() {
       Serial.println("hold2_2 Mirror Off");
       bathroom.OffRoom();
     }
+  }
+  if (BtnGroup4.click1()) {  //Лента туалета по датчику
+    Serial.println("click1 clickRibbon On");
+    bathroom.clickRibbon();
+  }
+  if (BtnGroup4.click2()) {  //Лента туалета по датчику
+    Serial.println("click2 clickRibbon On");
+    bathroom.clickRibbon();
   }
 }

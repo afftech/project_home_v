@@ -1,9 +1,22 @@
 #include "Arduino.h"
 #include "HardwareSerial.h"
-
+#include "TimerOff.h"
 class Bathroom {
 public:
   void run() {
+    TimerControlState.run();
+    if (TimerControlState.resp()) {
+      OnRibbonWBrightly = false;
+    }
+    if (OnBathroomLight || OnBathMirorLight) {
+      OnRibbonWBrightly = false;
+      TimerControlState.stop();
+    }
+    if (OnRibbonWBrightly) {
+      digitalWrite(RibbonWBrightly, 1);
+    } else {
+      digitalWrite(RibbonWBrightly, 0);
+    }
     if (OnBathroomLight) {
       digitalWrite(BathroomLight, 1);
     } else {
@@ -53,6 +66,12 @@ public:
     }
     TimeClickBathroom = millis();
   }
+  void clickRibbon() {
+    if (!OnBathroomLight && !OnBathMirorLight) {
+      OnRibbonWBrightly = true;
+      TimerControlState.on();
+    }
+  }
   void OffRoom() {
     OnBathroomLight = false;   //4
     OnBathMirorLight = false;  //7
@@ -61,7 +80,8 @@ public:
     StateBathMirorLight = 0;
   }
 private:
-  bool OnBathroomLight, OnBathMirorLight;
+  Timer TimerControlState{ TimeOffDT };
+  bool OnBathroomLight, OnBathMirorLight, OnRibbonWBrightly;
   int StateBathroomLight, StateBathMirorLight;
   long TimeClickBathroom, TimeClickMirror;
 };

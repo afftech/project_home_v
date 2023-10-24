@@ -19,6 +19,7 @@ public:
   }
   void on() {
     start = true;
+    i = 0;
     Time = millis();
   }
   bool resp() {

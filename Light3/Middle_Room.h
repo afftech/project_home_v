@@ -17,11 +17,11 @@ public:
     } else {
       digitalWrite(MiddleRoomLight2, 0);
     }
-    if (OnMiddleRoomLight3) {
+    /*if (OnMiddleRoomLight3) {
       digitalWrite(MiddleRoomLight3, 1);
     } else {
       digitalWrite(MiddleRoomLight3, 0);
-    }
+    }*/
     if (OnMiddleRoomBra) {
       digitalWrite(MiddleRoomBra, 1);
     } else {
@@ -49,24 +49,24 @@ public:
         OnMiddleRoomLight1 = true;
       } else if (StateSwitchRoom == 1) {
         StateSwitchRoom = 2;
-        OnMiddleRoomLight1 = true;
+        OnMiddleRoomLight1 = false;
         OnMiddleRoomLight2 = true;
       } else if (StateSwitchRoom == 2) {
         StateSwitchRoom = 3;
         OnMiddleRoomLight1 = true;
         OnMiddleRoomLight2 = true;
-        OnMiddleRoomLight3 = true;
+        //OnMiddleRoomLight3 = true;
       } else {
         StateSwitchRoom = 0;
         OnMiddleRoomLight1 = false;
         OnMiddleRoomLight2 = false;
-        OnMiddleRoomLight3 = false;
+        //OnMiddleRoomLight3 = false;
       }
     } else {
       StateSwitchRoom = 0;
       OnMiddleRoomLight1 = false;
       OnMiddleRoomLight2 = false;
-      OnMiddleRoomLight3 = false;
+      //OnMiddleRoomLight3 = false;
     }
     TimeClickSwitchRoom = millis();
   }
@@ -111,7 +111,7 @@ public:
   void OffRoom() {
     OnMiddleRoomLight1 = false;
     OnMiddleRoomLight2 = false;
-    OnMiddleRoomLight3 = false;
+    //OnMiddleRoomLight3 = false;
     OnMiddleRoomBra = false;
     StateSwitchRoom = 0;
     StateBra = 0;
@@ -120,7 +120,7 @@ private:
   bool StopTimeMiddleRoomBra;
   long OldMiddleRoomBra, TimeMiddleRoomBra;
   bool ControlMiddleRoom;
-  bool OnMiddleRoomLight1, OnMiddleRoomLight2, OnMiddleRoomLight3, OnMiddleRoomBra;
+  bool OnMiddleRoomLight1, OnMiddleRoomLight2, /* OnMiddleRoomLight3,*/ OnMiddleRoomBra;
   long TimeClickSwitchRoom, TimeClickMiddleRoomBra;
   int StateSwitchRoom, StateBra;
 };
