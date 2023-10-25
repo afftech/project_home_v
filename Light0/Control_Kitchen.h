@@ -40,7 +40,7 @@ public:
         digitalWrite(Apron, 0);
       }
     }
-    if (StopTime && OldTimeMainKitchen + TimeDoubleClick <= millis()) {
+    if (StopTime && OldTimeMainKitchen + 300 <= millis()) {
       if (OldTimeMainKitchen < TimeMainKitchen) {  // один клик
         Serial.println("Two clicks.");
         OnStateLamp();
