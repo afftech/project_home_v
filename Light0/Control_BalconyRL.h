@@ -70,7 +70,19 @@ public:
     }
     TimeClickMainBalconyL = millis();
   }
-
+  void On_or_Off_BalconyR(bool fun) {
+    if (fun) {
+      OnBalconyR = true;
+    } else {
+      OnBalconyR = false;
+    }
+  }
+  bool Global_StateBalconyR() {
+    if (StateBalconyR) {
+      return true;
+    }
+    return false;
+  }
 private:
   bool OnBalconyR, OnBalconyL;
   int StateBalconyR, StateBalconyL;

@@ -43,10 +43,11 @@ ButtonGroup BtnGroup4(Apron_Balcony_R, 1, 1, 1023, 520, 836, 475);
 ButtonGroup BtnGroup5(Balcony_L, 1, 1, 1023, 520, 836, 475);
 #include "Control_Hallway_Passage.h"
 Control_Hallway_Passage Control_Hallway_Passage;
-#include "Control_Kitchen.h"
-Control_Kitchen Control_Kitchen;
 #include "Control_BalconyRL.h"
 Control_BalconyRL Control_BalconyRL;
+#include "Control_Kitchen.h"
+Control_Kitchen Control_Kitchen;
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -110,11 +111,11 @@ void loop() {
   {  // выкл в кухни
     if (BtnGroup2.click1()) {
       Control_Kitchen.clickMainKitchen();
-      Serial.println("click1 Main Kitchen");
+      Serial.println("click1 Main Kitchen");  //правый балкон вкл
     }
-    if (BtnGroup2.hold1_2()) {
+    if (BtnGroup2.hold1_2()) {  //включить весь свет в кухне D2,D3.D4.D5.D11.D12
       Control_Kitchen.OffKitchen();
-      Serial.println("hold1_2 Main Kitchen");
+      Serial.println("hold1_2 Main Kitchen");  //правый балкон выкл
     }
     if (BtnGroup2.click2()) {
       Control_Kitchen.clickLamp();
@@ -167,15 +168,25 @@ void loop() {
       Control_BalconyRL.OffBalconyLR();
       Serial.println("hold1_2 BalconyL");
     }
+    if (BtnGroup5.click2()) {  //кухня гл вкл
+      Control_Kitchen.clickMainKitchen();
+      Serial.println("click1 Main Kitchen duplicate");
+    }
+    if (BtnGroup5.hold2_2()) {
+      Control_Kitchen.OffKitchen();
+      Serial.println("hold1_2 Main Kitchen duplicate");
+    }
   }
   {  //запуск Блока питания
     PowerOff.run();
-    if (BtnGroup0.stateAnyBtn()) {
+    if (BtnGroup0.stateAnyBtn() || BtnGroup1.stateAnyBtn()) {
       OnPowerUnit = true;
       PowerOff.on();
     }
-    if (PowerOff.resp()) {
-      OnPowerUnit = false;
+    if (!Control_Hallway_Passage.OffPowerUnit()) {
+      if (PowerOff.resp()) {
+        OnPowerUnit = false;
+      }
     }
     digitalWrite(PowerUnit, OnPowerUnit);
   }

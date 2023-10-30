@@ -34,6 +34,12 @@ public:
       TimeClickMainPassage = millis();
     }
   }
+  bool OffPowerUnit() {
+    if (StateLightHallway || StateLightPassage) {
+      return true;
+    }
+    return false;
+  }
   void clickMainHallway() {  // вкл малый свет, большой свет в прихожей выкл любой из них
     if (millis() - TimeClickMainHallway <= 3000) {
       if (StateLightHallway == 0) {

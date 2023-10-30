@@ -41,19 +41,33 @@ public:
       }
     }
     if (StopTime && OldTimeMainKitchen + 300 <= millis()) {
-      if (OldTimeMainKitchen < TimeMainKitchen) {  // один клик
-        Serial.println("Two clicks.");
+      if (OldTimeMainKitchen < TimeMainKitchen) {
+        Serial.println("Two click");
         OnStateLamp();
-      } else if (OldTimeMainKitchen == TimeMainKitchen) {  //два клика
+      } else if (OldTimeMainKitchen == TimeMainKitchen) {
         Serial.println("One Click");
         OnStateWorking_area();
       }
       StopTime = false;
     }
+
+    if (StopTimeLamp && OldTimeLamp + 300 <= millis()) {
+      if (OldTimeLamp < TimeLamp) {
+        Serial.println("Two click");
+        if (Control_BalconyRL.Global_StateBalconyR()) {
+          Control_BalconyRL.On_or_Off_BalconyR(0);
+        } else {
+          Control_BalconyRL.On_or_Off_BalconyR(1);
+        }
+      } else if (OldTimeLamp == TimeLamp) {
+        Serial.println("One Click");
+        OnLamp = !OnLamp;
+      }
+      StopTimeLamp = false;
+    }
   }
   void clickMainKitchen() {
     if (StopTime) {
-      Serial.println(" clicks.");
       TimeMainKitchen = millis();
     }
     if (!StopTime) {
@@ -65,19 +79,42 @@ public:
 
   void OnStateLamp() {
     OnLamp = !OnLamp;
+    if (OnLamp) {
+      Control_BalconyRL.On_or_Off_BalconyR(1);
+    } else {
+      Control_BalconyRL.On_or_Off_BalconyR(0);
+    }
   }
   void OnStateWorking_area() {
     OnWorking_area = !OnWorking_area;
   }
-  void clickLamp() {
-    OnStateLamp();
+  void clickLamp() {  //двойной клик добавить и вторым дергать балкон R
+    if (StopTimeLamp) {
+      TimeLamp = millis();
+    }
+    if (!StopTimeLamp) {
+      OldTimeLamp = millis();
+      TimeLamp = OldTimeLamp;
+      StopTimeLamp = true;
+    }
+    //OnStateLamp();
   }
   void OffKitchen() {  //выкл всю кухню
-    OnWorking_area = false;
-    OnLamp = false;
-    OnBar = false;
-    OnRibbon = false;
-    OnApron = false;
+    if (OnWorking_area || OnLamp || OnBar || OnRibbon || OnApron) {
+      OnWorking_area = false;
+      OnLamp = false;
+      OnBar = false;
+      OnRibbon = false;
+      OnApron = false;
+      Control_BalconyRL.On_or_Off_BalconyR(0);
+    } else {
+      Control_BalconyRL.On_or_Off_BalconyR(1);
+      OnWorking_area = true;
+      OnLamp = true;
+      OnBar = true;
+      OnRibbon = true;
+      OnApron = true;
+    }
     //Serial.println(" Off");
   }
   void clickBar() {
@@ -91,6 +128,6 @@ public:
   }
 
 private:
-  bool OnWorking_area, OnLamp, OnBar, OnRibbon, OnApron, StopTime;
-  long OldTimeMainKitchen, TimeMainKitchen;
+  bool OnWorking_area, OnLamp, OnBar, OnRibbon, OnApron, StopTime, StopTimeLamp;
+  long OldTimeMainKitchen, TimeMainKitchen, TimeLamp, OldTimeLamp;
 };
