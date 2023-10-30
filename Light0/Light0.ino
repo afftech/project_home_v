@@ -20,7 +20,7 @@
 #define SmallLightPassage 9  //Коридор */*
 #define BigLightPassage 10   //Коридор */*
 
-#define PowerUnit 11  //Включение блока питания */*
+#define PowerUnit 13  //Включение блока питания */*
 bool OnPowerUnit;     //Включение блока питания */*
 #include "TimerOff.h"
 Timer PowerOff(20);  //время выключения блока
