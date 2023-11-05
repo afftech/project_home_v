@@ -3,7 +3,8 @@
 #define MiddleRoom_MiddleRBra A1  //1:520-523  2:833-837 12:474-477
 #define Loggia_Toilet A2          //1:519-522  2:833-837 12:472-475
 #define Bathroom_Miror A3
-#define Sensor A4
+#define Sensor_1_2 A4
+#define Apron_NULL A6  // _Apron
 // 12 выходов
 #define MiddleRoomLight1 2
 #define MiddleRoomLight2 3
@@ -13,15 +14,13 @@
 
 #define LitleRoomLight1 6
 #define LitleRoomLight2 7
-
 #define LitleBraLRLight3 8
 #define ToiletLight 9
-
 #define LoggiaLight 12
-
 #define BathMirorLight 13
 #define BathroomLight 10
 #define RibbonWBrightly 5
+#define Apron 19  //A5
 
 #define TimeOffDT 90  //Время в секундах выключения управления освещением комнаты
 
@@ -30,7 +29,8 @@ ButtonGroup BtnGroup0(LitleRoom_LitleRBra, 1, 1, 1023, 461, 815, 413);
 ButtonGroup BtnGroup1(MiddleRoom_MiddleRBra, 1, 1, 1023, 461, 815, 413);
 ButtonGroup BtnGroup2(Loggia_Toilet, 1, 1, 1023, 461, 815, 413);
 ButtonGroup BtnGroup3(Bathroom_Miror, 1, 1, 1023, 461, 815, 413);
-ButtonGroup BtnGroup4(Sensor, 0, 0, 1023, 461, 815, 413);
+ButtonGroup BtnGroup4(Sensor_1_2, 0, 0, 1023, 461, 815, 413);
+ButtonGroup BtnGroup5(Apron_NULL, 1, 1, 1023, 461, 815, 413);
 
 #include "Little_Room.h"
 Little_Room little_Room;
@@ -42,6 +42,9 @@ Bathroom bathroom;
 Loggia loggia;
 #include "Toilet.h"
 Toilet toilet;
+#include "Control_Kitchen.h"
+Control_Kitchen Control_Kitchen;
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(MiddleRoomLight1, OUTPUT);
@@ -56,6 +59,7 @@ void setup() {
   pinMode(MiddleRoomBra, OUTPUT);
   pinMode(LoggiaLight, OUTPUT);
   pinMode(BathMirorLight, OUTPUT);
+  pinMode(Apron, OUTPUT);
 
   Serial.begin(9600);
 }
@@ -65,12 +69,25 @@ void loop() {
   bathroom.run();
   loggia.run();
   toilet.run();
+  Control_Kitchen.run();
   // put your main code here, to run repeatedly:
   BtnGroup0.check();
   BtnGroup1.check();
   BtnGroup2.check();
   BtnGroup3.check();
   BtnGroup4.check();
+  BtnGroup5.check();
+  {  //Фартук и балкон
+
+    if (BtnGroup5.click1()) {
+      Control_Kitchen.clickApron();
+      Serial.println("click1 Apron");
+    }
+    if (BtnGroup5.hold1_2()) {
+      Control_Kitchen.OffKitchen();  //в сериал отправляем
+      Serial.println("hold1_2 Apron");
+    }
+  }
   {  //малая комната
     if (BtnGroup0.click1()) {
       Serial.println("click1 LitleRoomLight");

@@ -78,10 +78,11 @@ public:
     }
   }
   bool Global_StateBalconyR() {
-    if (StateBalconyR) {
+    if (OnBalconyR) {
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 private:
   bool OnBalconyR, OnBalconyL;

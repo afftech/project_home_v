@@ -1,16 +1,17 @@
 //8 переключателей
 #define MainHallway_Passage A0  //1:519-523  2:834-839 12:473-476 1-2 & 12 Прихожая_Коридор
 #define Kitchen_Lamp A1         //1:520-523  2:833-837 12:474-477 1-2-12 _Гл.выкл.Кухня_Люстра
-#define Bar_Ribbon A2           //1:519-522  2:833-837 12:472-475 1-2-12 Бар_Лента
-#define Apron_Balcony_R A3      //1:519-523  2:833-837 12:472-476 1-2-12 _Гл.выкл.Кухня_Люстра
-#define Balcony_L A4            //1:519-523  2:833-837 12:472-476 1-2-12 _Гл.выкл.Кухня_Люстра
+#define Bra_Ribbon A2           //1:519-522  2:833-837 12:472-475 1-2-12 Бар_Лента добавляется ф-ия упр.---> foot light
+#define NULL_Balcony_R A3       //1:519-523  2:833-837 12:472-476 1-2-12 Apron переезжает  (удалить от сюда)
+#define Balcony_L A4            //1:519-523  2:833-837 12:472-476 1-2-12 Дубль Гл.выкл.Кухня
 // 11 выходов
+
 /*Кухня*/
-#define Working_area 2  //рабочая зона  */*
+#define Working_area 2  //рабочая зона  */* //включаем если весь свет на кухне погас!!!
 #define Lamp 3          //Лампа */*
-#define Bar 4           //Бар */*
+#define Bra 4           //Бар */*
 #define Ribbon 11       //Лента */ не горит*
-#define Apron 12        //фартук */ не горит*
+#define Foot_light 12   //фартук */ не горит*  // Apron переезжает  ---> foot light (Выключается если что то из света кухни ON, вкл. если выкл всесь свет кухни погас)
 /*Балкон*/
 #define BalconyR 5  //балкон */*
 #define BalconyL 6  //балкон */*
@@ -38,8 +39,8 @@ ButtonGroup BtnGroup1(MainHallway_Passage, 1, 1, 1023, 521, 836, 474); /*ButtonG
                                                                                 1 - это обычная кнопка 
                                                                                 0 - это постоянный сигнал с залипанием*/
 ButtonGroup BtnGroup2(Kitchen_Lamp, 1, 1, 1023, 521, 836, 475);
-ButtonGroup BtnGroup3(Bar_Ribbon, 1, 1, 1023, 520, 836, 475);
-ButtonGroup BtnGroup4(Apron_Balcony_R, 1, 1, 1023, 520, 836, 475);
+ButtonGroup BtnGroup3(Bra_Ribbon, 1, 1, 1023, 520, 836, 475);
+ButtonGroup BtnGroup4(NULL_Balcony_R, 1, 1, 1023, 520, 836, 475);
 ButtonGroup BtnGroup5(Balcony_L, 1, 1, 1023, 520, 836, 475);
 #include "Control_Hallway_Passage.h"
 Control_Hallway_Passage Control_Hallway_Passage;
@@ -53,9 +54,9 @@ void setup() {
   Serial.begin(9600);
   pinMode(Working_area, OUTPUT);
   pinMode(Lamp, OUTPUT);
-  pinMode(Bar, OUTPUT);
+  pinMode(Bra, OUTPUT);
   pinMode(Ribbon, OUTPUT);
-  pinMode(Apron, OUTPUT);
+  pinMode(Foot_light, OUTPUT);
   pinMode(BalconyR, OUTPUT);
   pinMode(BalconyL, OUTPUT);
   pinMode(SmallLightHallway, OUTPUT);
@@ -104,7 +105,7 @@ void loop() {
     }
   }
   if (Control_Hallway_Passage.apartmentOff()) {  //выкл света во всей кв
-    Control_Kitchen.OffKitchen();
+    Control_Kitchen.OffKitchenfrom_Hallway_Passage();
     Control_BalconyRL.OffBalconyLR();
     Serial.println("OffAll");
   }
@@ -127,12 +128,12 @@ void loop() {
     }
     //бар
     if (BtnGroup3.click1()) {
-      Control_Kitchen.clickBar();
-      Serial.println("click1 Bar");
+      Control_Kitchen.clickBra();
+      Serial.println("click1 Bra");
     }
     if (BtnGroup3.hold1_2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold1_2 Bar");
+      Serial.println("hold1_2 Bra");
     }
     if (BtnGroup3.click2()) {
       Control_Kitchen.clickRibbon();
@@ -141,14 +142,6 @@ void loop() {
     if (BtnGroup3.hold2_2()) {
       Control_Kitchen.OffKitchen();
       Serial.println("hold2_2 Ribbon");
-    }
-    if (BtnGroup4.click1()) {
-      Control_Kitchen.clickApron();
-      Serial.println("click1 Apron");
-    }
-    if (BtnGroup4.hold1_2()) {
-      Control_Kitchen.OffKitchen();
-      Serial.println("hold1_2 Apron");
     }
   }
   {  //балкон
