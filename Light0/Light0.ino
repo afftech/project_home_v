@@ -42,6 +42,9 @@ ButtonGroup BtnGroup2(Kitchen_Lamp, 1, 1, 1023, 521, 836, 475);
 ButtonGroup BtnGroup3(Bra_Ribbon, 1, 1, 1023, 520, 836, 475);
 ButtonGroup BtnGroup4(NULL_Balcony_R, 1, 1, 1023, 520, 836, 475);
 ButtonGroup BtnGroup5(Balcony_L, 1, 1, 1023, 520, 836, 475);
+
+#define TimeFoot_light 5;  //время подсветки в ноги
+
 #include "Control_Hallway_Passage.h"
 Control_Hallway_Passage Control_Hallway_Passage;
 #include "Control_BalconyRL.h"

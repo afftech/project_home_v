@@ -33,6 +33,10 @@ public:
       return true;
     }
   }
+  void stop() {
+    start = false;
+    i = 0;
+  }
 private:
   long Time;
   bool start;

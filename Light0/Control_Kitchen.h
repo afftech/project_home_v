@@ -5,6 +5,13 @@ class Control_Kitchen {
 public:
   void run() {
     {
+      {
+        if (OnFoot_light) {
+          digitalWrite(Foot_light, 1);
+        } else {
+          digitalWrite(Foot_light, 0);
+        }
+      }
       if (OnWorking_area) {
         digitalWrite(Working_area, 1);
       } else {
@@ -49,7 +56,6 @@ public:
       }
       StopTime = false;
     }
-
     if (StopTimeLamp && OldTimeLamp + 300 <= millis()) {
       if (OldTimeLamp < TimeLamp) {
         Serial.println("Two click");
@@ -69,7 +75,7 @@ public:
       if (OldTimeBra < TimeBra) {
         Serial.println("Two click");
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
-          OnWorking_area = !OnWorking_area;
+          OnFoot_light = !OnFoot_light;
         } else {
           OnBra = !OnBra;
         }
@@ -78,7 +84,7 @@ public:
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
           OnBra = !OnBra;
         } else {
-          OnWorking_area = !OnWorking_area;
+          OnFoot_light = !OnFoot_light;
         }
       }
       StopTimeBra = false;
@@ -87,7 +93,7 @@ public:
       if (OldTimeRibbon < TimeRibbon) {
         Serial.println("Two click");
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
-          OnWorking_area = !OnWorking_area;
+          OnFoot_light = !OnFoot_light;
         } else {
           OnRibbon = !OnRibbon;
         }
@@ -96,10 +102,25 @@ public:
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
           OnRibbon = !OnRibbon;
         } else {
-          OnWorking_area = !OnWorking_area;
+          OnFoot_light = !OnFoot_light;
         }
       }
       StopTimeRibbon = false;
+    }
+    {
+      if (!OnLamp && !OnRibbon && !OnBra && !OnRibbon) {
+        Timer1.on();
+        OnFoot_light = true;
+        BeforStateOff = false;
+      }
+      if (Timer1.resp()) {
+        OnFoot_light = false;
+      }
+      if ((OnLamp || OnRibbon || OnBra || OnRibbon) && !BeforStateOff) {
+        OnFoot_light = false;
+        BeforStateOff = true;
+        Timer1.stop();
+      }
     }
   }
   void clickMainKitchen() {
@@ -142,6 +163,7 @@ public:
       OnBra = false;
       OnRibbon = false;
       Control_BalconyRL.On_or_Off_BalconyR(0);
+      //AfterWork
     } else {
       Control_BalconyRL.On_or_Off_BalconyR(1);
       OnWorking_area = true;
@@ -169,7 +191,6 @@ public:
     }
   }
   void clickRibbon() {  //аналогично с брой
-                        //OnRibbon = !OnRibbon;
     if (StopTimeRibbon) {
       TimeRibbon = millis();
     }
@@ -179,10 +200,9 @@ public:
       StopTimeRibbon = true;
     }
   }
-
-
-
 private:
-  bool OnWorking_area, OnLamp, OnBra, OnRibbon, StopTime, StopTimeLamp, StopTimeBra, StopTimeRibbon;
+  bool OnWorking_area, OnLamp, OnBra, OnRibbon, StopTime, StopTimeLamp, StopTimeBra, StopTimeRibbon, OnFoot_light, BeforStateOff;
   long OldTimeMainKitchen, TimeMainKitchen, TimeLamp, OldTimeLamp, OldTimeBra, TimeBra, TimeRibbon, OldTimeRibbon;
+#include "TimerOff.h"
+  Timer Timer1(TimeFoot_light);  //время выключения блока
 };
