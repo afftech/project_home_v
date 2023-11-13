@@ -28,8 +28,8 @@ public:
     }
     TimeToilet = millis();
   }
-  void OffRoom() {
-    OnToilet = false;  //4
+  void Off_or_ONRoom() {
+    OnToilet = !OnToilet;  //4
     StateToilet = 0;
   }
 private:

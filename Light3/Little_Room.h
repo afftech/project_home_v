@@ -1,6 +1,6 @@
 
 class Little_Room {
-  #include "TimerOff.h"
+#include "TimerOff.h"
   Timer TimerControlState{ TimeOffDT };
 public:
   void run() {
@@ -102,13 +102,22 @@ public:
       TimerControlState.stop();
     }
   }
-  void OffRoom() {
-    OnLitleRoomLight1 = false;
-    OnLitleRoomLight2 = false;
-    OnLitleBraLRLight3 = false;
-    StateSwitchRoom = 0;
-    StateLitleBraLRLight3 = 0;
+  void Off_or_ONRoom() {
+    if (OnLitleRoomLight1 || OnLitleRoomLight2 || OnLitleBraLRLight3) {
+      OnLitleRoomLight1 = false;
+      OnLitleRoomLight2 = false;
+      OnLitleBraLRLight3 = false;
+      StateSwitchRoom = 0;  //возможно надо доб в цикл ветвления
+      StateLitleBraLRLight3 = 0;
+    } else if (!OnLitleRoomLight1 && !OnLitleRoomLight2 && !OnLitleBraLRLight3) {
+      OnLitleRoomLight1 = true;
+      OnLitleRoomLight2 = true;
+      OnLitleBraLRLight3 = true;
+      StateSwitchRoom = 3;
+      StateLitleBraLRLight3 = 1;
+    }
   }
+
 private:
   bool StopTimeLitleRBra;
   long OldTimeLitleRBra, TimeLitleRBra;

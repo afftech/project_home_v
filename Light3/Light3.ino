@@ -95,7 +95,7 @@ void loop() {
     }
     if (BtnGroup0.hold1_2()) {
       Serial.println("hold1_2 LitleRoomLight Off");
-      little_Room.OffRoom();
+      little_Room.Off_or_ONRoom();
     }
     if (BtnGroup0.click2()) {
       Serial.println("click2 LitleRBra");
@@ -103,7 +103,7 @@ void loop() {
     }
     if (BtnGroup0.hold2_2()) {
       Serial.println("hold2_2 LitleRBra Off");
-      little_Room.OffRoom();
+      little_Room.Off_or_ONRoom();
     }
   }
   {  //средняя комната
@@ -113,7 +113,7 @@ void loop() {
     }
     if (BtnGroup1.hold1_2()) {
       Serial.println("hold1_2 MiddleRoomLight Off");
-      middle_Room.OffRoom();
+      middle_Room.Off_or_ONRoom();
     }
     if (BtnGroup1.click2()) {
       Serial.println("click2 MiddleRoomBra");
@@ -121,7 +121,7 @@ void loop() {
     }
     if (BtnGroup1.hold2_2()) {
       Serial.println("hold2_2 MiddleRoomBra Off");
-      middle_Room.OffRoom();
+      middle_Room.Off_or_ONRoom();
     }
   }
   {  //лоджия
@@ -131,7 +131,7 @@ void loop() {
     }
     if (BtnGroup2.hold1_2()) {
       Serial.println("hold1_2 loggia Off");
-      loggia.OffRoom();
+      loggia.Off_or_ONRoom();
     }
     if (BtnGroup2.click2()) {
       Serial.println("click2 Toilet");
@@ -139,7 +139,7 @@ void loop() {
     }
     if (BtnGroup2.hold2_2()) {
       Serial.println("hold2_2 Toilet Off");
-      toilet.OffRoom();
+      toilet.Off_or_ONRoom();
     }
   }
   {  //Ванна и зеркало
@@ -149,7 +149,7 @@ void loop() {
     }
     if (BtnGroup3.hold1_2()) {
       Serial.println("hold1_2 Bathroom Off");
-      bathroom.OffRoom();
+      bathroom.Off_or_ONRoom();
     }
     if (BtnGroup3.click2()) {
       Serial.println("click2 Mirror");
@@ -157,7 +157,7 @@ void loop() {
     }
     if (BtnGroup3.hold2_2()) {
       Serial.println("hold2_2 Mirror Off");
-      bathroom.OffRoom();
+      bathroom.Off_or_ONRoom();
     }
   }
   if (BtnGroup4.click1()) {  //Лента туалета по датчику

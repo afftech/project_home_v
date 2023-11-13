@@ -108,11 +108,18 @@ public:
       TimerControlState.stop();
     }
   }
-  void OffRoom() {
-    OnMiddleRoomLight1 = false;
-    OnMiddleRoomLight2 = false;
-    //OnMiddleRoomLight3 = false;
-    OnMiddleRoomBra = false;
+  void Off_or_ONRoom() {
+    if (OnMiddleRoomLight1 || OnMiddleRoomLight2 || OnMiddleRoomBra) {
+      OnMiddleRoomLight1 = false;
+      OnMiddleRoomLight2 = false;
+      //OnMiddleRoomLight3 = false;
+      OnMiddleRoomBra = false;
+    } else if (!OnMiddleRoomLight1 && !OnMiddleRoomLight2 && !OnMiddleRoomBra) {
+      OnMiddleRoomLight1 = true;
+      OnMiddleRoomLight2 = true;
+      //OnMiddleRoomLight3 = false;
+      OnMiddleRoomBra = true;
+    }
     StateSwitchRoom = 0;
     StateBra = 0;
   }

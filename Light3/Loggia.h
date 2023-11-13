@@ -28,8 +28,8 @@ public:
     }
     TimeLoggiaLight = millis();
   }
-  void OffRoom() {
-    OnLoggiaLight = false;  //4
+  void Off_or_ONRoom() {
+    OnLoggiaLight = !OnLoggiaLight;  //4
     StateLoggiaLight = 0;
   }
 private:

@@ -72,10 +72,14 @@ public:
       TimerControlState.on();
     }
   }
-  void OffRoom() {
-    OnBathroomLight = false;   //4
-    OnBathMirorLight = false;  //7
-
+  void Off_or_ONRoom() {
+    if (OnBathroomLight || OnBathMirorLight) {
+      OnBathroomLight = false;   //4
+      OnBathMirorLight = false;  //7
+    } else if (!OnBathroomLight && !OnBathMirorLight) {
+      OnBathroomLight = true;   //4
+      OnBathMirorLight = true;  //7
+    }
     StateBathroomLight = 0;
     StateBathMirorLight = 0;
   }
