@@ -29,8 +29,13 @@ public:
     TimeLoggiaLight = millis();
   }
   void Off_or_ONRoom() {
-    OnLoggiaLight = !OnLoggiaLight;  //4
-    StateLoggiaLight = 0;
+    if (OnLoggiaLight) {
+      OnLoggiaLight = false;
+      StateLoggiaLight = 0;
+    } else {
+      OnLoggiaLight = true;  //4
+      StateLoggiaLight = 1;
+    }
   }
 private:
   bool OnLoggiaLight;

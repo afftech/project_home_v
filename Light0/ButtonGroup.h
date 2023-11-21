@@ -65,9 +65,11 @@ public:
           Btn1State = false;
           return false;
         }
-        Btn1State = false;
-        TimerClick1 = millis();
-        return false;
+        if (!_flag1) {
+          Btn1State = false;
+          TimerClick1 = millis();
+          return false;
+        }
       }
       return false;
     } else {
@@ -116,9 +118,11 @@ public:
           holdClick2_1 = true;
           return false;
         }
-        Btn2State = false;
-        TimerClick2 = millis();
-        return false;
+        if (!_flag1) {
+          Btn2State = false;
+          TimerClick2 = millis();
+          return false;
+        }
       }
       return false;
     } else {

@@ -114,14 +114,16 @@ public:
       OnMiddleRoomLight2 = false;
       //OnMiddleRoomLight3 = false;
       OnMiddleRoomBra = false;
+      StateSwitchRoom = 0;
+      StateBra = 0;
     } else if (!OnMiddleRoomLight1 && !OnMiddleRoomLight2 && !OnMiddleRoomBra) {
       OnMiddleRoomLight1 = true;
       OnMiddleRoomLight2 = true;
       //OnMiddleRoomLight3 = false;
       OnMiddleRoomBra = true;
+      StateSwitchRoom = 3;
+      StateBra = 1;
     }
-    StateSwitchRoom = 0;
-    StateBra = 0;
   }
 private:
   bool StopTimeMiddleRoomBra;

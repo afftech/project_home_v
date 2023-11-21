@@ -20,12 +20,12 @@
 #define BigLightHallway 8    //прихожая сильный свет */*
 #define SmallLightPassage 9  //Коридор */*
 #define BigLightPassage 10   //Коридор */*
-
-#define PowerUnit 13  //Включение блока питания */*
-bool OnPowerUnit;     //Включение блока питания */*
+#define TimeFoot_light 5     //время подсветки в ноги
+#define PowerUnit 13         //Включение блока питания */*
+bool OnPowerUnit;            //Включение блока питания */*
 #include "TimerOff.h"
-Timer PowerOff(20);  //время выключения блока
-
+Timer PowerOff(20);            //время выключения блока
+Timer Timer1(TimeFoot_light);  //время выключения подсветки
 #include "ButtonGroup.h"
 #include "ButtonGroupS3.h"
 ButtonGroupS3 BtnGroup0(MainHallway_Passage, 1, 1, 1023, 521, 836, 474);
@@ -43,7 +43,7 @@ ButtonGroup BtnGroup3(Bra_Ribbon, 1, 1, 1023, 520, 836, 475);
 ButtonGroup BtnGroup4(NULL_Balcony_R, 1, 1, 1023, 520, 836, 475);
 ButtonGroup BtnGroup5(Balcony_L, 1, 1, 1023, 520, 836, 475);
 
-#define TimeFoot_light 5;  //время подсветки в ноги
+
 
 #include "Control_Hallway_Passage.h"
 Control_Hallway_Passage Control_Hallway_Passage;

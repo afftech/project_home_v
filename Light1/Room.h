@@ -138,7 +138,6 @@ public:
   void Switch3() {
     OnRibbonP = true;
     OnRibbonBed = true;
-
     OnRibbonWDimly = false;
     OnRibbonWBrightly = true;
   }
@@ -176,7 +175,8 @@ public:
         OnBraLBed = true;
       } else if (StateBraLSwitch == 1) {
         StateBraLSwitch = 2;
-        OnBraLBed = false;
+        StateBraRSwitch = 2;
+        OnBraLBed = true;
         OnBraRBed = true;
       } else {
         StateBraLSwitch = 0;
@@ -212,7 +212,8 @@ public:
         OnBraRBed = true;
       } else if (StateBraRSwitch == 1) {
         StateBraRSwitch = 2;
-        OnBraRBed = false;
+        StateBraLSwitch = 2;
+        OnBraRBed = true;
         OnBraLBed = true;
       } else {
         StateBraRSwitch = 0;
@@ -293,7 +294,41 @@ public:
     OnRibbonWBrightly = false;  //5
     StateMainSwitch = 0;
   }
-  void OffMainRoom() {
+  void Off_On_Bra() {
+    if (OnRibbonWDimly || OnEdge || OnCentre || OnRibbonP || OnRibbonBed || OnRibbonWBrightly || OnBraLBed || OnBraRBed || OnBraTape) {
+      OnRibbonWDimly = false;     //4
+      OnEdge = false;             //7
+      OnCentre = false;           //8
+      OnRibbonP = false;          //2
+      OnRibbonBed = false;        //3
+      OnRibbonWBrightly = false;  //5
+      OnBraLBed = false;          //9
+      OnBraRBed = false;          //10
+      OnBraTape = false;          //11
+      StateMainSwitch = 0;
+      StateBraLSwitch = 0;
+      StateBraRSwitch = 0;
+      StateRibbonSwitch = 0;
+    } else if (!OnRibbonWDimly && !OnEdge && !OnCentre && !OnRibbonP && !OnRibbonBed && !OnRibbonWBrightly && !OnBraLBed && !OnBraRBed && !OnBraTape) {
+      StateMainSwitch = 3;
+      Switch1();
+      Switch2();
+      Switch3();
+      OnCentre = true;
+
+      StateBraLSwitch = 2;
+      StateBraRSwitch = 2;
+      OnBraLBed = true;
+      OnBraRBed = true;
+
+      StateRibbonSwitch = 3;
+      OnRibbonP = true;          //2
+      OnRibbonBed = true;        //3
+      OnRibbonWBrightly = true;  //5
+    }
+  }
+
+  /*void OffMainRoom() {
     OnRibbonWDimly = false;     //4
     OnEdge = false;             //7
     OnCentre = false;           //8
@@ -307,7 +342,7 @@ public:
     StateBraLSwitch = 0;
     StateBraRSwitch = 0;
     StateRibbonSwitch = 0;
-  }
+  }*/
 private:
   bool OnRibbonP, OnRibbonBed, OnRibbonWDimly, OnRibbonWBrightly, OnEdge, OnCentre, OnBraLBed, OnBraRBed, OnBraTape;
   bool StopTimeBraL, StopTime, StopTimeBraR, StopTimeBraT, StopTimeRibbon;

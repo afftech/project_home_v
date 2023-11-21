@@ -76,12 +76,14 @@ public:
     if (OnBathroomLight || OnBathMirorLight) {
       OnBathroomLight = false;   //4
       OnBathMirorLight = false;  //7
+      StateBathroomLight = 0;
+      StateBathMirorLight = 0;
     } else if (!OnBathroomLight && !OnBathMirorLight) {
       OnBathroomLight = true;   //4
       OnBathMirorLight = true;  //7
+      StateBathroomLight = 1;
+      StateBathMirorLight = 1;
     }
-    StateBathroomLight = 0;
-    StateBathMirorLight = 0;
   }
 private:
   Timer TimerControlState{ TimeOffDT };

@@ -16,9 +16,9 @@
 #define BraTape 11  //Бра стол
 
 #include "ButtonGroup.h" /* Максимум 1s*/
-//#include "ButtonGroupS3.h"                                           
+//#include "ButtonGroupS3.h"
 ButtonGroup BtnGroup0(MainSwitch_LBra, 1, 1, 1023, 521, 836, 474);
-ButtonGroup BtnGroup1(RBra_MainLight, 1, 1, 1023, 521, 836, 474);  
+ButtonGroup BtnGroup1(RBra_MainLight, 1, 1, 1023, 521, 836, 474);
 ButtonGroup BtnGroup2(Ribbon_BraTable, 1, 1, 1023, 521, 836, 475);
 
 
@@ -50,7 +50,7 @@ void loop() {
     }
     if (BtnGroup0.hold1_2()) {
       Serial.println("hold1_2 MainSwitch");
-      Room.OffMainRoom();
+      Room.Off_On_Bra();
     }
     if (BtnGroup1.click2()) {
       Serial.println("click2 MainSwitch 2");
@@ -58,7 +58,7 @@ void loop() {
     }
     if (BtnGroup1.hold2_2()) {
       Serial.println("hold1_2 MainSwitch 2");
-      Room.OffMainRoom();
+      Room.Off_On_Bra();
     }
   }
   {  //бра
@@ -68,7 +68,7 @@ void loop() {
     }
     if (BtnGroup0.hold2_2()) {
       Serial.println("hold2_2 BraL");
-      Room.OffMainRoom();
+      Room.Off_On_Bra();
     }
     if (BtnGroup1.click1()) {
       Serial.println("click1 BraR");
@@ -76,7 +76,7 @@ void loop() {
     }
     if (BtnGroup1.hold1_2()) {
       Serial.println("hold1_2 BraR");
-      Room.OffMainRoom();
+      Room.Off_On_Bra();
     }
   }
   {  //Выкл ленты
@@ -86,7 +86,7 @@ void loop() {
     }
     if (BtnGroup2.hold1_2()) {
       Serial.println("hold1_2 Ribbon");
-      Room.OffMainRoom();
+      Room.Off_On_Bra();
     }
     if (BtnGroup2.click2()) {
       Serial.println("click2 BraTable");
@@ -94,7 +94,7 @@ void loop() {
     }
     if (BtnGroup2.hold2_2()) {
       Serial.println("hold2_2 BraTable");
-      Room.OffMainRoom();
+      Room.Off_On_Bra();
     }
   }
 }

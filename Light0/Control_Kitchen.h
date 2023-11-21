@@ -203,6 +203,4 @@ public:
 private:
   bool OnWorking_area, OnLamp, OnBra, OnRibbon, StopTime, StopTimeLamp, StopTimeBra, StopTimeRibbon, OnFoot_light, BeforStateOff;
   long OldTimeMainKitchen, TimeMainKitchen, TimeLamp, OldTimeLamp, OldTimeBra, TimeBra, TimeRibbon, OldTimeRibbon;
-#include "TimerOff.h"
-  Timer Timer1(TimeFoot_light);  //время выключения блока
 };

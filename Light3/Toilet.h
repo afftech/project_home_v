@@ -29,8 +29,13 @@ public:
     TimeToilet = millis();
   }
   void Off_or_ONRoom() {
-    OnToilet = !OnToilet;  //4
-    StateToilet = 0;
+    if (OnToilet) {
+      OnToilet = false;  //4
+      StateToilet = 0;
+    } else {
+      OnToilet = true;  //4
+      StateToilet = 1;
+    }
   }
 private:
   bool OnToilet;
