@@ -50,20 +50,17 @@ public:
       if (!holdStop1 && _flag1 && Btn1State && millis() - TimerClick1 >= BtnGroupTime3) {
         TimerClick1 = millis();
         holdClick1_2 = true;
-        Serial.println(F("p"));
         return false;
       }
       if (!_flag1 && Btn1State) {
         if (hold1On && millis() - TimerClick1 < BtnGroupTime2) {
           hold1On = false;
           Btn1State = false;
-          Serial.println(F("t"));
           return true;
         }
         if (hold1On && millis() - TimerClick1 >= BtnGroupTime2) {
           holdClick1_1 = true;
           Btn1State = false;
-          Serial.println(F("y"));
           return false;
         }
         if (!_flag1) {
@@ -100,28 +97,25 @@ public:
   }
   bool click2() {
     if (_BtnMode2) {
-      if (!holdStop2 && _flag2 && !Btn2State && millis() - TimerClick2 >= 200) {
+      if (!holdStop2 && _flag2 && !Btn2State && millis() - TimerClick2 >= BtnGroupTime1) {
         Btn2State = true;
         TimerClick2 = millis();
         hold2On = true;
       }
-      if (!holdStop2 && _flag2 && Btn2State && millis() - TimerClick2 >= 1000) {
+      if (!holdStop2 && _flag2 && Btn2State && millis() - TimerClick2 >= BtnGroupTime3) {
         TimerClick2 = millis();
         holdClick2_2 = true;
-        Serial.println(F("Hey"));
         return false;
       }
       if (!_flag2 && Btn2State) {
-        if (hold2On && millis() - TimerClick2 < 500) {
+        if (hold2On && millis() - TimerClick2 < BtnGroupTime2) {
           Btn2State = false;
           hold2On = false;
-          Serial.println(F("Mey"));
           return true;
         }
-        if (hold2On && millis() - TimerClick2 >= 500) {
+        if (hold2On && millis() - TimerClick2 >= BtnGroupTime2) {
           Btn2State = false;
           holdClick2_1 = true;
-          Serial.println(F("Bla"));
           return false;
         }
         if (!_flag2) {

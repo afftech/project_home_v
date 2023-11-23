@@ -45,32 +45,33 @@ public:
   }
   bool click1() {
     if (_BtnMode1) {
-      if (_flag1 && !Btn1State && millis() - TimerClick1 >= 200) {
+      if (!holdStop1 && _flag1 && !Btn1State && millis() - TimerClick1 >= BtnGroupTimeS1) {
         Btn1State = true;
         TimerClick1 = millis();
         hold1On = true;
       }
-      if (_flag1 && Btn1State && millis() - TimerClick1 >= 3000) {
+      if (!holdStop1 && _flag1 && Btn1State && millis() - TimerClick1 >= BtnGroupTimeS3) {
         TimerClick1 = millis();
         holdClick1_2 = true;
         return false;
       }
       if (!_flag1 && Btn1State) {
-        if (hold1On && millis() - TimerClick1 < 500) {
+        if (hold1On && millis() - TimerClick1 < BtnGroupTimeS2) {
           hold1On = false;
           Btn1State = false;
           return true;
         }
-        if (hold1On && millis() - TimerClick1 >= 500) {
+        if (hold1On && millis() - TimerClick1 >= BtnGroupTimeS2) {
           holdClick1_1 = true;
           Btn1State = false;
           return false;
         }
         if (!_flag1) {
-          Btn1State = false;
-          TimerClick1 = millis();
-          return false;
+          holdStop1 = false;
         }
+        Btn1State = false;
+        TimerClick1 = millis();
+        return false;
       }
       return false;
     } else {
@@ -89,7 +90,8 @@ public:
     return false;
   }
   bool hold1_2() {
-    if (holdClick1_2) {
+    if (holdClick1_2 && !holdStop1) {
+      holdStop1 = true;
       holdClick1_2 = false;
       hold1On = false;
       return true;
@@ -98,32 +100,35 @@ public:
   }
   bool click2() {
     if (_BtnMode2) {
-      if (_flag2 && !Btn2State && millis() - TimerClick2 >= 200) {
+      if (!holdStop2 && _flag2 && !Btn2State && millis() - TimerClick2 >= BtnGroupTimeS1) {
         Btn2State = true;
         TimerClick2 = millis();
         hold2On = true;
       }
-      if (_flag2 && Btn2State && millis() - TimerClick2 >= 3000) {
+      if (!holdStop2 && _flag2 && Btn2State && millis() - TimerClick2 >= BtnGroupTimeS3) {
         TimerClick2 = millis();
         holdClick2_2 = true;
+        Serial.println(F("Not Err 1"));
         return false;
       }
       if (!_flag2 && Btn2State) {
-        if (hold2On && millis() - TimerClick2 < 500) {
+        if (hold2On && millis() - TimerClick2 < BtnGroupTimeS2) {
           Btn2State = false;
-          hold1On = false;
+          hold2On = false;
           return true;
         }
-        if (hold2On && millis() - TimerClick2 >= 500) {
+        if (hold2On && millis() - TimerClick2 >= BtnGroupTimeS2) {
           Btn2State = false;
           holdClick2_1 = true;
           return false;
         }
         if (!_flag2) {
-          Btn2State = false;
-          TimerClick2 = millis();
-          return false;
+          holdStop2 = false;
         }
+        Btn2State = false;
+        TimerClick2 = millis();
+
+        return false;
       }
       return false;
     } else {
@@ -137,14 +142,17 @@ public:
     if (holdClick2_1) {
       holdClick2_1 = false;
       hold2On = false;
+      Serial.println(F("Not Err 2"));
       return true;
     }
     return false;
   }
   bool hold2_2() {
-    if (holdClick2_2) {
+    if (holdClick2_2 && !holdStop2) {
+      holdStop2 = true;
       holdClick2_2 = false;
       hold2On = false;
+      Serial.println(F("Not Err 3"));
       return true;
     }
     return false;
@@ -156,7 +164,7 @@ public:
     return false;
   }
 private:
-  bool holdClick2, hold2On, hold1On, holdClick1_1, holdClick1_2, holdClick2_1, holdClick2_2;
+  bool holdClick2, hold2On, hold1On, holdClick1_1, holdClick1_2, holdClick2_1, holdClick2_2, holdStop1, holdStop2;
   bool _flag1, _flag2, CheckCondition, CheckClick1, CheckClick2, Btn1State, Btn2State;
   int _holdTimeclick1, _holdTimeclick2;
   int _expectation;

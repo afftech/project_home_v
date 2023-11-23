@@ -4,6 +4,7 @@
 #define Bra_Ribbon A2           //1:519-522  2:833-837 12:472-475 1-2-12 Бар_Лента добавляется ф-ия упр.---> foot light
 #define NULL_Balcony_R A3       //1:519-523  2:833-837 12:472-476 1-2-12 Apron переезжает  (удалить от сюда)
 #define Balcony_L A4            //1:519-523  2:833-837 12:472-476 1-2-12 Дубль Гл.выкл.Кухня
+#define Passage1_Passage2 A5    //1:519-523  2:833-837 12:472-476 1-2-12 Дубль Гл.выкл.Кухня
 // 11 выходов
 
 /*Кухня*/
@@ -20,28 +21,40 @@
 #define BigLightHallway 8    //прихожая сильный свет */*
 #define SmallLightPassage 9  //Коридор */*
 #define BigLightPassage 10   //Коридор */*
-#define TimeFoot_light 5     //время подсветки в ноги
-#define PowerUnit 13         //Включение блока питания */*
-bool OnPowerUnit;            //Включение блока питания */*
+
+
+#define PowerUnit 13  //Включение блока питания */*
+bool OnPowerUnit;     //Включение блока питания */*
 #include "TimerOff.h"
-Timer PowerOff(20);            //время выключения блока
-Timer Timer1(TimeFoot_light);  //время выключения подсветки
+Timer PowerOff(20);  //время выключения блока в минутах
+Timer Timer1(5);     //время выключения подсветки в ноги в минутах
+
+//для обычных кнопок ButtonGroup
+#define BtnGroupTime1 100  //программная задержка от помех для кликов
+#define BtnGroupTime2 250  //время для средней длинны нажатия
+#define BtnGroupTime3 400  //время для длинного нажатия
+//для таких же обычных кнопок только ButtonGroupS3.h
+#define BtnGroupTimeS1 100   //программная задержка от помех для кликов
+#define BtnGroupTimeS2 250   //время для средней длинны нажатия
+#define BtnGroupTimeS3 3000  //время для длинного нажатия
+
 #include "ButtonGroup.h"
 #include "ButtonGroupS3.h"
-ButtonGroupS3 BtnGroup0(MainHallway_Passage, 1, 1, 1023, 521, 836, 474);
-ButtonGroup BtnGroup1(MainHallway_Passage, 1, 1, 1023, 521, 836, 474); /*ButtonGroup**(аналоговый пин, 
+ButtonGroupS3 BtnGroup0(MainHallway_Passage, 1, 1, 1023, 521, 836, 475);  //1023, 521, 836, 475
+ButtonGroup BtnGroup1(MainHallway_Passage, 1, 1, 1023, 521, 836, 475);    /*ButtonGroup**(аналоговый пин, 
                                                                                 тип сигнала,
                                                                                 тип сигнала,
                                                                                 состояние без нажатия,
                                                                                 состояние 1 сигнала,
                                                                                 состояние 2 сигнала) */
-                                                                       /*тип сигнала может быть:
+                                                                          /*тип сигнала может быть:
                                                                                 1 - это обычная кнопка 
                                                                                 0 - это постоянный сигнал с залипанием*/
 ButtonGroup BtnGroup2(Kitchen_Lamp, 1, 1, 1023, 521, 836, 475);
-ButtonGroup BtnGroup3(Bra_Ribbon, 1, 1, 1023, 520, 836, 475);
-ButtonGroup BtnGroup4(NULL_Balcony_R, 1, 1, 1023, 520, 836, 475);
-ButtonGroup BtnGroup5(Balcony_L, 1, 1, 1023, 520, 836, 475);
+ButtonGroup BtnGroup3(Bra_Ribbon, 1, 1, 1023, 521, 836, 475);
+ButtonGroup BtnGroup4(NULL_Balcony_R, 1, 1, 1023, 521, 836, 475);
+ButtonGroup BtnGroup5(Balcony_L, 1, 1, 1023, 521, 836, 475);
+ButtonGroup BtnGroup6(Passage1_Passage2, 1, 1, 1023, 521, 836, 475);
 
 
 
@@ -79,98 +92,128 @@ void loop() {
   BtnGroup3.check();
   BtnGroup4.check();
   BtnGroup5.check();
+  BtnGroup6.check();
+
   {  // гл выкл
     if (BtnGroup0.click1()) {
-      Serial.println("click1 MainHallway");
+      //Serial.println("click1 MainHallway");
       Control_Hallway_Passage.clickMainHallway();
     }
     if (BtnGroup0.hold1_1()) {
-      Serial.println("hold1_1 MainHallway1");
+      //Serial.println("hold1_1 MainHallway1");
       Control_Hallway_Passage.long1ClickMainHallway();
     }
     if (BtnGroup0.hold1_2()) {
-      Serial.println("hold1_1 MainHallway2");
+      //Serial.println("hold1_1 MainHallway2");
       Control_Hallway_Passage.long2ClickMainHallway();
     }
   }
   {  // выкл в прихожей
     if (BtnGroup1.click2()) {
       Control_Hallway_Passage.clickMainPassage();
-      Serial.println("Passage");
+      //Serial.println("Passage");
     }
     if (BtnGroup1.hold2_1()) {
-      Serial.println("hold2_2 Passage");
+      //Serial.println("hold2_2 Passage");
       Control_Hallway_Passage.long1ClickMainPassage();
     }
     if (BtnGroup1.hold2_2()) {
-      Serial.println("hold2_2 Passage");
+      //Serial.println("hold2_2 Passage");
+      Control_Hallway_Passage.long2ClickMainPassage();
+    }
+  }
+  {  // выкл в прихожей
+    if (BtnGroup6.click1()) {
+      Control_Hallway_Passage.clickMainPassage();
+      //Serial.println("Passage");
+    }
+    if (BtnGroup6.hold1_1()) {
+      //Serial.println("hold2_2 Passage");
+      Control_Hallway_Passage.long1ClickMainPassage();
+    }
+    if (BtnGroup6.hold1_2()) {
+      //Serial.println("hold2_2 Passage");
+      Control_Hallway_Passage.long2ClickMainPassage();
+    }
+  }
+  {  // выкл в прихожей
+    if (BtnGroup6.click2()) {
+      Control_Hallway_Passage.clickMainPassage();
+      //Serial.println("Passage");
+    }
+    if (BtnGroup6.hold2_1()) {
+      //Serial.println("hold2_2 Passage");
+      Control_Hallway_Passage.long1ClickMainPassage();
+    }
+    if (BtnGroup6.hold2_2()) {
+      //Serial.println("hold2_2 Passage");
       Control_Hallway_Passage.long2ClickMainPassage();
     }
   }
   if (Control_Hallway_Passage.apartmentOff()) {  //выкл света во всей кв
     Control_Kitchen.OffKitchenfrom_Hallway_Passage();
     Control_BalconyRL.OffBalconyLR();
-    Serial.println("OffAll");
+    //Serial.println("OffAll");
   }
   {  // выкл в кухни
     if (BtnGroup2.click1()) {
       Control_Kitchen.clickMainKitchen();
-      Serial.println("click1 Main Kitchen");  //правый балкон вкл
+      //Serial.println("click1 Main Kitchen");  //правый балкон вкл
     }
     if (BtnGroup2.hold1_2()) {  //включить весь свет в кухне D2,D3.D4.D5.D11.D12
       Control_Kitchen.OffKitchen();
-      Serial.println("hold1_2 Main Kitchen");  //правый балкон выкл
+      //Serial.println("hold1_2 Main Kitchen");  //правый балкон выкл
     }
     if (BtnGroup2.click2()) {
       Control_Kitchen.clickLamp();
-      Serial.println("click2 Lamp");
+      //Serial.println("click2 Lamp");
     }
     if (BtnGroup2.hold2_2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold2_2 Lamp");
+      //Serial.println("hold2_2 Lamp");
     }
     //бар
     if (BtnGroup3.click1()) {
       Control_Kitchen.clickBra();
-      Serial.println("click1 Bra");
+      //Serial.println("click1 Bra");
     }
     if (BtnGroup3.hold1_2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold1_2 Bra");
+      //Serial.println("hold1_2 Bra");
     }
     if (BtnGroup3.click2()) {
       Control_Kitchen.clickRibbon();
-      Serial.println("click2 Ribbon");
+      //Serial.println("click2 Ribbon");
     }
     if (BtnGroup3.hold2_2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold2_2 Ribbon");
+      //Serial.println("hold2_2 Ribbon");
     }
   }
   {  //балкон
     if (BtnGroup4.click2()) {
       Control_BalconyRL.clickMainBalconyR();
-      Serial.println("click2 BalconyR");
+      //Serial.println("click2 BalconyR");
     }
     if (BtnGroup4.hold2_2()) {
       Control_BalconyRL.OffBalconyLR();
-      Serial.println("hold2_2 BalconyR");
+      //Serial.println("hold2_2 BalconyR");
     }
     if (BtnGroup5.click1()) {
       Control_BalconyRL.clickMainBalconyL();
-      Serial.println("click1 BalconyL");
+      //Serial.println("click1 BalconyL");
     }
     if (BtnGroup5.hold1_2()) {
       Control_BalconyRL.OffBalconyLR();
-      Serial.println("hold1_2 BalconyL");
+      //Serial.println("hold1_2 BalconyL");
     }
     if (BtnGroup5.click2()) {  //кухня гл вкл
       Control_Kitchen.clickMainKitchen();
-      Serial.println("click1 Main Kitchen duplicate");
+      //Serial.println("click1 Main Kitchen duplicate");
     }
     if (BtnGroup5.hold2_2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold1_2 Main Kitchen duplicate");
+      //Serial.println("hold1_2 Main Kitchen duplicate");
     }
   }
   {  //запуск Блока питания

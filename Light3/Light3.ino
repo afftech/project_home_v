@@ -24,9 +24,9 @@
 
 #define TimeOffDT 90  //Время в секундах выключения управления освещением комнаты
 
-#define BtnGroupTime1 200  //программная задержка от помех для кликов
-#define BtnGroupTime2 500  //время для средней длинны нажатия
-#define BtnGroupTime3 100  //время для длинного нажатия
+#define BtnGroupTime1 100  //программная задержка от помех для кликов
+#define BtnGroupTime2 250  //время для средней длинны нажатия
+#define BtnGroupTime3 400  //время для длинного нажатия
 
 #include "ButtonGroup.h"   /* Максимум 1s*/
 ButtonGroup BtnGroup0(LitleRoom_LitleRBra, 1, 1, 1023, 461, 815, 413);
