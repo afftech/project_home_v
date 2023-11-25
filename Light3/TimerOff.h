@@ -10,7 +10,6 @@ public:
     if (start) {
       if (millis() - Time >= 1000) {
         i++;
-        Serial.println(i);
         if (i >= _timeStop) {
           start = false;
           i = 0;

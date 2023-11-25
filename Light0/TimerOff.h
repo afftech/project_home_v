@@ -10,7 +10,6 @@ public:
     if (start) {
       if (millis() - Time >= 60000) {
         i++;
-        //Serial.println(i);
         if (i >= _DelayTimeS) {
           start = false;
           i = 0;

@@ -26,8 +26,8 @@
 #define PowerUnit 13  //Включение блока питания */*
 bool OnPowerUnit;     //Включение блока питания */*
 #include "TimerOff.h"
-Timer PowerOff(20);  //время выключения блока в минутах
-Timer Timer1(5);     //время выключения подсветки в ноги в минутах
+Timer PowerOff(1);  //время выключения блока в минутах
+Timer Timer1(1);    //время выключения подсветки в ноги в минутах (Кухня)
 
 //для обычных кнопок ButtonGroup
 #define BtnGroupTime1 100  //программная задержка от помех для кликов
@@ -170,7 +170,7 @@ void loop() {
     }
     if (BtnGroup2.hold2_2()) {
       Control_Kitchen.OffKitchen();
-      //Serial.println("hold2_2 Lamp");
+      Serial.println("hold2_2 Lamp");
     }
     //бар
     if (BtnGroup3.click1()) {
@@ -179,7 +179,7 @@ void loop() {
     }
     if (BtnGroup3.hold1_2()) {
       Control_Kitchen.OffKitchen();
-      //Serial.println("hold1_2 Bra");
+      Serial.println("hold1_2 Bra");
     }
     if (BtnGroup3.click2()) {
       Control_Kitchen.clickRibbon();
@@ -187,7 +187,7 @@ void loop() {
     }
     if (BtnGroup3.hold2_2()) {
       Control_Kitchen.OffKitchen();
-      //Serial.println("hold2_2 Ribbon");
+      Serial.println("hold2_2 Ribbon");
     }
   }
   {  //балкон
@@ -213,7 +213,7 @@ void loop() {
     }
     if (BtnGroup5.hold2_2()) {
       Control_Kitchen.OffKitchen();
-      //Serial.println("hold1_2 Main Kitchen duplicate");
+      Serial.println("hold1_2 Main Kitchen duplicate");
     }
   }
   {  //запуск Блока питания

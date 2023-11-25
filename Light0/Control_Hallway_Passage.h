@@ -52,6 +52,8 @@ public:
     } else {
       StateLightHallway = 0;
     }
+    Serial.print(F("StateLightHallway:"));
+    Serial.println(StateLightHallway);
     TimeClickMainHallway = millis();
   }
   void long1ClickMainHallway() {  //вкл большой свет корридоре и прихожей
@@ -93,10 +95,11 @@ public:
     } else {
       StateLightPassage = 0;
     }
+    Serial.print(F("StateLightPassage:"));
+    Serial.println(StateLightPassage);
     TimeClickMainPassage = millis();
   }
   void long1ClickMainPassage() {
-    StateLightHallway = 2;
     StateLightPassage = 2;
   }
   void long2ClickMainPassage() {

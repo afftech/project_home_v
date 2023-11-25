@@ -76,6 +76,7 @@ public:
         Serial.println("Two click");
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
           OnFoot_light = !OnFoot_light;
+          Serial.println(F("OnFoot_light"));
         } else {
           OnBra = !OnBra;
         }
@@ -108,17 +109,18 @@ public:
       StopTimeRibbon = false;
     }
     {
-      if (!OnLamp && !OnRibbon && !OnBra && !OnRibbon) {
+      Timer1.run();
+      if (!OnLamp && !OnRibbon && !OnBra && !OnRibbon && !BeforStateOff) {
         Timer1.on();
         OnFoot_light = true;
-        BeforStateOff = false;
+        BeforStateOff = true;
       }
       if (Timer1.resp()) {
         OnFoot_light = false;
       }
-      if ((OnLamp || OnRibbon || OnBra || OnRibbon) && !BeforStateOff) {
+      if ((OnLamp || OnRibbon || OnBra || OnRibbon)) {
         OnFoot_light = false;
-        BeforStateOff = true;
+        BeforStateOff = false;
         Timer1.stop();
       }
     }
