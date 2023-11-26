@@ -196,7 +196,7 @@ void loop() {
       //Serial.println("click2 BalconyR");
     }
     if (BtnGroup4.hold2_2()) {
-      Control_BalconyRL.OffBalconyLR();
+      Control_BalconyRL.Off_or_Off_BalconyLR();
       //Serial.println("hold2_2 BalconyR");
     }
     if (BtnGroup5.click1()) {
@@ -204,7 +204,7 @@ void loop() {
       //Serial.println("click1 BalconyL");
     }
     if (BtnGroup5.hold1_2()) {
-      Control_BalconyRL.OffBalconyLR();
+      Control_BalconyRL.Off_or_Off_BalconyLR();
       //Serial.println("hold1_2 BalconyL");
     }
     if (BtnGroup5.click2()) {  //кухня гл вкл

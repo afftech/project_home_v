@@ -3,7 +3,7 @@ class Control_Hallway_Passage {
 public:
   void run() {
     {
-      if (StateLightHallway == 1) {  //прихожая
+      if (StateLightHallway == 1) {  //
         digitalWrite(SmallLightHallway, 1);
         digitalWrite(BigLightHallway, 0);
       } else if (StateLightHallway == 2) {
@@ -103,8 +103,12 @@ public:
     StateLightPassage = 2;
   }
   void long2ClickMainPassage() {
-    StateLightHallway = false;
-    StateLightPassage = false;
+    if (StateLightHallway || StateLightPassage) {
+      StateLightHallway = false;
+      StateLightPassage = false;
+    } else {
+      StateLightPassage = 2;
+    }
   }
 
 private:

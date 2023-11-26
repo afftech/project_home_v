@@ -31,18 +31,34 @@ public:
         OnBalconyR = true;
       } else if (StateBalconyR == 1) {
         StateBalconyR = 2;
+        StateBalconyL = 2;
         OnBalconyL = true;
       } else {
         StateBalconyR = 0;
+        StateBalconyL = 0;
         OnBalconyR = false;
         OnBalconyL = false;
       }
     } else {
       StateBalconyR = 0;
+      StateBalconyL = 0;
       OnBalconyR = false;
       OnBalconyL = false;
     }
     TimeClickMainBalconyR = millis();
+  }
+  void Off_or_Off_BalconyLR() {
+    if (OnBalconyR || OnBalconyL) {
+      OnBalconyR = false;
+      OnBalconyL = false;
+      StateBalconyR = false;
+      StateBalconyL = false;
+    } else {
+      OnBalconyR = true;
+      OnBalconyL = true;
+      StateBalconyL = 2;
+      StateBalconyR = 2;
+    }
   }
   void OffBalconyLR() {
     OnBalconyR = false;
@@ -57,9 +73,11 @@ public:
         OnBalconyL = true;
       } else if (StateBalconyL == 1) {
         StateBalconyL = 2;
+        StateBalconyR = 2;
         OnBalconyR = true;
       } else {
         StateBalconyL = 0;
+        StateBalconyR = 0;
         OnBalconyR = false;
         OnBalconyL = false;
       }
