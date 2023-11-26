@@ -12,6 +12,7 @@ public:
         i++;
         if (i >= _DelayTimeS) {
           start = false;
+          respOn = true;
           i = 0;
         } else {
           start = true;
@@ -26,11 +27,11 @@ public:
     i = 0;
   }
   bool resp() {
-    if (start) {
-      return false;
-    } else {
+    if (respOn) {
+      respOn = false;
       return true;
     }
+    return false;
   }
   void stop() {
     start = false;
@@ -38,6 +39,6 @@ public:
   }
 private:
   long Time;
-  bool start;
+  bool start, respOn;
   int i, _DelayTimeS;
 };

@@ -1,3 +1,4 @@
+#include "HardwareSerial.h"
 
 
 
@@ -59,6 +60,7 @@ public:
         if (hold1On && millis() - TimerClick1 < BtnGroupTimeS2) {
           hold1On = false;
           Btn1State = false;
+          Serial.println(F("Button_click1"));
           return true;
         }
         if (hold1On && millis() - TimerClick1 >= BtnGroupTimeS2) {
@@ -115,6 +117,7 @@ public:
         if (hold2On && millis() - TimerClick2 < BtnGroupTimeS2) {
           Btn2State = false;
           hold2On = false;
+          Serial.println(F("Button_click2"));
           return true;
         }
         if (hold2On && millis() - TimerClick2 >= BtnGroupTimeS2) {

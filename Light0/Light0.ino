@@ -170,7 +170,7 @@ void loop() {
     }
     if (BtnGroup2.hold2_2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold2_2 Lamp");
+      //Serial.println("hold2_2 Lamp");
     }
     //бар
     if (BtnGroup3.click1()) {
@@ -179,7 +179,7 @@ void loop() {
     }
     if (BtnGroup3.hold1_2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold1_2 Bra");
+      //Serial.println("hold1_2 Bra");
     }
     if (BtnGroup3.click2()) {
       Control_Kitchen.clickRibbon();
@@ -187,7 +187,7 @@ void loop() {
     }
     if (BtnGroup3.hold2_2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold2_2 Ribbon");
+      //Serial.println("hold2_2 Ribbon");
     }
   }
   {  //балкон
@@ -213,12 +213,12 @@ void loop() {
     }
     if (BtnGroup5.hold2_2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold1_2 Main Kitchen duplicate");
+      //Serial.println("hold1_2 Main Kitchen duplicate");
     }
   }
   {  //запуск Блока питания
     PowerOff.run();
-    if (BtnGroup0.stateAnyBtn() || BtnGroup1.stateAnyBtn()) {
+    if (BtnGroup0.stateAnyBtn() || BtnGroup1.stateAnyBtn() || BtnGroup6.stateAnyBtn()) {
       OnPowerUnit = true;
       PowerOff.on();
     }

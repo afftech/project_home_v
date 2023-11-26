@@ -4,6 +4,7 @@
 class Control_Kitchen {
 public:
   void run() {
+
     {
       {
         if (OnFoot_light) {
@@ -81,7 +82,7 @@ public:
           OnBra = !OnBra;
         }
       } else if (OldTimeBra == TimeBra) {
-        Serial.println("One Click");
+        Serial.println(F("One Click"));
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
           OnBra = !OnBra;
         } else {
@@ -109,18 +110,26 @@ public:
       StopTimeRibbon = false;
     }
     {
+      if (!OnLamp && !OnRibbon && !OnBra && !OnRibbon) {
+        StateAlllight = false;
+      } else {
+        StateAlllight = true;
+      }
       Timer1.run();
-      if (!OnLamp && !OnRibbon && !OnBra && !OnRibbon && !BeforStateOff) {
+      if (!StateAlllight && !AfterStateLight) {
         Timer1.on();
         OnFoot_light = true;
-        BeforStateOff = true;
+        AfterStateLight = true;
+        StateOnFoot_light = false;
       }
       if (Timer1.resp()) {
         OnFoot_light = false;
       }
-      if ((OnLamp || OnRibbon || OnBra || OnRibbon)) {
+      if (StateAlllight && AfterStateLight) {
+        StateOnFoot_light = true;
+        Serial.print(OnFoot_light);
         OnFoot_light = false;
-        BeforStateOff = false;
+        AfterStateLight = false;
         Timer1.stop();
       }
     }
@@ -203,6 +212,6 @@ public:
     }
   }
 private:
-  bool OnWorking_area, OnLamp, OnBra, OnRibbon, StopTime, StopTimeLamp, StopTimeBra, StopTimeRibbon, OnFoot_light, BeforStateOff;
+  bool OnWorking_area, OnLamp, OnBra, OnRibbon, StopTime, StopTimeLamp, StopTimeBra, StopTimeRibbon, OnFoot_light, AfterStateLight, StateAlllight, StateOnFoot_light;
   long OldTimeMainKitchen, TimeMainKitchen, TimeLamp, OldTimeLamp, OldTimeBra, TimeBra, TimeRibbon, OldTimeRibbon;
 };
