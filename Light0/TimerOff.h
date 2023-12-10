@@ -10,6 +10,7 @@ public:
     if (start) {
       if (millis() - Time >= 60000) {
         i++;
+        Serial.println(i);
         if (i >= _DelayTimeS) {
           start = false;
           respOn = true;
@@ -38,7 +39,7 @@ public:
     i = 0;
   }
 private:
-  long Time;
+  unsigned long Time;
   bool start, respOn;
   int i, _DelayTimeS;
 };

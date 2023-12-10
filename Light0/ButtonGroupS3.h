@@ -17,28 +17,21 @@ public:
   void check() {
     int dataBtn = analogRead(_pin);
     if (dataBtn < (_expectation - 10)) {
-      if (millis() - TimerExpectation >= 10) {
-        if (!CheckCondition) {
-          CheckCondition = true;
-          TimerCondition = millis();
-        }
-        if ((_condition1 - 5) < dataBtn && dataBtn < (_condition1 + 5) && millis() - TimerCondition >= 10) {
-          CheckCondition = false;
-          _flag1 = true;
-          _flag2 = false;
+      if ((_condition1 - 5) < dataBtn && dataBtn < (_condition1 + 5) && millis() - TimerExpectation >= 10) {
+        TimerExpectation = millis();
+        _flag1 = true;
+        _flag2 = false;
 
-        } else if ((_condition2 - 5) < dataBtn && dataBtn < (_condition2 + 5) && millis() - TimerCondition >= 10) {
-          CheckCondition = false;
-          _flag1 = false;
-          _flag2 = true;
-        } else if ((_condition3 - 5) < dataBtn && dataBtn < (_condition3 + 5) && millis() - TimerCondition >= 10) {
-          CheckCondition = false;
-          _flag1 = true;
-          _flag2 = true;
-        }
+      } else if ((_condition2 - 5) < dataBtn && dataBtn < (_condition2 + 5) && millis() - TimerExpectation >= 10) {
+        TimerExpectation = millis();
+        _flag1 = false;
+        _flag2 = true;
+      } else if ((_condition3 - 5) < dataBtn && dataBtn < (_condition3 + 5) && millis() - TimerExpectation >= 10) {
+        TimerExpectation = millis();
+        _flag1 = true;
+        _flag2 = true;
       }
     } else {
-      CheckCondition = false;
       _flag1 = false;
       _flag2 = false;
       TimerExpectation = millis();
@@ -60,12 +53,13 @@ public:
         if (hold1On && millis() - TimerClick1 < BtnGroupTimeS2) {
           hold1On = false;
           Btn1State = false;
-          Serial.println(F("Button_click1"));
+          Serial.println(F("clickS1"));
           return true;
         }
         if (hold1On && millis() - TimerClick1 >= BtnGroupTimeS2) {
           holdClick1_1 = true;
           Btn1State = false;
+          Serial.println(F("Err2"));
           return false;
         }
         if (!_flag1) {
@@ -87,6 +81,7 @@ public:
     if (holdClick1_1) {
       holdClick1_1 = false;
       hold1On = false;
+      Serial.println(F("holdS1_1"));
       return true;
     }
     return false;
@@ -96,6 +91,7 @@ public:
       holdStop1 = true;
       holdClick1_2 = false;
       hold1On = false;
+      Serial.println(F("holdS1_2"));
       return true;
     }
     return false;
@@ -106,23 +102,25 @@ public:
         Btn2State = true;
         TimerClick2 = millis();
         hold2On = true;
+        //Serial.println(F("Err3"));
       }
       if (!holdStop2 && _flag2 && Btn2State && millis() - TimerClick2 >= BtnGroupTimeS3) {
         TimerClick2 = millis();
         holdClick2_2 = true;
-        Serial.println(F("Not Err 1"));
+        //Serial.println(F("Err4"));
         return false;
       }
       if (!_flag2 && Btn2State) {
         if (hold2On && millis() - TimerClick2 < BtnGroupTimeS2) {
           Btn2State = false;
           hold2On = false;
-          Serial.println(F("Button_click2"));
+          //Serial.println(F("clickS2"));
           return true;
         }
         if (hold2On && millis() - TimerClick2 >= BtnGroupTimeS2) {
           Btn2State = false;
           holdClick2_1 = true;
+          //Serial.println(F("Err2"));
           return false;
         }
         if (!_flag2) {
@@ -145,7 +143,7 @@ public:
     if (holdClick2_1) {
       holdClick2_1 = false;
       hold2On = false;
-      Serial.println(F("Not Err 2"));
+      //Serial.println(F("holdS2_1"));
       return true;
     }
     return false;
@@ -155,7 +153,7 @@ public:
       holdStop2 = true;
       holdClick2_2 = false;
       hold2On = false;
-      Serial.println(F("Not Err 3"));
+      //Serial.println(F("holdS2_2"));
       return true;
     }
     return false;
@@ -176,5 +174,5 @@ private:
   int _condition3;
   int _BtnMode1, _BtnMode2;
   char _pin;
-  uint32_t TimerExpectation, TimerCondition, TimerClick1, TimerClick2;
+  unsigned long TimerExpectation, TimerCondition, TimerClick1, TimerClick2;
 };

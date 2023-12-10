@@ -14,27 +14,20 @@ public:
   void check() {
     int dataBtn = analogRead(_pin);
     if (dataBtn < (_expectation - 10)) {
-      if (millis() - TimerExpectation >= 10) {
-        if (!CheckCondition) {
-          CheckCondition = true;
-          TimerCondition = millis();
-        }
-        if ((_condition1 - 5) < dataBtn && dataBtn < (_condition1 + 5) && millis() - TimerCondition >= 10) {
-          CheckCondition = false;
-          _flag1 = true;
-          _flag2 = false;
-        } else if ((_condition2 - 5) < dataBtn && dataBtn < (_condition2 + 5) && millis() - TimerCondition >= 10) {
-          CheckCondition = false;
-          _flag1 = false;
-          _flag2 = true;
-        } else if ((_condition3 - 5) < dataBtn && dataBtn < (_condition3 + 5) && millis() - TimerCondition >= 10) {
-          CheckCondition = false;
-          _flag1 = true;
-          _flag2 = true;
-        }
+      if ((_condition1 - 5) < dataBtn && dataBtn < (_condition1 + 5) && millis() - TimerExpectation >= 10) {
+        TimerExpectation = millis();
+        _flag1 = true;
+        _flag2 = false;
+      } else if ((_condition2 - 5) < dataBtn && dataBtn < (_condition2 + 5) && millis() - TimerExpectation >= 10) {
+        TimerExpectation = millis();
+        _flag1 = false;
+        _flag2 = true;
+      } else if ((_condition3 - 5) < dataBtn && dataBtn < (_condition3 + 5) && millis() - TimerExpectation >= 10) {
+        TimerExpectation = millis();
+        _flag1 = true;
+        _flag2 = true;
       }
     } else {
-      CheckCondition = false;
       _flag1 = false;
       _flag2 = false;
       TimerExpectation = millis();
@@ -56,6 +49,7 @@ public:
         if (hold1On && millis() - TimerClick1 < BtnGroupTime2) {
           hold1On = false;
           Btn1State = false;
+          Serial.println(F("click1"));
           return true;
         }
         if (hold1On && millis() - TimerClick1 >= BtnGroupTime2) {
@@ -111,6 +105,7 @@ public:
         if (hold2On && millis() - TimerClick2 < BtnGroupTime2) {
           Btn2State = false;
           hold2On = false;
+          Serial.println(F("click2"));
           return true;
         }
         if (hold2On && millis() - TimerClick2 >= BtnGroupTime2) {
@@ -150,6 +145,12 @@ public:
     }
     return false;
   }
+  bool stateAnyBtn() {
+    if (_flag1 || _flag2) {
+      return true;
+    }
+    return false;
+  }
 private:
   bool holdClick2, hold2On, hold1On, holdClick1_1, holdClick1_2, holdClick2_1, holdClick2_2, holdStop1, holdStop2;
   bool _flag1, _flag2, CheckCondition, CheckClick1, CheckClick2, Btn1State, Btn2State;
@@ -160,5 +161,5 @@ private:
   int _condition3;
   int _BtnMode1, _BtnMode2;
   char _pin;
-  uint32_t TimerExpectation, TimerCondition, TimerClick1, TimerClick2;
+  unsigned long TimerExpectation, TimerCondition, TimerClick1, TimerClick2;
 };

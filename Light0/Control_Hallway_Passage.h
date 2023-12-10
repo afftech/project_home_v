@@ -52,12 +52,12 @@ public:
     } else {
       StateLightHallway = 0;
     }
-    Serial.print(F("StateLightHallway:"));
-    Serial.println(StateLightHallway);
+    //Serial.print(F("StateLightHallway:"));
+    //Serial.println(StateLightHallway);
     TimeClickMainHallway = millis();
   }
   void long1ClickMainHallway() {  //вкл большой свет корридоре и прихожей
-                                  //выкл весь свет в кв
+
     if (!StateLightHallway && !StateLightPassage) {
       StateLightHallway = 2;
       StateLightPassage = 2;
@@ -70,8 +70,7 @@ public:
       StateLightPassage = false;
     }
   }
-  void long2ClickMainHallway() {
-    //выкл весь свет в кв
+  void long2ClickMainHallway() {  //выкл весь свет в кв
     StateLightHallway = false;
     StateLightPassage = false;
     apartment = true;
@@ -95,8 +94,8 @@ public:
     } else {
       StateLightPassage = 0;
     }
-    Serial.print(F("StateLightPassage:"));
-    Serial.println(StateLightPassage);
+    //Serial.print(F("StateLightPassage:"));
+    //Serial.println(StateLightPassage);
     TimeClickMainPassage = millis();
   }
   void long1ClickMainPassage() {
@@ -114,5 +113,5 @@ public:
 private:
   bool apartment;
   int StateLightHallway, StateLightPassage;
-  long TimeClickMainHallway, TimeClickMainPassage;
+  unsigned long TimeClickMainHallway, TimeClickMainPassage;
 };

@@ -49,24 +49,24 @@ public:
     }
     if (StopTime && OldTimeMainKitchen + 300 <= millis()) {
       if (OldTimeMainKitchen < TimeMainKitchen) {
-        Serial.println("Two click");
+        //Serial.println("Two click");
         OnStateLamp();
       } else if (OldTimeMainKitchen == TimeMainKitchen) {
-        Serial.println("One Click");
+        //Serial.println("One Click");
         OnStateWorking_area();
       }
       StopTime = false;
     }
     if (StopTimeLamp && OldTimeLamp + 300 <= millis()) {
       if (OldTimeLamp < TimeLamp) {
-        Serial.println("Two click");
+        //Serial.println("Two click");
         if (Control_BalconyRL.Global_StateBalconyR()) {
           Control_BalconyRL.On_or_Off_BalconyR(0);
         } else {
           Control_BalconyRL.On_or_Off_BalconyR(1);
         }
       } else if (OldTimeLamp == TimeLamp) {
-        Serial.println("One Click");
+        //Serial.println("One Click");
         OnLamp = !OnLamp;
       }
       StopTimeLamp = false;
@@ -74,15 +74,15 @@ public:
 
     if (StopTimeBra && OldTimeBra + 300 <= millis()) {
       if (OldTimeBra < TimeBra) {
-        Serial.println("Two click");
+        //Serial.println("Two click");
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
           OnFoot_light = !OnFoot_light;
-          Serial.println(F("OnFoot_light"));
+          //Serial.println(F("OnFoot_light"));
         } else {
           OnBra = !OnBra;
         }
       } else if (OldTimeBra == TimeBra) {
-        Serial.println(F("One Click"));
+        //Serial.println(F("One Click"));
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
           OnBra = !OnBra;
         } else {
@@ -93,14 +93,14 @@ public:
     }
     if (StopTimeRibbon && OldTimeRibbon + 300 <= millis()) {
       if (OldTimeRibbon < TimeRibbon) {
-        Serial.println("Two click");
+        //Serial.println("Two click");
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
           OnFoot_light = !OnFoot_light;
         } else {
           OnRibbon = !OnRibbon;
         }
       } else if (OldTimeRibbon == TimeRibbon) {
-        Serial.println("One Click");
+       // Serial.println("One Click");
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
           OnRibbon = !OnRibbon;
         } else {
@@ -127,7 +127,7 @@ public:
       }
       if (StateAlllight && AfterStateLight) {
         StateOnFoot_light = true;
-        Serial.print(OnFoot_light);
+       // Serial.print(OnFoot_light);
         OnFoot_light = false;
         AfterStateLight = false;
         Timer1.stop();
@@ -213,5 +213,5 @@ public:
   }
 private:
   bool OnWorking_area, OnLamp, OnBra, OnRibbon, StopTime, StopTimeLamp, StopTimeBra, StopTimeRibbon, OnFoot_light, AfterStateLight, StateAlllight, StateOnFoot_light;
-  long OldTimeMainKitchen, TimeMainKitchen, TimeLamp, OldTimeLamp, OldTimeBra, TimeBra, TimeRibbon, OldTimeRibbon;
+  unsigned long OldTimeMainKitchen, TimeMainKitchen, TimeLamp, OldTimeLamp, OldTimeBra, TimeBra, TimeRibbon, OldTimeRibbon;
 };

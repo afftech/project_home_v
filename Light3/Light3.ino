@@ -28,7 +28,7 @@
 #define BtnGroupTime2 250  //время для средней длинны нажатия
 #define BtnGroupTime3 400  //время для длинного нажатия
 
-#include "ButtonGroup.h"   /* Максимум 1s*/
+#include "ButtonGroup.h" /* Максимум 1s*/
 ButtonGroup BtnGroup0(LitleRoom_LitleRBra, 1, 1, 1023, 461, 815, 413);
 ButtonGroup BtnGroup1(MiddleRoom_MiddleRBra, 1, 1, 1023, 461, 815, 413);
 ButtonGroup BtnGroup2(Loggia_Toilet, 1, 1, 1023, 461, 815, 413);
@@ -87,7 +87,7 @@ void loop() {
       Control_Kitchen.clickApron();
       //Serial.println("click1 Apron");
     }
-    if (BtnGroup5.hold1_2()) {
+    if (BtnGroup5.hold1_2() || BtnGroup5.hold1_1()) {
       Control_Kitchen.OffKitchen();  //в сериал отправляем
       //Serial.println("hold1_2 Apron");
     }
@@ -97,7 +97,7 @@ void loop() {
       //Serial.println("click1 LitleRoomLight");
       little_Room.clickLitleRoom();
     }
-    if (BtnGroup0.hold1_2()) {
+    if (BtnGroup0.hold1_2() || BtnGroup0.hold1_1()) {
       //Serial.println("hold1_2 LitleRoomLight Off");
       little_Room.Off_or_ONRoom();
     }
@@ -105,7 +105,7 @@ void loop() {
       //Serial.println("click2 LitleRBra");
       little_Room.ClickLitleRBra();
     }
-    if (BtnGroup0.hold2_2()) {
+    if (BtnGroup0.hold2_2() || BtnGroup0.hold2_1()) {
       //Serial.println("hold2_2 LitleRBra Off");
       little_Room.Off_or_ONRoom();
     }
@@ -115,7 +115,7 @@ void loop() {
       //Serial.println("click1 MiddleRoomLight");
       middle_Room.clickRoom();
     }
-    if (BtnGroup1.hold1_2()) {
+    if (BtnGroup1.hold1_2() || BtnGroup1.hold1_1()) {
       //Serial.println("hold1_2 MiddleRoomLight Off");
       middle_Room.Off_or_ONRoom();
     }
@@ -123,7 +123,7 @@ void loop() {
       //Serial.println("click2 MiddleRoomBra");
       middle_Room.ClickBra();
     }
-    if (BtnGroup1.hold2_2()) {
+    if (BtnGroup1.hold2_2() || BtnGroup1.hold2_1()) {
       //Serial.println("hold2_2 MiddleRoomBra Off");
       middle_Room.Off_or_ONRoom();
     }
@@ -133,7 +133,7 @@ void loop() {
       //Serial.println("click1 loggia");
       loggia.clickLoggia();
     }
-    if (BtnGroup2.hold1_2()) {
+    if (BtnGroup2.hold1_2() || BtnGroup2.hold1_1()) {
       //Serial.println("hold1_2 loggia Off");
       loggia.Off_or_ONRoom();
     }
@@ -141,7 +141,7 @@ void loop() {
       //Serial.println("click2 Toilet");
       toilet.clickToilet();
     }
-    if (BtnGroup2.hold2_2()) {
+    if (BtnGroup2.hold2_2() || BtnGroup2.hold2_1()) {
       //Serial.println("hold2_2 Toilet Off");
       toilet.Off_or_ONRoom();
     }
@@ -151,7 +151,7 @@ void loop() {
       //Serial.println("click1 Bathroom");
       bathroom.clickBathroom();
     }
-    if (BtnGroup3.hold1_2()) {
+    if (BtnGroup3.hold1_2() || BtnGroup3.hold1_1()) {
       //Serial.println("hold1_2 Bathroom Off");
       bathroom.Off_or_ONRoom();
     }
@@ -159,7 +159,7 @@ void loop() {
       //Serial.println("click2 Mirror");
       bathroom.clickMirror();
     }
-    if (BtnGroup3.hold2_2()) {
+    if (BtnGroup3.hold2_2() || BtnGroup3.hold2_1()) {
       //Serial.println("hold2_2 Mirror Off");
       bathroom.Off_or_ONRoom();
     }

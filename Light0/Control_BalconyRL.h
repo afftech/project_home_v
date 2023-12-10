@@ -105,5 +105,5 @@ public:
 private:
   bool OnBalconyR, OnBalconyL;
   int StateBalconyR, StateBalconyL;
-  long TimeClickMainBalconyR, TimeClickMainBalconyL;
+  unsigned long TimeClickMainBalconyR, TimeClickMainBalconyL;
 };
