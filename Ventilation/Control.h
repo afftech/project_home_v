@@ -203,7 +203,7 @@ public:
   }
   /*==все что касается ванной==*/
   void Dependence(bool on) {  //Вызываем в ручном и автоматическом режиме
-  //Serial.println(retKitchenCurrentSpeed);
+                              //Serial.println(retKitchenCurrentSpeed);
     if (on) {
       if (!retKitchenCurrentSpeed && !retBathroomCurrentSpeed && !retToiletCurrentSpeed) {
         digitalWrite(FanKitchen1, false);
@@ -212,18 +212,24 @@ public:
       } else {
         if (retKitchenCurrentSpeed > 1) {  //ЕСЛИ СКОРОСТЬ заданная от ВЫТЯЖКИ больше 1
           digitalWrite(FanKitchen1, false);
+          KitchenCurrentSpeed = 0;
         } else {
           digitalWrite(FanKitchen1, true);
+          KitchenCurrentSpeed = 1;
         }
         if (retBathroomCurrentSpeed > 1) {
           digitalWrite(FanBathroom1, false);
+          BathroomCurrentSpeed = 0;
         } else {
           digitalWrite(FanBathroom1, true);
+          BathroomCurrentSpeed = 1;
         }
         if (retToiletCurrentSpeed > 1) {
           digitalWrite(FanToilet1, false);
+          ToiletCurrentSpeed = 0;
         } else {
           digitalWrite(FanToilet1, true);
+          ToiletCurrentSpeed = 1;
         }
       }
     }

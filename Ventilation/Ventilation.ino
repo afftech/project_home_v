@@ -33,7 +33,11 @@ int RangeHood_Slave[3][3] = { { 2, 3, 4 },    //1 СКОРОСТЬ вытяжк�
                               { 3, 3, 3 },    //2 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
                               { 4, 3, 2 } };  //3 СКОРОСТЬ вытяжки {скорость кухни, скорость ванной, скорость туалета}
 
+#define BtnGroupTime1 100  //программная задержка от помех для кликов
+#define BtnGroupTime2 250  //время для средней длинны нажатия
+#define BtnGroupTime3 400  //время для длинного нажатия
 #include "ButtonGroup.h"
+
 ButtonGroup BtnGroup1(RangeHood_1and2, 0, 0, 1023, 465, 816, 417); /*BtnGroup**(аналоговый пин, 
                                                                                 тип сигнала,
                                                                                 тип сигнала,
@@ -62,12 +66,12 @@ void loop() {
   BtnGroup4.check();
 
   control.RangeHood(BtnGroup1.click1(), BtnGroup1.click2(), BtnGroup2.click1());
-  //Кухна
+  //Кухня
   if (BtnGroup2.click2()) {
     control.KitchenFan(true);
     Serial.println("Button: KitchenFan");
   }
-  if (BtnGroup2.hold2()) {
+  if (BtnGroup2.hold2_1() || BtnGroup2.hold2_2()) {
     control.KitchenFan(false);
     Serial.println("Stop: KitchenFan");
   }
@@ -76,7 +80,7 @@ void loop() {
     control.BathroomFan(true);
     Serial.println("Button: BathroomFan");
   }
-  if (BtnGroup3.hold1()) {
+  if (BtnGroup3.hold1_1() || BtnGroup3.hold1_2()) {
     control.BathroomFan(false);
     Serial.println("Stop: BathroomFan");
   }
@@ -85,7 +89,7 @@ void loop() {
     control.ToiletFan(true);
     Serial.println("Button: ToileFan");
   }
-  if (BtnGroup4.hold1()) {
+  if (BtnGroup4.hold1_1() || BtnGroup4.hold1_2()) {
     control.ToiletFan(false);
     Serial.println("Stop: ToileFan");
   }
