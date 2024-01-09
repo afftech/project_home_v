@@ -15,6 +15,30 @@ public:
     pinMode(pinSpeed3, OUTPUT);
     pinMode(pinSpeed4, OUTPUT);
   }
+  void New_Init_State(bool New_State) {
+    _New_State = New_State;
+    if (_New_State) {
+      if (!modAuto && !modManual && OldSpeed < 1) {
+        digitalWrite(_pinSpeed1, true);
+        _New_Init_State = true;
+        Serial.println("New_Init_State 3");
+      }
+      if ((modManual || modAuto) && OldSpeed != 1) {
+        digitalWrite(_pinSpeed1, false);
+        _New_Init_State = false;
+        Serial.println("New_Init_State 1");
+      }
+    } else {
+      if (!modAuto && !modManual && OldSpeed < 1) {
+        digitalWrite(_pinSpeed1, false);
+        _New_Init_State = false;
+        Serial.println("New_Init_State 2");
+      }
+    }
+  }
+  bool retNew_state() {
+    return _New_Init_State;
+  }
   void run(bool Light) {
     //Serial.println(modManual);
     if (!FunOff) {   //скорость изменена
@@ -37,24 +61,17 @@ public:
           LightState = true;
         }
         if (timer_switch(_Time3)) {
-          digitalWrite(_pinSpeed1, false);
-          digitalWrite(_pinSpeed2, false);
-          digitalWrite(_pinSpeed3, false);
-          digitalWrite(_pinSpeed4, false);
+          offAll();
           FunOff = true;
           Check = false;
           modManual = false;
           resetOn = true;
-          
         }
       } else {
         if (!LightState) {  //если свет не был включен ждем 5 мин и вырубаем вытяжку
           //Serial.println("off 1");
           if (timer_switch(_Time1)) {
-            digitalWrite(_pinSpeed1, false);
-            digitalWrite(_pinSpeed2, false);
-            digitalWrite(_pinSpeed3, false);
-            digitalWrite(_pinSpeed4, false);
+            offAll();
             FunOff = true;
             Check = false;
             modManual = false;
@@ -64,10 +81,7 @@ public:
         if (LightState) {  //если свет  был включен ждем 10 мин и вырубаем вытякжу
           //Serial.println("off 2");
           if (timer_switch(_Time2)) {
-            digitalWrite(_pinSpeed1, false);
-            digitalWrite(_pinSpeed2, false);
-            digitalWrite(_pinSpeed3, false);
-            digitalWrite(_pinSpeed4, false);
+            offAll();
             FunOff = true;
             Check = false;
             modManual = false;
@@ -78,7 +92,6 @@ public:
     }
   }
   int Speed(int speed, bool Auto) {
-    Serial.println(speed);
     if (Auto) {
       if (!modAuto) {  //если ручной режим был вкл раньше, то берём установленную скорость, а после откл режима авто возвращаем на нее
         if (OldSpeed != 0) {
@@ -101,7 +114,7 @@ public:
         Check = false;
         Change(speed);
       }
-    } else {
+    } else {  //В ручном режиме
       if (modAuto) {
         if (speed == 0) {
           modManual = false;
@@ -121,12 +134,11 @@ public:
     }
   }
   int Change(int speed) {
+    /*Serial.print("Change");
+    Serial.println(speed);*/
     if (speed != 0) {
       if (speed != OldSpeed) {
-        digitalWrite(_pinSpeed1, false);
-        digitalWrite(_pinSpeed2, false);
-        digitalWrite(_pinSpeed3, false);
-        digitalWrite(_pinSpeed4, false);
+        offAll();
       }
       if (speed != 0) {  //сбрасываем таймер
         i = 0;
@@ -149,10 +161,7 @@ public:
         return speed;
       }
     } else {
-      digitalWrite(_pinSpeed1, false);
-      digitalWrite(_pinSpeed2, false);
-      digitalWrite(_pinSpeed3, false);
-      digitalWrite(_pinSpeed4, false);
+      offAll();
       FunOff = true;  //обнуляем флаг остановки
       Check = false;
       OldSpeed = speed;
@@ -186,11 +195,18 @@ public:
   int retSpeed() {
     return OldSpeed;
   }
+  void offAll() {
+    digitalWrite(_pinSpeed1, false);
+    digitalWrite(_pinSpeed2, false);
+    digitalWrite(_pinSpeed3, false);
+    digitalWrite(_pinSpeed4, false);
+  }
 private:
   unsigned long Timer, Timer1;
   int _pinSpeed1, _pinSpeed2, _pinSpeed3, _pinSpeed4, OldSpeed, OldSpeedManual;
   int _Time1, _Time2, _Time3;
   bool LightState, lightOn, FunOff = true, Check, modAuto, modManual;
+  bool _New_State, _New_Init_State;
   int i;
   bool resetOn;
   bool timer_switch(long v) {
