@@ -1,26 +1,36 @@
 //6 переключателей
-#define MainSwitch_LBra A0  //1:519-523  2:834-839 12:473-476 1-2 & 12 Прихожая_Коридор
-#define RBra_MainLight A1   //1:520-523  2:833-837 12:474-477 1-2-12 _Гл.выкл.Кухня_Люстра
-#define Ribbon_BraTable A2  //1:519-522  2:833-837 12:472-475 1-2-12 Бар_Лента
+#define MainSwitch PB13
+#define LBra PB14
+#define RBra PB15
+#define MainLight PA8
+#define Ribbon PA11
+#define BraTable PA12
 
 // 9 выходов
-#define RibbonP 2
-#define RibbonBed 3
-#define RibbonWDimly 4     //Лента шкафа тускло
-#define RibbonWBrightly 5  //Лента шкафа ярко
+#define RibbonP PA0          //2
+#define RibbonBed PA1        //3
+#define RibbonWDimly PA2     //4     //Лента шкафа тускло
+#define RibbonWBrightly PA3  //5  //Лента шкафа ярко
 
-#define Edge 7     //край
-#define Centre 8   //центр
-#define BraLBed 9  //Бра левая часть кровати
-#define BraRBed 10
-#define BraTape 11  //Бра стол
+#define Edge PA5     //7     //край
+#define Centre PA6   //8   //центр
+#define BraLBed PA7  //9  //Бра левая часть кровати
+#define BraRBed PB0  //10
+#define BraTape PB1  //11  //Бра стол
 
-#include "ButtonGroup.h" /* Максимум 1s*/
+#define BtnGroupTime1 100  //программная задержка от помех для кликов
+#define BtnGroupTime2 250  //время для средней длинны нажатия
+#define BtnGroupTime3 400  //время для длинного нажатия
+
+#include "button.h"
+
 //#include "ButtonGroupS3.h"
-ButtonGroup BtnGroup0(MainSwitch_LBra, 1, 1, 1023, 521, 836, 474);
-ButtonGroup BtnGroup1(RBra_MainLight, 1, 1, 1023, 521, 836, 474);
-ButtonGroup BtnGroup2(Ribbon_BraTable, 1, 1, 1023, 521, 836, 475);
-
+Button Button1(MainSwitch, 1);
+Button Button2(LBra, 1);
+Button Button3(RBra, 1);
+Button Button4(MainLight, 1);
+Button Button5(Ribbon, 1);
+Button Button6(BraTable, 1);
 
 #include "Room.h"
 Room Room;
@@ -40,59 +50,62 @@ void setup() {
 void loop() {
   Room.run();
   // put your main code here, to run repeatedly:
-  BtnGroup0.check();
-  BtnGroup1.check();
-  BtnGroup2.check();
+  Button1.check();
+  Button2.check();
+  Button3.check();
+  Button4.check();
+  Button5.check();
+  Button6.check();
   {  // гл выкл
-    if (BtnGroup0.click1()) {
+    if (Button1.click()) {
       Serial.println("click1 MainSwitch");
       Room.clickMainSwitch();
     }
-    if (BtnGroup0.hold1_2()) {
+    if (Button1.hold1() || Button1.hold2()) {
       Serial.println("hold1_2 MainSwitch");
       Room.Off_On_Bra();
     }
-    if (BtnGroup1.click2()) {
+    if (Button4.click()) {
       Serial.println("click2 MainSwitch 2");
       Room.clickMainSwitch();
     }
-    if (BtnGroup1.hold2_2()) {
+    if (Button4.hold1() || Button4.hold2()) {
       Serial.println("hold1_2 MainSwitch 2");
       Room.Off_On_Bra();
     }
   }
   {  //бра
-    if (BtnGroup0.click2()) {
+    if (Button2.click()) {
       Serial.println("click2 BraL");
       Room.clickBraLSwitch();
     }
-    if (BtnGroup0.hold2_2()) {
+    if (Button2.hold1() || Button2.hold2()) {
       Serial.println("hold2_2 BraL");
       Room.Off_On_Bra();
     }
-    if (BtnGroup1.click1()) {
+    if (Button3.click()) {
       Serial.println("click1 BraR");
       Room.clickBraRSwitch();
     }
-    if (BtnGroup1.hold1_2()) {
+    if (Button3.hold1() || Button3.hold2()) {
       Serial.println("hold1_2 BraR");
       Room.Off_On_Bra();
     }
   }
   {  //Выкл ленты
-    if (BtnGroup2.click1()) {
+    if (Button5.click()) {
       Serial.println("click1 Ribbon");
       Room.clickRibbonSwitch();
     }
-    if (BtnGroup2.hold1_2()) {
+    if (Button5.hold1() || Button5.hold2()) {
       Serial.println("hold1_2 Ribbon");
       Room.Off_On_Bra();
     }
-    if (BtnGroup2.click2()) {
+    if (Button5.click()) {
       Serial.println("click2 BraTable");
       Room.clickBraTSwitch();
     }
-    if (BtnGroup2.hold2_2()) {
+    if (Button5.hold1() || Button5.hold2()) {
       Serial.println("hold2_2 BraTable");
       Room.Off_On_Bra();
     }

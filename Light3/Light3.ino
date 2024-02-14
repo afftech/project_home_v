@@ -1,26 +1,30 @@
 //8 переключателей
-#define LitleRoom_LitleRBra A0    //1:519-523  2:834-839 12:473-476
-#define MiddleRoom_MiddleRBra A1  //1:520-523  2:833-837 12:474-477
-#define Loggia_Toilet A2          //1:519-522  2:833-837 12:472-475
-#define Bathroom_Miror A3
-#define Sensor_1_2 A4
-#define Apron_NULL A6  // _Apron
+#define LitleRoom PB13
+#define LitleRBra PB14
+#define MiddleRoom PB15
+#define MiddleRBra PA8
+#define LoggiaB PA11
+#define ToiletB PA12
+#define BathroomB PA15
+#define Miror PB3
+#define Sensor_1 PB4
+#define Sensor_2 PB5
+#define ApronB PB6
+
 // 12 выходов
-#define MiddleRoomLight1 2
-#define MiddleRoomLight2 3
-#define MiddleRoomLight3 4
-#define MiddleRoomBra 11
-
-
-#define LitleRoomLight1 6
-#define LitleRoomLight2 7
-#define LitleBraLRLight3 8
-#define ToiletLight 9
-#define LoggiaLight 12
-#define BathMirorLight 13
-#define BathroomLight 10
-#define RibbonWBrightly 5
-#define Apron 19  //A5
+#define MiddleRoomLight1 PA0  //2
+#define MiddleRoomLight2 PA1  //3
+#define MiddleRoomLight3 PA2  //4
+#define MiddleRoomBra PB1     //11
+#define LitleRoomLight1 PA4   //6
+#define LitleRoomLight2 PA5   //7
+#define LitleBraLRLight3 PA6  //8
+#define ToiletLight PA7       //9
+#define LoggiaLight PB10      //12
+#define BathMirorLight PB11   //13
+#define BathroomLight PB0     //10
+#define RibbonWBrightly PA3   //5
+#define Apron PB12            //19              //A5
 
 #define TimeOffDT 90  //Время в секундах выключения управления освещением комнаты
 
@@ -28,13 +32,18 @@
 #define BtnGroupTime2 250  //время для средней длинны нажатия
 #define BtnGroupTime3 400  //время для длинного нажатия
 
-#include "ButtonGroup.h" /* Максимум 1s*/
-ButtonGroup BtnGroup0(LitleRoom_LitleRBra, 1, 1, 1023, 461, 815, 413);
-ButtonGroup BtnGroup1(MiddleRoom_MiddleRBra, 1, 1, 1023, 461, 815, 413);
-ButtonGroup BtnGroup2(Loggia_Toilet, 1, 1, 1023, 461, 815, 413);
-ButtonGroup BtnGroup3(Bathroom_Miror, 1, 1, 1023, 461, 815, 413);
-ButtonGroup BtnGroup4(Sensor_1_2, 0, 0, 1023, 461, 815, 413);
-ButtonGroup BtnGroup5(Apron_NULL, 1, 1, 1023, 461, 815, 413);
+#include "button.h"
+Button Button1(LitleRoom, 1);
+Button Button2(LitleRBra, 1);
+Button Button3(MiddleRoom, 1);
+Button Button4(MiddleRBra, 1);
+Button Button5(LoggiaB, 1);
+Button Button6(ToiletB, 1);
+Button Button7(BathroomB, 1);
+Button Button8(Miror, 1);
+Button Button9(Sensor_1, 0);
+Button Button10(Sensor_2, 0);
+Button Button11(ApronB, 1);
 
 #include "Little_Room.h"
 Little_Room little_Room;
@@ -63,8 +72,6 @@ void setup() {
   pinMode(MiddleRoomBra, OUTPUT);
   pinMode(LoggiaLight, OUTPUT);
   pinMode(BathMirorLight, OUTPUT);
-  pinMode(Apron, OUTPUT);
-
   Serial.begin(9600);
 }
 void loop() {
@@ -75,101 +82,107 @@ void loop() {
   toilet.run();
   Control_Kitchen.run();
   // put your main code here, to run repeatedly:
-  BtnGroup0.check();
-  BtnGroup1.check();
-  BtnGroup2.check();
-  BtnGroup3.check();
-  BtnGroup4.check();
-  BtnGroup5.check();
+  Button1.check();
+  Button2.check();
+  Button3.check();
+  Button4.check();
+  Button5.check();
+  Button6.check();
+  Button7.check();
+  Button8.check();
+  Button9.check();
+  Button10.check();
+  Button11.check();
+
   {  //Фартук и балкон
 
-    if (BtnGroup5.click1()) {
+    if (Button11.click()) {
       Control_Kitchen.clickApron();
-      //Serial.println("click1 Apron");
+      Serial.println("click1 Apron");
     }
-    if (BtnGroup5.hold1_2() || BtnGroup5.hold1_1()) {
-      Control_Kitchen.OffKitchen();  //в сериал отправляем
-      //Serial.println("hold1_2 Apron");
+    if (Button11.hold1() || Button11.hold2()) {
+      Control_Kitchen.OffKitchen();
+      Serial.println("hold1_2 Apron");
     }
   }
   {  //малая комната
-    if (BtnGroup0.click1()) {
-      //Serial.println("click1 LitleRoomLight");
+    if (Button1.click()) {
+      Serial.println("click1 LitleRoomLight");
       little_Room.clickLitleRoom();
     }
-    if (BtnGroup0.hold1_2() || BtnGroup0.hold1_1()) {
-      //Serial.println("hold1_2 LitleRoomLight Off");
+    if (Button1.hold1() || Button1.hold2()) {
+      Serial.println("hold1_2 LitleRoomLight Off");
       little_Room.Off_or_ONRoom();
     }
-    if (BtnGroup0.click2()) {
-      //Serial.println("click2 LitleRBra");
+    if (Button2.click()) {
+      Serial.println("click2 LitleRBra");
       little_Room.ClickLitleRBra();
     }
-    if (BtnGroup0.hold2_2() || BtnGroup0.hold2_1()) {
-      //Serial.println("hold2_2 LitleRBra Off");
+    if (Button2.hold1() || Button2.hold2()) {
+      Serial.println("hold2_2 LitleRBra Off");
       little_Room.Off_or_ONRoom();
     }
   }
   {  //средняя комната
-    if (BtnGroup1.click1()) {
-      //Serial.println("click1 MiddleRoomLight");
+    if (Button3.click()) {
+      Serial.println("click1 MiddleRoomLight");
       middle_Room.clickRoom();
     }
-    if (BtnGroup1.hold1_2() || BtnGroup1.hold1_1()) {
-      //Serial.println("hold1_2 MiddleRoomLight Off");
+    if (Button3.hold1() || Button3.hold2()) {
+      Serial.println("hold1_2 MiddleRoomLight Off");
       middle_Room.Off_or_ONRoom();
     }
-    if (BtnGroup1.click2()) {
-      //Serial.println("click2 MiddleRoomBra");
+    if (Button4.click()) {
+      Serial.println("click2 MiddleRoomBra");
       middle_Room.ClickBra();
     }
-    if (BtnGroup1.hold2_2() || BtnGroup1.hold2_1()) {
-      //Serial.println("hold2_2 MiddleRoomBra Off");
+    if (Button4.hold1() || Button4.hold2()) {
+      Serial.println("hold2_2 MiddleRoomBra Off");
       middle_Room.Off_or_ONRoom();
     }
   }
   {  //лоджия
-    if (BtnGroup2.click1()) {
-      //Serial.println("click1 loggia");
+    if (Button5.click()) {
+      Serial.println("click1 loggia");
       loggia.clickLoggia();
     }
-    if (BtnGroup2.hold1_2() || BtnGroup2.hold1_1()) {
-      //Serial.println("hold1_2 loggia Off");
+    if (Button5.hold1() || Button5.hold2()) {
+      Serial.println("hold1_2 loggia Off");
       loggia.Off_or_ONRoom();
     }
-    if (BtnGroup2.click2()) {
-      //Serial.println("click2 Toilet");
+    if (Button6.click()) {
+      Serial.println("click2 Toilet");
       toilet.clickToilet();
     }
-    if (BtnGroup2.hold2_2() || BtnGroup2.hold2_1()) {
-      //Serial.println("hold2_2 Toilet Off");
+    if (Button6.hold1() || Button6.hold2()) {
+      Serial.println("hold2_2 Toilet Off");
       toilet.Off_or_ONRoom();
     }
   }
   {  //Ванна и зеркало
-    if (BtnGroup3.click1()) {
-      //Serial.println("click1 Bathroom");
+    if (Button7.click()) {
+      Serial.println("click1 Bathroom");
       bathroom.clickBathroom();
     }
-    if (BtnGroup3.hold1_2() || BtnGroup3.hold1_1()) {
-      //Serial.println("hold1_2 Bathroom Off");
+    if (Button7.hold2() || Button7.hold1()) {
+      Serial.println("hold1_2 Bathroom Off");
       bathroom.Off_or_ONRoom();
     }
-    if (BtnGroup3.click2()) {
-      //Serial.println("click2 Mirror");
+    if (Button8.click()) {
+      Serial.println("click2 Mirror");
       bathroom.clickMirror();
     }
-    if (BtnGroup3.hold2_2() || BtnGroup3.hold2_1()) {
-      //Serial.println("hold2_2 Mirror Off");
+    if (Button8.hold2() || Button8.hold1()) {
+      Serial.println("hold2_2 Mirror Off");
       bathroom.Off_or_ONRoom();
     }
   }
-  if (BtnGroup4.click1()) {  //Лента туалета по датчику
-    //Serial.println("click1 clickRibbon On");
+  if (Button9.click()) {  //Лента туалета по датчику
+    Serial.println("click1 clickRibbon On");
     bathroom.clickRibbon();
   }
-  if (BtnGroup4.click2()) {  //Лента туалета по датчику
-    //Serial.println("click2 clickRibbon On");
+  if (Button10.click()) {  //Лента туалета по датчику
+    Serial.println("click2 clickRibbon On");
     bathroom.clickRibbon();
   }
 }
