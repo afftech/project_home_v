@@ -1,22 +1,17 @@
 #include "Server.h"
-#include "Voice.h"
-voice voice;
+
 bool Valve2State, SignalKitchen, CurrentStateKitchen,
   SignalBathroom, CurrentStateBathroom;
 bool SensorKitchenState = false;
 bool SensorBathroomState = false;
 int ValveKitchen, ValveBathroom;
 class control {
-
 public:
   control(int sec) {
     _sec = sec;
   }
-  void Voice() {
-    voice.process();
-  }
   void buttons() {
-    if (ButtonValve1.click()) {
+    if (ButtonValve1.hold2()) {
       if (ValveKitchen != 0) {
         digitalWrite(Valve1Open, false);
         digitalWrite(Valve1Close, false);
@@ -26,16 +21,21 @@ public:
       /*  */
       switch (CurrentStateKitchen) {
         case 0:
-          ValveKitchen = 1;
-          voice.CloseKitchen();
+          ValveKitchen = 1;  //Закрытие кранов
+          voice.Play(3);
           break;
-        case 1:
+        case 1:  //Открытие вида 2 сообщения
           ValveKitchen = 2;
-          voice.OpenKitchen();
+          if (LeakKitchen) {
+            voice.Play(6);
+            LeakKitchen = false;  //снимаем состояние протечки после сообщения о ней и открытия
+          } else {
+            voice.Play(5);  //Протечек не было просто открываем
+          }
           break;
       }
-    } 
-    if (ButtonValve2.click()) {
+    }
+    if (ButtonValve2.hold2()) {
       if (ValveBathroom != 0) {
         digitalWrite(Valve2Open, false);
         digitalWrite(Valve2Close, false);
@@ -88,8 +88,9 @@ public:
   }
   void AutoKitchen() {
     if (SignalKitchen && ValveKitchen == 0 && CurrentStateKitchen != 1) {  //закрыть по датчику
-      if (voice.CloseKitchen()) {
+      if (voice.Play(1)) {
         SensorKitchenState = true;
+        LeakKitchen = true;  //фиксируем состояние протечки
       }
     }
     if (SensorKitchenState) {
@@ -203,6 +204,7 @@ public:
     }
   }
 private:
+  bool LeakKitchen, LeakBathroom;
   int increment, increment1, _sec;
   unsigned long Timer1, Timer2;
 };

@@ -1,63 +1,84 @@
-#include "HardwareSerial.h"
-#include "Arduino.h"
-
-class button {
+class Button {
 public:
-  button(char pin,int waiting_time) {
+  Button(char pin, int BtnMode) {
     _pin = pin;
-    _waiting_time=waiting_time;
+    _BtnMode = BtnMode;
     pinMode(_pin, INPUT);
   }
-  bool click() {
-
-    int btnState = analogRead(_pin);
-    if (btnState <= 20 && !_flag && time1(true)) {
-      _flag = true;
-      _tmr = millis();
-      on = false;
-      return true;
-    }
-    if (btnState <= 20 && _flag && time1(true)) {
-      _tmr = millis();
-      on = false;
-      return true;
-    }
-    if (btnState >= 21 && _flag) {
+  void check() {
+    int dataBtn = digitalRead(_pin);
+    if (dataBtn) {
       _flag = false;
-      _tmr = millis();
-      time1(false);
+    } else {
+      _flag = true;
     }
-    if (btnState >= 21) {
-      Timer = millis();
-      i = 0;
+  }
+  bool click() {
+    if (_BtnMode) {
+      if (!holdStop && _flag && !BtnState && millis() - TimerClick1 >= BtnGroupTime1) {
+        BtnState = true;
+        TimerClick1 = millis();
+        holdOn = true;
+      }
+      if (!holdStop && _flag && BtnState && millis() - TimerClick1 >= BtnGroupTime3) {
+        TimerClick1 = millis();
+        holdClick2 = true;
+        return false;
+      }
+      if (!_flag && BtnState) {
+        if (holdOn && millis() - TimerClick1 < BtnGroupTime2) {
+          holdOn = false;
+          BtnState = false;
+          return true;
+        }
+        if (holdOn && millis() - TimerClick1 >= BtnGroupTime2) {
+          holdClick1 = true;
+          BtnState = false;
+          return false;
+        }
+        if (!_flag) {
+          holdStop = false;
+        }
+        BtnState = false;
+        TimerClick1 = millis();
+        return false;
+      }
+      return false;
+    } else {
+      if (_flag) {
+        return true;
+      }
+      return false;
+    }
+  }
+  bool hold1() {
+    if (holdClick1) {
+      holdClick1 = false;
+      holdOn = false;
+      return true;
+    }
+    return false;
+  }
+  bool hold2() {
+    if (holdClick2 && !holdStop) {
+      holdStop = true;
+      holdClick2 = false;
+      holdOn = false;
+      return true;
+    }
+    return false;
+  }
+
+  bool stateBtn() {
+    if (_flag) {
+      return true;
     }
     return false;
   }
 private:
-  bool on;
+  bool holdOn, holdClick1, holdClick2, holdStop;
+  bool _flag, BtnState;
+  int _BtnMode;
   char _pin;
-  uint32_t _tmr;
-  bool _flag;
-  unsigned long Timer;
-  int i;
-  int _waiting_time;
-  bool time1(bool v) {
-    if (v) {
-      if (millis() - Timer >= 1000) {
-        i++;
-        Timer = millis();
-        Serial.println(i);
-        if (i >= _waiting_time) {
-          i = 0;
-          return true;
-        } else {
-          return false;
-        }
-      }
-      return false;
-    } else {
-      i = 0;
-      return false;
-    }
-  }
+  unsigned long TimerClick1;
 };

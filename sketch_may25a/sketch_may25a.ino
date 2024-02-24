@@ -1,5 +1,3 @@
-#include "  .h"
-
 #define DataSensor1 A0
 #define DataSensor2 A1
 #define DataSensor3 A2
@@ -12,27 +10,31 @@
 #define Valve2Open 4
 #define Valve2Close 5
 
-Time Time;
-uint32_t TimeInitEth, TimeGetDate;
-bool ethState, error;
-bool MonthDay, statePrevention;
+#include "Voice.h"
+Voice voice;
+
+//Кнопка реагирует через 6 секунд
+#define BtnGroupTime1 200   //программная задержка от помех для кликов
+#define BtnGroupTime2 390   //время для средней длинны нажатия
+#define BtnGroupTime3 6000  //время для длинного нажатия
+
+#include "button.h"
+Button ButtonValve1(A6, 1);  //Кнопка открыть/закрыть Kitchen, режим кнопки
+Button ButtonValve2(A7, 1);  //Кнопка открыть/закрыть Bathroom, режим кнопки
+
+#include "Control.h"
+control control(30);  //длительность подачи питания на открытие или закрытия крана
+
+
+bool ethState, error;            //состояние сетевого подключения, состояние протечки
+bool MonthDay, statePrevention;  //Регистр состояния получения месяца и запуска профилактики
 
 #include "OnPrevention.h"
 onPrevention onPrevention(30);     //10 секунд выдержка комманды открыть и закрыть
 String datePrevention1 = "06-18";  //месяц и день для проведения 1 обслуживания
-String datePrevention2 = "06-07";  //месяц и день для проведения 2 обслуживания 
+String datePrevention2 = "06-07";  //месяц и день для проведения 2 обслуживания
 
-#include "button.h"
-button ButtonValve1(A6, 6);  //Кнопка открыть/закрыть Kitchen, время удерживания
-button ButtonValve2(A7, 6);  //Кнопка открыть/закрыть Bathroom, время удерживания
-
-
-uint32_t i;
-uint32_t T1;
-bool Attempt;
-
-#include "Control.h"
-control start(30);  //длительность подачи питания на открытие или закрытия крана
+#include "ControlEthernet.h"
 
 void setup() {
   Serial.begin(9600);
@@ -50,94 +52,6 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  if (!ethState && !error) {
-    if (!Time.Ethernetinit()) {
-      ethState = 1;
-      Serial.println("ok");
-      Attempt = false;
-    } else {
-      Serial.println("Ethernetinit ERROR");
-      ethState = true;
-      error = true;
-      Attempt = false;
-    }
-  }
-
-  if (ethState) {
-    if (millis() - TimeGetDate >= 1000 && !error) {
-      TimeGetDate = millis();
-      if (!Time.linkStatus()) {
-        Serial.println("error = true");
-        error = true;
-      }
-      if (!error) {
-        Prevention();
-        onPrevention.run();
-      }
-    }
-    if (error) {
-      if (timer() && !Attempt) {
-        ethState = false;
-        error = false;
-        Attempt == true;
-      }
-    }
-    start.buttons();
-    start.AutoKitchen();
-    start.AutoBathroom();
-    start.Signals();
-    start.Voice();
-  }
-  //Serial.println(analogRead(A6));
-}
-void Prevention() {
-  Time.Update();
-  TimeGetDate = millis();
-  String Split;
-  String formattedDate;
-  formattedDate = Time.getDate();
-  //Serial.println(formattedDate);
-  int splitT = formattedDate.indexOf("-");
-  Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
-  if ((Split == datePrevention1) || (Split == datePrevention2)) {
-    //Serial.println(Split);
-    MonthDay = true;
-  }
-  if (MonthDay) {
-    formattedDate = Time.getTime();
-    splitT = formattedDate.indexOf(":");
-    Split = formattedDate.substring(0, splitT);  //час
-    if (Split == "15") {
-      if (!statePrevention) {//запуск профилактики 
-        onPrevention.start();
-        statePrevention = true;
-        Serial.println("12342313");  //выполнение профилактики
-      }
-    }
-  }
-  if (statePrevention) { //Обнуляем цикл профилактики
-    formattedDate = Time.getDate();
-    splitT = formattedDate.indexOf("-");
-    Split = formattedDate.substring(splitT + 1, formattedDate.length() - 0);  //месяц и день
-    Serial.println("Prevention ok");
-    if ((Split != datePrevention1)&&(Split != datePrevention2)) {
-      statePrevention = false;
-      MonthDay = false;
-      Serial.println("!!!!!!");
-    }
-  }
-}
-bool timer() {
-  if (millis() - T1 >= 1000) {
-    T1 = millis();
-    i++;
-    Serial.println("Attempt to start the network via 7200 sec.");
-    Serial.println(i);
-    if (i >= 7200) {
-      i = 0;
-      return true;
-    }
-  }
-  return false;
+  voice.process();  //перенести в ino
+  ControlEth_loop();
 }
