@@ -56,20 +56,21 @@ public:
     return true;
   }
   bool Play(int i) {
-    i = i - 1;
     Serial.print(F("Voice:"));
     Serial.println(i);
+    i = i - 1;
     digitalWrite(S1, SoundSelection[i][0]);
     digitalWrite(S2, SoundSelection[i][1]);
     digitalWrite(S3, SoundSelection[i][2]);
     digitalWrite(S4, SoundSelection[i][3]);
     PlayState = true;
+    TimerVoice = millis();
     return true;
   }
   bool timer() {
-    if (millis() - T1 >= 200) {
+    if (millis() - TimerVoice >= 1200) {
       Serial.println("millis() - T1");
-      Serial.println(millis() - T1);
+      Serial.println(millis() - TimerVoice);
       return true;
     }
     return false;
@@ -94,5 +95,5 @@ private:
     { 1, 1, 1, 1 }   //15) Не удалось обновить время и дату, после включения.
   };
   bool PlayState;
-  long T1;
+  long TimerVoice;
 };

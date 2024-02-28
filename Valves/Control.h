@@ -1,3 +1,4 @@
+#include "HardwareSerial.h"
 #include "Server.h"
 
 bool Valve2State, SignalKitchen, CurrentStateKitchen,
@@ -11,7 +12,14 @@ public:
     _sec = sec;
   }
   void buttons() {
+    if (ButtonValve1.click()) {
+      Serial.println("ButtonValve1.click()");
+    }
+    if (ButtonValve2.click()) {
+      Serial.println("ButtonValve2.click()");
+    }
     if (ButtonValve1.hold2()) {
+      Serial.println("ButtonValve1.hold2()");
       if (ValveKitchen != 0) {
         digitalWrite(Valve1Open, false);
         digitalWrite(Valve1Close, false);
@@ -36,6 +44,7 @@ public:
       }
     }
     if (ButtonValve2.hold2()) {
+      Serial.println("ButtonValve2.hold2()");
       if (ValveBathroom != 0) {
         digitalWrite(Valve2Open, false);
         digitalWrite(Valve2Close, false);
@@ -47,17 +56,19 @@ public:
         case 0:
           ValveBathroom = 1;
           voice.CloseBathroom();
+          voice.Play(10);
           break;
         case 1:
           ValveBathroom = 2;
           voice.OpenBathroom();
+          voice.Play(11);
           break;
       }
     }
   }
   void AutoBathroom() {
     if (SignalBathroom && ValveBathroom == 0 && CurrentStateBathroom != 1) {  //закрыть по датчику
-      if (voice.CloseBathroom()) {
+      if (voice.Play(9)) {
         SensorBathroomState = true;
       }
     }
@@ -121,7 +132,6 @@ public:
   bool OpenClose(int y) {
     if (y == 1) {
       if (millis() - Timer1 >= 1000) {
-
         increment++;
         Timer1 = millis();
         if (increment >= _sec) {

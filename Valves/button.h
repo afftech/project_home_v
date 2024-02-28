@@ -1,3 +1,4 @@
+#include "HardwareSerial.h"
 class Button {
 public:
   Button(char pin, int BtnMode) {
@@ -6,11 +7,13 @@ public:
     pinMode(_pin, INPUT);
   }
   void check() {
-    int dataBtn = digitalRead(_pin);
-    if (dataBtn) {
-      _flag = false;
-    } else {
+    int dataBtn = analogRead(_pin);
+    if (dataBtn <= 20) {
       _flag = true;
+      //Serial.println("_flag = true;");
+    } else if (dataBtn >= 21) {
+      _flag = false;
+      //Serial.println("_flag = false;");
     }
   }
   bool click() {

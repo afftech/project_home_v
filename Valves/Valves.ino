@@ -16,7 +16,7 @@ Voice voice;
 //Кнопка реагирует через 6 секунд
 #define BtnGroupTime1 200   //программная задержка от помех для кликов
 #define BtnGroupTime2 390   //время для средней длинны нажатия
-#define BtnGroupTime3 6000  //время для длинного нажатия
+#define BtnGroupTime3 3000  //время для длинного нажатия
 
 #include "button.h"
 Button ButtonValve1(A6, 1);  //Кнопка открыть/закрыть Kitchen, режим кнопки

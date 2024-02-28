@@ -9,29 +9,26 @@ bool timer();
 void Prevention();
 void ControlEth_loop() {
   // put your main code here, to run repeatedly:
-  if (!ethState && !error) {
+  if (!ethState && !error) {  //если Ethernet работает и ошибок нет
     if (!Time.Ethernetinit()) {
-      ethState = 1;
+      ethState = 1;  //проверка выполнена
       Serial.println("ok");
       Attempt = false;
+      voice.Play(14);  //успешно
     } else {
       Serial.println("Ethernetinit ERROR");
-      ethState = true;
+      ethState = true;  //проверка выполнена
       error = true;
       Attempt = false;
       voice.Play(15);  //ошибка сети
     }
   }
-
   if (ethState) {
     if (millis() - TimeGetDate >= 1000 && !error) {
       TimeGetDate = millis();
       if (!Time.linkStatus()) {
         Serial.println("error = true");
         error = true;
-        voice.Play(15);  //ошибка сети
-      } else {
-        voice.Play(14);  //вребя обновлено
       }
       if (!error) {
         Prevention();
@@ -45,19 +42,13 @@ void ControlEth_loop() {
         Attempt == true;
       }
     }
+    ButtonValve1.check();
+    ButtonValve2.check();
     control.buttons();
     control.AutoKitchen();
     control.AutoBathroom();
     control.Signals();
     //control.Voice(); перенесли в .ino
-  }
-  if (OldError != error) {
-    if (error) {
-      voice.Play(15);  //ошибка сети
-    } else {
-      voice.Play(14);  //ошибка сети
-    }
-    OldError = error;
   }
   //Serial.println(analogRead(A6));
 }
