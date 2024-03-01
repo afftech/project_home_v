@@ -10,6 +10,10 @@
 #define Valve2Open 4
 #define Valve2Close 5
 
+#include "Strait.h"
+strait Strait_Bathroom(Valve1Open, Valve1Close);  //pin:open pin:close
+strait Strait_Kitchen(Valve2Open, Valve2Close);
+
 #include "Voice.h"
 Voice voice;
 

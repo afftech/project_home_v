@@ -31,14 +31,20 @@ public:
         case 0:
           ValveKitchen = 1;  //Закрытие кранов
           voice.Play(3);
+          onStait_Kitchen = 1;
           break;
         case 1:  //Открытие вида 2 сообщения
           ValveKitchen = 2;
-          if (LeakKitchen) {
-            voice.Play(6);
-            LeakKitchen = false;  //снимаем состояние протечки после сообщения о ней и открытия
+          onStait_Kitchen = 0;
+          if (SignalKitchen) {
+            voice.Play(8);
           } else {
-            voice.Play(5);  //Протечек не было просто открываем
+            if (LeakKitchen) {
+              voice.Play(6);
+              LeakKitchen = false;  //снимаем состояние протечки после сообщения о ней и открытия
+            } else {
+              voice.Play(5);  //Протечек не было просто открываем
+            }
           }
           break;
       }
@@ -53,15 +59,24 @@ public:
       }
       switch (CurrentStateBathroom) {
         CurrentStateBathroom = !CurrentStateBathroom;
-        case 0:
+        case 0:  //Закрытие кранов
           ValveBathroom = 1;
-          voice.CloseBathroom();
           voice.Play(10);
+          onStait_Bathroom = 1;
           break;
-        case 1:
+        case 1:  //Открытие кранов
           ValveBathroom = 2;
-          voice.OpenBathroom();
-          voice.Play(11);
+          onStait_Bathroom = 0;
+          if (SignalBathroom) {
+            voice.Play(8);
+          } else {
+            if (LeakBathroom) {
+              voice.Play(11);
+              LeakBathroom = false;  //снимаем состояние протечки после сообщения о ней и открытия
+            } else {
+              voice.Play(12);  //Протечек не было просто открываем
+            }
+          }
           break;
       }
     }
@@ -96,6 +111,12 @@ public:
         OpenCloseBathroom(0);
       }
     }
+    Strait_Bathroom.loop();
+    if (onStait_Bathroom && !SignalBathroom) {  //если включено от кнопки и не было протечки
+      Strait_Bathroom.set_State(1);
+    } else {
+      Strait_Bathroom.set_State(0);
+    }
   }
   void AutoKitchen() {
     if (SignalKitchen && ValveKitchen == 0 && CurrentStateKitchen != 1) {  //закрыть по датчику
@@ -127,6 +148,12 @@ public:
         ValveKitchen = 0;
         OpenClose(0);
       }
+    }
+    Strait_Kitchen.loop();
+    if (onStait_Kitchen && !SignalKitchen) {  //если включено от кнопки и не было протечки
+      Strait_Kitchen.set_State(1);
+    } else {
+      Strait_Kitchen.set_State(0);
     }
   }
   bool OpenClose(int y) {
@@ -214,6 +241,7 @@ public:
     }
   }
 private:
+  bool onStait_Kitchen, onStait_Bathroom;
   bool LeakKitchen, LeakBathroom;
   int increment, increment1, _sec;
   unsigned long Timer1, Timer2;

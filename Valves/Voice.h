@@ -27,34 +27,6 @@ public:
       }
     }
   }
-  bool OpenKitchen() {
-    /* digitalWrite(6, false);
-    PlayOpenKitchen = true;
-    T1 = millis();
-    Serial.println("Open");*/
-    return true;
-  }
-  bool CloseKitchen() {
-    /* digitalWrite(7, false);
-    PlayCloseKitchen = true;
-    Serial.println("Close");
-    T1 = millis();*/
-    return true;
-  }
-  bool OpenBathroom() {
-    /*digitalWrite(8, false);
-    PlayOpenBathroom = true;
-    T1 = millis();
-    Serial.println("Open");*/
-    return true;
-  }
-  bool CloseBathroom() {
-    /* digitalWrite(9, false);
-    PlayCloseBathroom = true;
-    Serial.println("Close");
-    T1 = millis();*/
-    return true;
-  }
   bool Play(int i) {
     Serial.print(F("Voice:"));
     Serial.println(i);
@@ -64,13 +36,13 @@ public:
     digitalWrite(S3, SoundSelection[i][2]);
     digitalWrite(S4, SoundSelection[i][3]);
     PlayState = true;
-    TimerVoice = millis();
+    T1 = millis();
     return true;
   }
   bool timer() {
-    if (millis() - TimerVoice >= 1200) {
+    if (millis() - T1 >= 1200) {
       Serial.println("millis() - T1");
-      Serial.println(millis() - TimerVoice);
+      Serial.println(millis() - T1);
       return true;
     }
     return false;
@@ -95,5 +67,5 @@ private:
     { 1, 1, 1, 1 }   //15) Не удалось обновить время и дату, после включения.
   };
   bool PlayState;
-  long TimerVoice;
+  long T1;
 };
