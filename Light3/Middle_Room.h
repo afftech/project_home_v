@@ -125,6 +125,14 @@ public:
       StateBra = 1;
     }
   }
+  void OffRoom() {
+    OnMiddleRoomLight1 = false;
+    OnMiddleRoomLight2 = false;
+    //OnMiddleRoomLight3 = false;
+    OnMiddleRoomBra = false;
+    StateSwitchRoom = 0;
+    StateBra = 0;
+  }
 private:
   bool StopTimeMiddleRoomBra;
   long OldMiddleRoomBra, TimeMiddleRoomBra;

@@ -117,7 +117,13 @@ public:
       StateLitleBraLRLight3 = 1;
     }
   }
-
+  void OffRoom() {
+      OnLitleRoomLight1 = false;
+      OnLitleRoomLight2 = false;
+      OnLitleBraLRLight3 = false;
+      StateSwitchRoom = 0;  //возможно надо доб в цикл ветвления
+      StateLitleBraLRLight3 = 0;
+  }
 private:
   bool StopTimeLitleRBra;
   long OldTimeLitleRBra, TimeLitleRBra;

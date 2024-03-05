@@ -55,8 +55,14 @@ Bathroom bathroom;
 Loggia loggia;
 #include "Toilet.h"
 Toilet toilet;
+
+
+#include "CAN_Net.h"
+
 #include "Control_Kitchen.h"
 Control_Kitchen Control_Kitchen;
+
+#include "CAN_Control.h"
 
 void setup() {
   // put your setup code here, to run once:
@@ -73,6 +79,7 @@ void setup() {
   pinMode(LoggiaLight, OUTPUT);
   pinMode(BathMirorLight, OUTPUT);
   Serial.begin(9600);
+  CAN_Setup();
 }
 void loop() {
   little_Room.run();
@@ -93,6 +100,7 @@ void loop() {
   Button9.check();
   Button10.check();
   Button11.check();
+  loop_CAN_Net();
 
   {  //Фартук и балкон
 

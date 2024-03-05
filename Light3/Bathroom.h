@@ -85,6 +85,12 @@ public:
       StateBathMirorLight = 1;
     }
   }
+  void OffRoom() {
+    OnBathroomLight = false;   //4
+    OnBathMirorLight = false;  //7
+    StateBathroomLight = 0;
+    StateBathMirorLight = 0;
+  }
 private:
   Timer TimerControlState{ TimeOffDT };
   bool OnBathroomLight, OnBathMirorLight, OnRibbonWBrightly;

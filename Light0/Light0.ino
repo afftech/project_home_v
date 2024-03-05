@@ -5,7 +5,7 @@
 #define BLamp PA8     //!!
 #define BBra PA11     //!!
 #define BRibbon PA12  //!!
-/*null*/             //PA15 свободен
+/*null*/              //PA15 свободен
 #define Balcony_R PB3
 #define Balcony_L PB4
 #define KitchenDuplicate PB5
@@ -43,11 +43,11 @@ Timer Timer1(1);    //время выключения подсветки в но
 bool PowerOffState;
 
 //для обычных кнопок ButtonGroup
-#define BtnGroupTime1 200   //программная задержка от помех для кликов
+#define BtnGroupTime1 200  //программная задержка от помех для кликов
 #define BtnGroupTime2 390  //время для средней длинны нажатия
 #define BtnGroupTime3 500  //время для длинного нажатия
 //для таких же обычных кнопок только ButtonGroupS3.h
-#define BtnGroupTimeS1 200    //программная задержка от помех для кликов
+#define BtnGroupTimeS1 200   //программная задержка от помех для кликов
 #define BtnGroupTimeS2 390   //время для средней длинны нажатия
 #define BtnGroupTimeS3 3000  //время для длинного нажатия
 
@@ -73,8 +73,13 @@ Button Button10(Passage2, 1);
 Control_Hallway_Passage Control_Hallway_Passage;
 #include "Control_BalconyRL.h"
 Control_BalconyRL Control_BalconyRL;
+
+#include "CAN_Net.h"
+
 #include "Control_Kitchen.h"
 Control_Kitchen Control_Kitchen;
+
+#include "CAN_Control.h"
 
 void setup() {
   // put your setup code here, to run once:
@@ -93,6 +98,7 @@ void setup() {
   pinMode(PowerUnit, OUTPUT);
   Serial.println(F("Start"));
   delay(500);
+  CAN_Setup();
 }
 void loop() {
   Control_Hallway_Passage.run();
@@ -110,7 +116,7 @@ void loop() {
   Button8.check();
   Button9.check();
   Button10.check();
-
+  loop_CAN_Net();
   {  // гл выкл
     if (Button1.click()) {
       Serial.println(F("click1 MainHallway"));
@@ -171,6 +177,7 @@ void loop() {
     Control_Kitchen.OffKitchenfrom_Hallway_Passage();
     Control_BalconyRL.OffBalconyLR();
     Serial.println(F("OffAll"));
+    SendData(0x1B1, 0x0101);  //отправить в can шину
   }
   {  // выкл в кухни
     if (Button3.click()) {

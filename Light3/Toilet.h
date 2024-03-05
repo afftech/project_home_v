@@ -37,6 +37,10 @@ public:
       StateToilet = 1;
     }
   }
+  void OffRoom() {
+    OnToilet = false;  //4
+    StateToilet = 0;
+  }
 private:
   bool OnToilet;
   int StateToilet;

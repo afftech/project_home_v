@@ -100,7 +100,7 @@ public:
           OnRibbon = !OnRibbon;
         }
       } else if (OldTimeRibbon == TimeRibbon) {
-       // Serial.println("One Click");
+        // Serial.println("One Click");
         if (OnLamp || OnRibbon || OnBra || OnRibbon) {
           OnRibbon = !OnRibbon;
         } else {
@@ -127,7 +127,7 @@ public:
       }
       if (StateAlllight && AfterStateLight) {
         StateOnFoot_light = true;
-       // Serial.print(OnFoot_light);
+        // Serial.print(OnFoot_light);
         OnFoot_light = false;
         AfterStateLight = false;
         Timer1.stop();
@@ -174,6 +174,7 @@ public:
       OnBra = false;
       OnRibbon = false;
       Control_BalconyRL.On_or_Off_BalconyR(0);
+      SendData(0x1B2, 0x0101);
       //AfterWork
     } else {
       Control_BalconyRL.On_or_Off_BalconyR(1);
@@ -181,6 +182,7 @@ public:
       OnLamp = true;
       OnBra = true;
       OnRibbon = true;
+      SendData(0x1B2, 0x0102);
     }
     //Serial.println(" Off");
   }

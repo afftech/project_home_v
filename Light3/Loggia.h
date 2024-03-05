@@ -37,6 +37,10 @@ public:
       StateLoggiaLight = 1;
     }
   }
+    void OffRoom() {
+      OnLoggiaLight = false;
+      StateLoggiaLight = 0;
+  }
 private:
   bool OnLoggiaLight;
   int StateLoggiaLight;
