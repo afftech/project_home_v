@@ -32,8 +32,13 @@ Button Button4(MainLight, 1);
 Button Button5(Ribbon, 1);
 Button Button6(BraTable, 1);
 
+#include "CAN_Net.h"
+
 #include "Room.h"
 Room Room;
+
+#include "CAN_Control.h"
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -46,6 +51,7 @@ void setup() {
   pinMode(BraLBed, OUTPUT);
   pinMode(BraRBed, OUTPUT);
   pinMode(BraTape, OUTPUT);
+  CAN_Setup();
 }
 void loop() {
   Room.run();
@@ -56,6 +62,7 @@ void loop() {
   Button4.check();
   Button5.check();
   Button6.check();
+  loop_CAN_Net();
   {  // гл выкл
     if (Button1.click()) {
       Serial.println("click1 MainSwitch");

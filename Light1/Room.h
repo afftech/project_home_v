@@ -328,7 +328,7 @@ public:
     }
   }
 
-  /*void OffMainRoom() {
+  void OffMainRoom() {
     OnRibbonWDimly = false;     //4
     OnEdge = false;             //7
     OnCentre = false;           //8
@@ -342,7 +342,7 @@ public:
     StateBraLSwitch = 0;
     StateBraRSwitch = 0;
     StateRibbonSwitch = 0;
-  }*/
+  }
 private:
   bool OnRibbonP, OnRibbonBed, OnRibbonWDimly, OnRibbonWBrightly, OnEdge, OnCentre, OnBraLBed, OnBraRBed, OnBraTape;
   bool StopTimeBraL, StopTime, StopTimeBraR, StopTimeBraT, StopTimeRibbon;
