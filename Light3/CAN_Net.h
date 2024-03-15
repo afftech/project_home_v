@@ -11,7 +11,7 @@ void CAN_Setup() {
   Can.begin();
   Can.setBaudRate(500000);  //500KBPS
   Can.setMBFilterProcessing(MB0, 0x1B1, 0x1FFFFFFF);
-  Can.setMBFilterProcessing(MB1, 0x1A6, 0x1FFFFFFF);
+  Can.setMBFilterProcessing(MB1, 0x1B2, 0x1FFFFFFF);
 }
 
 void SendData(uint32_t id, uint16_t DATA) {  //отправка в шину SendData(0x1A4, 0x0102);
