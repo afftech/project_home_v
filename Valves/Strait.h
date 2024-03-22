@@ -1,7 +1,9 @@
 #include "OnPrevention2.h"
+
 class strait {
+  onPrevention2 _onPrevention2{ 60, _pin_Open, _pin_Close };  //10 секунд выдержка комманды открыть и закрыть
 public:
-  strait(char pin_Open, char pin_Close) {
+  strait(int* pin_Open, int* pin_Close) {
     _pin_Open = pin_Open;
     _pin_Close = pin_Close;
   }
@@ -31,8 +33,7 @@ public:
     FunActiv = i;
   }
 private:
-  char _pin_Open, _pin_Close;
-  onPrevention2 _onPrevention2{ 60, _pin_Open, _pin_Close };  //10 секунд выдержка комманды открыть и закрыть
+  int* _pin_Open, _pin_Close;
   bool FunActiv, StartActiv, OldStartActiv;
   unsigned long TimerStrait;
   int day;

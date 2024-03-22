@@ -3,15 +3,16 @@
 
 class onPrevention2 {
 public:
-  onPrevention2(int waiting_time, char pin_Open, char pin_Close) {
+  onPrevention2(int waiting_time, int* pin_Open, int* pin_Close) {
     _waiting_time = waiting_time;
     _pin_Open = pin_Open;
     _pin_Close = pin_Close;
   }
   bool run() {
+    Serial.println(_pin_Close);
     if (on) {
       if (!open) {
-        //Serial.println("Open");
+        Serial.println(_pin_Open);
         digitalWrite(_pin_Open, true);
         if (time1()) {
           open = true;
@@ -34,8 +35,8 @@ public:
     Timer = millis();
   }
 private:
-  char _pin_Open;
-  char _pin_Close;
+  int _pin_Open;
+  int _pin_Close;
   bool on, open;
   unsigned long Timer;
   int i;

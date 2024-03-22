@@ -8,12 +8,13 @@ public:
   }
   void check() {
     int dataBtn = analogRead(_pin);
+    //Serial.println(analogRead(_pin));
     if (dataBtn <= 20) {
       _flag = true;
-      //Serial.println("_flag = true;");
+     // Serial.println("_flag = true;");
     } else if (dataBtn >= 21) {
       _flag = false;
-      //Serial.println("_flag = false;");
+     // Serial.println("_flag = false;");
     }
   }
   bool click() {
