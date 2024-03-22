@@ -8,13 +8,13 @@
 #define BathroomB PA15
 #define Miror PB3
 #define Sensor_1 PB4
-#define Sensor_2 PB5
-#define ApronB PB6
+//#define Sensor_2 PB5
+#define ApronB PB5  //PB6
 
 // 12 выходов
 #define MiddleRoomLight1 PA0  //2
 #define MiddleRoomLight2 PA1  //3
-#define MiddleRoomLight3 PA2  //4
+//#define MiddleRoomLight3 PA2  //4 нет больше
 #define MiddleRoomBra PB1     //11
 #define LitleRoomLight1 PA4   //6
 #define LitleRoomLight2 PA5   //7
@@ -24,7 +24,7 @@
 #define BathMirorLight PB11   //13
 #define BathroomLight PB0     //10
 #define RibbonWBrightly PA3   //5
-#define Apron PB12            //19              //A5
+#define Apron PA2             //PB12            //19              //A5
 
 #define TimeOffDT 90  //Время в секундах выключения управления освещением комнаты
 
@@ -42,7 +42,7 @@ Button Button6(ToiletB, 1);
 Button Button7(BathroomB, 1);
 Button Button8(Miror, 1);
 Button Button9(Sensor_1, 0);
-Button Button10(Sensor_2, 0);
+//Button Button10(Sensor_2, 0);
 Button Button11(ApronB, 1);
 
 #include "Little_Room.h"
@@ -68,7 +68,7 @@ void setup() {
   // put your setup code here, to run once:
   pinMode(MiddleRoomLight1, OUTPUT);
   pinMode(MiddleRoomLight2, OUTPUT);
-  pinMode(MiddleRoomLight3, OUTPUT);
+  //pinMode(MiddleRoomLight3, OUTPUT);
   pinMode(RibbonWBrightly, OUTPUT);
   pinMode(LitleRoomLight1, OUTPUT);
   pinMode(LitleRoomLight2, OUTPUT);
@@ -78,6 +78,7 @@ void setup() {
   pinMode(MiddleRoomBra, OUTPUT);
   pinMode(LoggiaLight, OUTPUT);
   pinMode(BathMirorLight, OUTPUT);
+  pinMode(Apron, OUTPUT);
   Serial.begin(9600);
   CAN_Setup();
 }
@@ -98,7 +99,7 @@ void loop() {
   Button7.check();
   Button8.check();
   Button9.check();
-  Button10.check();
+  //Button10.check();
   Button11.check();
   loop_CAN_Net();
 
@@ -189,8 +190,8 @@ void loop() {
     Serial.println("click1 clickRibbon On");
     bathroom.clickRibbon();
   }
-  if (Button10.click()) {  //Лента туалета по датчику
+  /*if (Button10.click()) {  //Лента туалета по датчику
     Serial.println("click2 clickRibbon On");
     bathroom.clickRibbon();
-  }
+  }*/
 }
