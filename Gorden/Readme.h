@@ -12,3 +12,5 @@
 5.2) переключатель  1 он, едет только мотор 4.
 5.3) Переключ 2 он, едет только мотор 5.
 5.4 ) оба перек он.... хз. либо пусть не едут, либо пусть едут оба мотора...
+https://github.com/dev-lab/esp-iot-curtains
+https://support.wirenboard.com/t/ne-udaetsya-podklyuchit-dooya-dt82/10757/6
