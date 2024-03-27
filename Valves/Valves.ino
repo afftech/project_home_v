@@ -11,8 +11,9 @@
 #define Valve2Close 5
 
 #include "Strait.h"
-strait Strait_Bathroom(Valve1Open, Valve1Close);  //pin:open pin:close
-strait Strait_Kitchen(Valve2Open, Valve2Close);
+
+strait Strait_Bathroom{ Valve1Open, Valve1Close, 60 };
+strait Strait_Kitchen{ Valve2Open, Valve2Close, 10 };
 
 #include "Voice.h"
 Voice voice;
@@ -27,14 +28,15 @@ Button ButtonValve1(A6, 1);  //Кнопка открыть/закрыть Kitche
 Button ButtonValve2(A7, 1);  //Кнопка открыть/закрыть Bathroom, режим кнопки
 
 #include "Control.h"
-control control(2);//30  //длительность подачи питания на открытие или закрытия крана
+control control(2);  //30  //длительность подачи питания на открытие или закрытия крана
 
 
 bool ethState, error;            //состояние сетевого подключения, состояние протечки
 bool MonthDay, statePrevention;  //Регистр состояния получения месяца и запуска профилактики
 
 #include "OnPrevention.h"
-onPrevention onPrevention(30);//30     //10 секунд выдержка комманды открыть и закрыть
+onPrevention onPrevention(Valve1Open, Valve2Open, Valve1Close, Valve2Close, 30);  //30     //10 секунд выдержка комманды открыть и закрыть
+
 String datePrevention1 = "06-18";  //месяц и день для проведения 1 обслуживания
 String datePrevention2 = "06-07";  //месяц и день для проведения 2 обслуживания
 
