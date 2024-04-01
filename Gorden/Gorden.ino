@@ -10,8 +10,8 @@ void setup() {
 }
 
 void loop() {
-  delay(500);
-  SerialSlave.send("a", 1);
+  //delay(500);
+  //SerialSlave.send("a", 1);
   // put your main code here, to run repeatedly:
   SerialSlave.Listner();
 

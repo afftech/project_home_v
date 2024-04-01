@@ -1,6 +1,5 @@
-//#include "USBAPI.h"
-/*#include <SoftwareSerial.h>
-SoftwareSerial SerialPort(10, 11);  // RX, TX*/
+
+
 class SerialSlave {
 public:
   /* SerialSlave() {
@@ -18,16 +17,16 @@ public:
     //Serial.println(data);
   }
   bool getData;
-  void Listner() {
-    if (Serial2.available() > 0) {
-      char key = Serial2.read();
-      int data = Serial2.parseInt();
-      if (key != ' ') {
-        controlDevice(key, data);
+  void Listner() {  // пример 55 00 00 02 00 02 01 01 9D 58
+    if (Serial.available() > 0) {
+      char key = Serial.read();
+      if (String(key, BIN) != ("100000") && String(key, BIN) != ("1010")) {
+        Serial.println(String(key, BIN));
       }
     }
   }
 private:
+  char message[21];
   void controlDevice(char key, int data) {
     switch (key) {
       case 'a':
