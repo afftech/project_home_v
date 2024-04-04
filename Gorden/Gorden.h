@@ -46,13 +46,13 @@ void loop_Gorden() {
       //Serial.println("WAIT_DATA ");
       break;
     case PARSING_DATA:
-      Serial.println("Parsing ");
+      //Serial.println("Parsing ");
       //logData();
       parsingData();
       state = WAIT_DATA;
       break;
     case SEND_DATA:
-      Serial.println("Send data ");
+      //Serial.println("Send data ");
       sendDataToUART();
       //logSendData();
       state = WAIT_DATA;
@@ -101,7 +101,7 @@ void getDataFromUART() {
   while (Serial2.available() > 0) {
     incomingData[incomingBytesRead++] = Serial2.read();
     ;
-    delay(5);
+    //delay(5);
   }
 
   if (incomingBytesRead) {
@@ -134,6 +134,7 @@ void sendDataToUART() {
   }
   /* delay(5);
   digitalWrite(2, LOW);*/
+  Serial.println();
 }
 
 
