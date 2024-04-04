@@ -14,3 +14,6 @@
 5.4 ) оба перек он.... хз. либо пусть не едут, либо пусть едут оба мотора...
 https://github.com/dev-lab/esp-iot-curtains
 https://support.wirenboard.com/t/ne-udaetsya-podklyuchit-dooya-dt82/10757/6
+https://z-uno.z-wave.me/examples/dooya_curtain_motor_rs485/
+https://manuzoid.com/manuals/994rn-Dooya%20DT82TV%20F-1.2%2014%20User%20manual
+https://manualspro.net/108290-dooya-curtain-motor-dt82tv---f-12---14-manual-curtain-motor#Parameter+1%3A+CONFIGURATION_SET
