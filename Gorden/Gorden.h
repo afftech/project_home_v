@@ -161,7 +161,11 @@ void zcustom_SWLStartStopHandler(uint8_t channel, bool start, bool up, uint8_t* 
 byte getterBlinds() {
   return shadesLevel;
 }
-
+void Stop() {
+  state = SEND_DATA;
+  command[3] = CONTROL;
+  command[4] = STOP;
+}
 void setterBlinds(byte level) {
   state = SEND_DATA;
   command[3] = CONTROL;
@@ -173,7 +177,7 @@ void setterBlinds(byte level) {
   } else {
     command[4] = PERCENTAGE;
     command[5] = level;
-  }
+  }a
 }
 word modbus_crc16(byte* buf, int len) {
   word crc = 0xFFFF;

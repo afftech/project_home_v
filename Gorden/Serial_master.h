@@ -16,7 +16,7 @@ private:
         setterBlinds(data);
         break;
       case 's':
-        setterBlinds(data);
+        Stop();
         break;
       case 'u':
         setterBlinds(99);
