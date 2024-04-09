@@ -1,3 +1,5 @@
+#include <curtains_RS485.h>
+Curtains Curtains(1);
 class Serial_master {
 public:
   void Listner() {  // пример 55 00 00 02 00 02 01 01 9D 58
@@ -8,25 +10,26 @@ public:
         controlDevice(key, data);
       }
     }
+    Curtains.loop();
   }
 private:
   void controlDevice(char key, int data) {
     switch (key) {
       case 'p':
-        setterBlinds(data);
         break;
       case 's':
-        Stop();
+        Curtains.send(1, 's');
         break;
       case 'u':
-        setterBlinds(99);
+        ///Curtains.send(1, 'u');
         break;
       case 'd':
-        setterBlinds(0);
+        //Curtains.send(1, 'd');
         break;
       default:
         break;
     }
-    Serial.println(data);
+    //Serial.print(key);
+    //Serial.println(data);
   }
 };

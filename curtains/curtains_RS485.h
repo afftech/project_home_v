@@ -20,7 +20,7 @@ public:
     }
     for (int addres = 0; addres < numberCurtains; addres++) {
       curtainsObj[addres]->loop();
-      this->state = curtainsObj[addres]->getState();
+      //this->state = curtainsObj[addres]->getState();
     }
   }
   void send(int addres, char message) {

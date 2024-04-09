@@ -21,11 +21,12 @@ enum States {
   SEND_DATA
 };
 
-
+byte* command;
 class CurtainsObj {
 public:
   CurtainsObj(int i) {  //номер/адрес двигателя
-    command[2] = i;
+                        //command[2] = i;
+    command = new byte[8];
   }
   void loop() {
     if (state == SEND_DATA) {
@@ -33,12 +34,15 @@ public:
       sendDataToUART();
       //logSendData();
       state = WAIT_DATA;
+      Serial.print("SEND_DATA");
     }
   }
   void Stop() {
-    state = SEND_DATA;
-    command[3] = CONTROL;
-    command[4] = STOP;
+    command[1] = 0xFE;
+    Serial.print(command[1], HEX);
+    /*state = SEND_DATA;*/
+    //command[3] = CONTROL;
+    //command[4] = STOP;
   }
   void setterBlinds(byte level) {
     state = SEND_DATA;
@@ -53,17 +57,17 @@ public:
       command[5] = level;
     }
   }
-  byte getState() {
+  /*byte getState() {
     return state;
-  }
+  }*/
 private:
   byte state = WAIT_DATA;
   ////////////////////////////////////
-  byte command[8] = { 0x55, 0x01, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
+
+  ///= { 0x55, 0xfe, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 }
   void sendDataToUART() {
     byte len;
-
     if (command[4] == PERCENTAGE || command[3] == READ) {
       word crc = modbus_crc16(command, 6);
       command[6] = lowByte(crc);
