@@ -21,10 +21,10 @@ private:
         Curtains.send(1, 's');
         break;
       case 'u':
-        ///Curtains.send(1, 'u');
+        Curtains.send(1, 'u');
         break;
       case 'd':
-        //Curtains.send(1, 'd');
+        Curtains.send(1, 'd');
         break;
       default:
         break;

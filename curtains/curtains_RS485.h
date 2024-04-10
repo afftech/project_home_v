@@ -5,14 +5,12 @@ public:
     this->numberCurtains = x;
     for (int i = 0; i < this->numberCurtains; i++) { curtainsObj[i] = new CurtainsObj(i + 1); }
   }
-  Curtains() {
-    this->numberCurtains = 1;
-    for (int i = 0; i < this->numberCurtains; i++) { curtainsObj[i] = new CurtainsObj(i + 1); }
-  }
+
   void loop() {
+
     switch (state) {
       case WAIT_DATA:
-        getDataFromUART();
+        //getDataFromUART();
         break;
       case SEND_DATA:
         state = WAIT_DATA;
@@ -25,6 +23,7 @@ public:
   }
   void send(int addres, char message) {
     state = SEND_DATA;
+    addres = addres - 1;
     switch (message) {
       /*case 'p':
         curtainsObj[addres]->setterBlinds(data);
@@ -41,6 +40,7 @@ public:
       default:
         break;
     }
+    Serial.println("Start");
   }
   void getDataFromUART() {
     byte incomingBytesRead = 0;

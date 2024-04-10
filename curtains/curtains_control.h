@@ -21,33 +21,29 @@ enum States {
   SEND_DATA
 };
 
-byte* command;
+//byte* command;
 class CurtainsObj {
 public:
   CurtainsObj(int i) {  //номер/адрес двигателя
                         //command[2] = i;
-    command = new byte[8];
+                        //command = new byte[8];
   }
   void loop() {
     if (state == SEND_DATA) {
-      //Serial.println("Send data ");
       sendDataToUART();
-      //logSendData();
+      Serial.println("SEND_DATA");
       state = WAIT_DATA;
-      Serial.print("SEND_DATA");
     }
   }
   void Stop() {
-    command[1] = 0xFE;
-    Serial.print(command[1], HEX);
-    /*state = SEND_DATA;*/
-    //command[3] = CONTROL;
-    //command[4] = STOP;
+    state = SEND_DATA;
+    command[3] = CONTROL;
+    command[4] = STOP;
+    //Serial.print(command[4], HEX);
   }
   void setterBlinds(byte level) {
     state = SEND_DATA;
     command[3] = CONTROL;
-
     if (level == 0) {
       command[4] = DOWN;
     } else if (level == 99 || level == 255) {
@@ -56,18 +52,18 @@ public:
       command[4] = PERCENTAGE;
       command[5] = level;
     }
+    //Serial.print(command[4], HEX);
   }
-  /*byte getState() {
-    return state;
-  }*/
 private:
   byte state = WAIT_DATA;
   ////////////////////////////////////
-
+  byte command[8] = { 0x55, 0xfe, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 };
+  //ModBus Command1;
 
   ///= { 0x55, 0xfe, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 }
-  void sendDataToUART() {
-    byte len;
+  void
+  sendDataToUART() {
+     byte len;
     if (command[4] == PERCENTAGE || command[3] == READ) {
       word crc = modbus_crc16(command, 6);
       command[6] = lowByte(crc);
@@ -83,10 +79,10 @@ private:
       Serial.print(command[i], HEX);
       Serial2.write(command[i]);
     }
-    Serial.println();
   }
   word modbus_crc16(byte* buf, int len) {
     word crc = 0xFFFF;
+
     for (int pos = 0; pos < len; pos++) {
       crc ^= (word)buf[pos];  // XOR byte into least sig. byte of crc
 

@@ -177,7 +177,7 @@ void setterBlinds(byte level) {
   } else {
     command[4] = PERCENTAGE;
     command[5] = level;
-  }a
+  }
 }
 word modbus_crc16(byte* buf, int len) {
   word crc = 0xFFFF;
