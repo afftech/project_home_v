@@ -1,6 +1,5 @@
 #include "Print.h"
 
-
 #define INCOMING_BYTES_COUNT 100
 
 // Functions code
@@ -24,9 +23,8 @@ enum States {
 //byte* command;
 class CurtainsObj {
 public:
-  CurtainsObj(int i) {  //номер/адрес двигателя
-                        //command[2] = i;
-                        //command = new byte[8];
+  CurtainsObj(byte i) {  //номер/адрес двигателя
+    command[2] = i;
   }
   void loop() {
     if (state == SEND_DATA) {
@@ -57,13 +55,12 @@ public:
 private:
   byte state = WAIT_DATA;
   ////////////////////////////////////
-  byte command[8] = { 0x55, 0xfe, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 };
+  byte command[8] = { 0x55, 0x01, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 };
   //ModBus Command1;
 
-  ///= { 0x55, 0xfe, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 }
   void
   sendDataToUART() {
-     byte len;
+    byte len;
     if (command[4] == PERCENTAGE || command[3] == READ) {
       word crc = modbus_crc16(command, 6);
       command[6] = lowByte(crc);
