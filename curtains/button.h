@@ -19,8 +19,10 @@ public:
         BtnState = true;
         TimerClick1 = millis();
         holdOn = true;
+        hook = true;
+        return true;
       }
-      if (!holdStop && _flag && BtnState && millis() - TimerClick1 >= BtnGroupTime3) {
+      if (!holdStop && !_flag && BtnState && millis() - TimerClick1 >= BtnGroupTime2) {
         TimerClick1 = millis();
         holdClick2 = true;
         return false;
@@ -29,7 +31,7 @@ public:
         if (holdOn && millis() - TimerClick1 < BtnGroupTime2) {
           holdOn = false;
           BtnState = false;
-          return true;
+          //return true;
         }
         if (holdOn && millis() - TimerClick1 >= BtnGroupTime2) {
           holdClick1 = true;
@@ -75,7 +77,15 @@ public:
     }
     return false;
   }
+  bool Hook() {
+    if (hook) {
+      hook = false;
+      return true;
+    }
+    return false;
+  }
 private:
+  bool hook;
   bool holdOn, holdClick1, holdClick2, holdStop;
   bool _flag, BtnState;
   int _BtnMode;

@@ -40,7 +40,6 @@ public:
       default:
         break;
     }
-    Serial.println("Start");
   }
   void getDataFromUART() {
     byte incomingBytesRead = 0;
