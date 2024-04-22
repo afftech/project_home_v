@@ -12,23 +12,27 @@ protected:
     if (on) {
       if (!open) {
         digitalWrite(pin_Open, true);
+        /*Serial.print("Open:");
+        Serial.println(pin_Open);*/
         if (time1()) {
           open = true;
           digitalWrite(pin_Open, false);
         }
       }
       if (open) {  //теперь закрываем
-        //Serial.println("Close");
+        /*Serial.print("Close:");
+        Serial.println(pin_Close);
+        Serial.println("Close");*/
         digitalWrite(pin_Close, true);
 
-       
+
         if (time1()) {
           open = false;
           on = false;
           digitalWrite(pin_Close, false);
         }
       }
-    } 
+    }
   }
   void start() {
     on = true;

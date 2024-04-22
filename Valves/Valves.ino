@@ -12,8 +12,8 @@
 
 #include "Strait.h"
 
-strait Strait_Bathroom{ Valve1Open, Valve1Close, 60 };
-strait Strait_Kitchen{ Valve2Open, Valve2Close, 10 };
+strait Strait_Bathroom{ Valve1Open, Valve1Close, 30 };
+strait Strait_Kitchen{ Valve2Open, Valve2Close, 30 };
 
 #include "Voice.h"
 Voice voice;

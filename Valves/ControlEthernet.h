@@ -9,9 +9,9 @@ bool timer();
 void Prevention();
 void ControlEth_loop() {
   // put your main code here, to run repeatedly:
- // if (!ethState && !error) {  //если Ethernet работает и ошибок нет
-  //  if (/*!Time.Ethernetinit()*/ false) {
-    /*  ethState = 1;  //проверка выполнена
+  if (!ethState && !error) {  //если Ethernet работает и ошибок нет
+    if (!Time.Ethernetinit()) {
+      ethState = 1;  //проверка выполнена
       Serial.println("ok");
       Attempt = false;
       voice.Play(14);  //успешно
@@ -41,7 +41,7 @@ void ControlEth_loop() {
         error = false;
         Attempt == true;
       }
-    }*/
+    }
     ButtonValve1.check();
     ButtonValve2.check();
     control.buttons();
@@ -49,7 +49,7 @@ void ControlEth_loop() {
     control.AutoBathroom();
     control.Signals();
     //control.Voice(); перенесли в .ino
- // }
+  }
   //Serial.println(analogRead(A6));
 }
 void Prevention() {
@@ -96,7 +96,7 @@ bool timer() {
     i++;
     //Serial.println("Attempt to start the network via 7200 sec.");
     //Serial.println(i);
-    if (i >= 10) {//7200
+    if (i >= 7200) {//7200
       i = 0;
       return true;
     }
