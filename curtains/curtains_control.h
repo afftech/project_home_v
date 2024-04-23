@@ -29,7 +29,7 @@ public:
   void loop() {
     if (state == SEND_DATA) {
       sendDataToUART();
-      Serial.println("SEND_DATA");
+      //Serial.println("SEND_DATA");
       state = WAIT_DATA;
     }
   }
@@ -76,6 +76,7 @@ private:
       Serial.print(command[i], HEX);
       Serial2.write(command[i]);
     }
+    Serial.println();
   }
   word modbus_crc16(byte* buf, int len) {
     word crc = 0xFFFF;

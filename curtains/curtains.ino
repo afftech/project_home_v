@@ -19,7 +19,7 @@ Button Open_BR(PA3, 1);
 Button Close_BR(PA4, 1);
 
 Button select_BR_4(PA5, 0);
-Button select_BR_5(PB6, 0);
+Button select_BR_5(PA6, 0);
 
 #include <Little_Room.h>
 #include <Middle_Room.h>
