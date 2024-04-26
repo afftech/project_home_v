@@ -45,7 +45,7 @@ void loop_BR() {
   if (Close_BR.hold2()) {
     PlayBR('s');
   }
-  Serial.println(select_BR_5.click());
+  //Serial.println(select_BR_4.click());
 }
 void PlayBR(char message) {
   if (select_BR_4.click() && !select_BR_5.click()) {  // для 4
