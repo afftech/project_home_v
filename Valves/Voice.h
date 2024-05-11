@@ -41,8 +41,8 @@ public:
   }
   bool timer() {
     if (millis() - T1 >= 1200) {
-      Serial.println("millis() - T1");
-      Serial.println(millis() - T1);
+      /*Serial.println("millis() - T1");
+      Serial.println(millis() - T1);*/
       return true;
     }
     return false;

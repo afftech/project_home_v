@@ -12,8 +12,8 @@
 
 #include "Strait.h"
 
-strait Strait_Bathroom{ Valve1Open, Valve1Close, 30 };
-strait Strait_Kitchen{ Valve2Open, Valve2Close, 30 };
+strait Strait_Bathroom{ Valve1Open, Valve1Close, 3 };//30
+strait Strait_Kitchen{ Valve2Open, Valve2Close, 3 };//30
 
 #include "Voice.h"
 Voice voice;
@@ -28,7 +28,7 @@ Button ButtonValve1(A6, 1);  //Кнопка открыть/закрыть Kitche
 Button ButtonValve2(A7, 1);  //Кнопка открыть/закрыть Bathroom, режим кнопки
 
 #include "Control.h"
-control control(2);  //30  //длительность подачи питания на открытие или закрытия крана
+control control(3);  //30  //длительность подачи питания на открытие или закрытия крана
 
 
 bool ethState, error;            //состояние сетевого подключения, состояние протечки

@@ -1,11 +1,12 @@
 #include "HardwareSerial.h"
 #include "Server.h"
 
-bool Valve2State, SignalKitchen, CurrentStateKitchen,
-  SignalBathroom, CurrentStateBathroom;
+bool Valve2State, SignalKitchen, OldSignalKitchen, CurrentStateKitchen,
+  SignalBathroom, OldSignalBathroom, CurrentStateBathroom;
 bool SensorKitchenState = false;
 bool SensorBathroomState = false;
 int ValveKitchen, ValveBathroom;
+bool ManualKitchenControl, ManualBathroomControl;
 class control {
 public:
   control(int sec) {
@@ -14,9 +15,11 @@ public:
   void buttons() {
     if (ButtonValve1.click()) {
       Serial.println("ButtonValve1.click()");
+      voice.Play(2);
     }
     if (ButtonValve2.click()) {
       Serial.println("ButtonValve2.click()");
+      voice.Play(10);
     }
     if (ButtonValve1.hold2()) {
       Serial.println("ButtonValve1.hold2()");
@@ -36,12 +39,14 @@ public:
         case 1:  //Открытие вида 2 сообщения
           ValveKitchen = 2;
           onStait_Kitchen = 0;
-          if (SignalKitchen) {
+          if (LeakKitchen) {
+            LeakKitchen = false;
+            ManualKitchenControl = true;  // открываем в ручнуом реджиме, откл авто до снятия сигналов
             voice.Play(8);
           } else {
-            if (LeakKitchen) {
+            if (OldSignalKitchen) {
               voice.Play(6);
-              LeakKitchen = false;  //снимаем состояние протечки после сообщения о ней и открытия
+              OldSignalKitchen = false;  //снимаем состояние протечки после сообщения о ней и открытия
             } else {
               voice.Play(5);  //Протечек не было просто открываем
             }
@@ -58,21 +63,22 @@ public:
         increment1 = 0;
       }
       switch (CurrentStateBathroom) {
-        CurrentStateBathroom = !CurrentStateBathroom;
         case 0:  //Закрытие кранов
           ValveBathroom = 1;
-          voice.Play(10);
+          voice.Play(11);
           onStait_Bathroom = 1;
           break;
         case 1:  //Открытие кранов
           ValveBathroom = 2;
           onStait_Bathroom = 0;
-          if (SignalBathroom) {
+          if (LeakBathroom) {
+            LeakBathroom = false;
+            ManualBathroomControl = true;  // открываем в ручнуом реджиме, откл авто до снятия сигналов
             voice.Play(8);
           } else {
-            if (LeakBathroom) {
-              voice.Play(11);
-              LeakBathroom = false;  //снимаем состояние протечки после сообщения о ней и открытия
+            if (OldSignalBathroom) {
+              voice.Play(13);
+              OldSignalBathroom = false;  //снимаем состояние протечки после сообщения о ней и открытия
             } else {
               voice.Play(12);  //Протечек не было просто открываем
             }
@@ -82,9 +88,10 @@ public:
     }
   }
   void AutoBathroom() {
-    if (SignalBathroom && ValveBathroom == 0 && CurrentStateBathroom != 1) {  //закрыть по датчику
+    if (!ManualBathroomControl && SignalBathroom && ValveBathroom == 0 && CurrentStateBathroom != 1) {  //закрыть по датчику
       if (voice.Play(9)) {
         SensorBathroomState = true;
+        LeakBathroom = true;  //фиксируем состояние протечки
       }
     }
     if (SensorBathroomState) {
@@ -112,14 +119,18 @@ public:
       }
     }
     Strait_Bathroom.loop();
-    if (onStait_Bathroom && !SignalBathroom) {  //если включено от кнопки и не было протечки
-      Strait_Bathroom.set_State(1);
+    if (onStait_Bathroom && !LeakBathroom) {  //если включено от кнопки и не было протечки
+      if (!OldSignalBathroom) {
+        Strait_Bathroom.set_State(1);
+      } else {
+        Strait_Bathroom.set_State(0);
+      }
     } else {
       Strait_Bathroom.set_State(0);
     }
   }
   void AutoKitchen() {
-    if (SignalKitchen && ValveKitchen == 0 && CurrentStateKitchen != 1) {  //закрыть по датчику
+    if (!ManualKitchenControl && SignalKitchen && ValveKitchen == 0 && CurrentStateKitchen != 1) {  //закрыть по датчику
       if (voice.Play(1)) {
         SensorKitchenState = true;
         LeakKitchen = true;  //фиксируем состояние протечки
@@ -150,8 +161,12 @@ public:
       }
     }
     Strait_Kitchen.loop();
-    if (onStait_Kitchen && !SignalKitchen) {  //если включено от кнопки и не было протечки
-      Strait_Kitchen.set_State(1);
+    if (onStait_Kitchen && !LeakKitchen) {  //если включено от кнопки и не было протечки
+      if (!OldSignalKitchen) {
+        Strait_Kitchen.set_State(1);
+      } else {
+        Strait_Kitchen.set_State(0);
+      }
     } else {
       Strait_Kitchen.set_State(0);
     }
@@ -164,6 +179,7 @@ public:
         if (increment >= _sec) {
           digitalWrite(Valve1Open, false);
           increment = 0;
+          voice.Play(7);  //краны закрыты
           return true;
         } else {
           digitalWrite(Valve1Open, true);
@@ -179,6 +195,7 @@ public:
         if (increment >= _sec) {
           digitalWrite(Valve1Close, false);
           increment = 0;
+          voice.Play(4);  //краны закрыты
           return true;
         } else {
           digitalWrite(Valve1Close, true);
@@ -215,6 +232,7 @@ public:
         if (increment1 >= _sec) {
           digitalWrite(Valve2Close, false);
           increment1 = 0;
+          //voice.Play(11);  //краны закрыты
           return true;
         } else {
           digitalWrite(Valve2Close, true);
@@ -231,13 +249,21 @@ public:
   void Signals() {
     if ((analogRead(DataSensor1) <= 200 || analogRead(DataSensor2) <= 200 || analogRead(DataSensor3) <= 200) && !SensorKitchenState) {
       SignalKitchen = 1;
+      if (onStait_Kitchen == 1) {
+        OldSignalKitchen = true;
+      }
     } else {
       SignalKitchen = 0;
+      ManualKitchenControl = false;  // снимаем ручное режим ручного открытия  как высохнут датчики и переводим в автомат
     }
     if ((analogRead(DataSensor4) <= 200 || analogRead(DataSensor5) <= 200 || analogRead(DataSensor6) <= 200) && !SensorBathroomState) {
       SignalBathroom = 1;
+      if (onStait_Bathroom == 1) {
+        OldSignalBathroom = true;
+      }
     } else {
       SignalBathroom = 0;
+      ManualBathroomControl = false;
     }
   }
 private:

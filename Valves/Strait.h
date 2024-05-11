@@ -14,6 +14,7 @@ public:
       OldStartActiv = FunActiv;
       if (OldStartActiv) {
         StartActiv = 1;
+        day = 0;
       } else {
         StartActiv = 0;
       }
@@ -22,14 +23,14 @@ public:
       TimerStrait = millis();
     }
     if (StartActiv) {
-      if (millis() - TimerStrait >= 86400000) {  //сутки 86400000 мили сек
+      if (millis() - TimerStrait >= 1000) {  //сутки 86400000 мили сек
         day++;
+        Serial.print("day:");
         Serial.println(day);
         TimerStrait = millis();
         if (day == 14) {           //суток
           onPrevention2::start();  //проливаем воду
           day = 0;
-          //StartActiv = 0;
         }
       }
     }
