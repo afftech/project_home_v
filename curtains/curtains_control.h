@@ -57,7 +57,6 @@ private:
   ////////////////////////////////////
   byte command[8] = { 0x55, 0x01, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 };
   //ModBus Command1;
-
   void
   sendDataToUART() {
     byte len;

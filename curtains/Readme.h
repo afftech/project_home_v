@@ -17,6 +17,7 @@ https://support.wirenboard.com/t/ne-udaetsya-podklyuchit-dooya-dt82/10757/6
 https://z-uno.z-wave.me/examples/dooya_curtain_motor_rs485/
 https://manuzoid.com/manuals/994rn-Dooya%20DT82TV%20F-1.2%2014%20User%20manual
 https://manualspro.net/108290-dooya-curtain-motor-dt82tv---f-12---14-manual-curtain-motor#Parameter+1%3A+CONFIGURATION_SET
+https://smarttone.ru/blog/blinds-rs485-commands/
 
 ну я хз, делай так, на зеленом разъеме 1,2 - мотор 1 (малая комната ). 
 3,4- мотор 2 (средняя комната), 5,6 - мотор 3 (Кухня) , 
