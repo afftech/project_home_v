@@ -1,7 +1,7 @@
 HardwareSerial Serial2(PB11, PB10);
 
 byte command[] = { 0x55, 0x00, 0x00, 0x02, 0x00, 0x02, 0x01, 0x01, 0x00, 0x00 };
-byte command1[] = { 0x55, 0x01, 0x01, 0x03, 0x01, 0xB9, 0x24 };
+byte command1[] = { 0x55, 0x01, 0x01, 0x03, 0x01,0x00, 0xB9, 0x24 };
 
 #define UP 0x01
 #define DOWN 0x02
@@ -55,7 +55,7 @@ void available() {
 }
 void install(byte Number) {
   Serial.println();
-  command[6] = Number;
+  command[7] = Number;
   byte len = 10;
   word crc = modbus_crc16(command, 8);
   command[8] = lowByte(crc);
@@ -73,7 +73,7 @@ void install(byte Number) {
 void DOWN_Start(byte Number) {
   Serial.println();
   state = !state;
-  command1[1] = Number;
+  command1[2] = Number;
   if (state) {
     command1[4] = UP;
     Serial.print("UP:");
@@ -82,10 +82,10 @@ void DOWN_Start(byte Number) {
     Serial.print("DOWN:");
   }
   //command[6] = Number;
-  byte len = 7;
+  byte len = 8;
   word crc = modbus_crc16(command1, 5);
-  command1[5] = lowByte(crc);
-  command1[6] = highByte(crc);
+  command1[6] = lowByte(crc);
+  command1[7] = highByte(crc);
   // put your setup code here, to run once:
   Serial.print("OUTPUT:");
   for (byte i = 0; i < len; i++) {
