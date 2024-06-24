@@ -1,7 +1,7 @@
 HardwareSerial Serial2(PB11, PB10);
 
 byte command[] = { 0x55, 0x00, 0x00, 0x02, 0x00, 0x02, 0x01, 0x01, 0x00, 0x00 };
-byte command1[] = { 0x55, 0x01, 0x01, 0x03, 0x01,0x00, 0xB9, 0x24 };
+byte command1[] = { 0x55, 0x01, 0x01, 0x03, 0x01, 0x00, 0xB9, 0x24 };
 
 #define UP 0x01
 #define DOWN 0x02
@@ -31,20 +31,20 @@ void loop() {
   N_4.check();
   N_5.check();
   if (N_1.click()) {
-    install(21);
+    install(1);
   }
   if (N_2.click()) {
-    DOWN_Start(21);
+    install(2);
   }
   if (N_3.click()) {
-    DOWN_Start(2);
+    install(3);
   }
-  /*if (N_4.click()) {
+  if (N_4.click()) {
     install(4);
   }
   if (N_5.click()) {
     install(5);
-  }*/
+  }
   available();
 }
 void available() {
@@ -83,7 +83,7 @@ void DOWN_Start(byte Number) {
   }
   //command[6] = Number;
   byte len = 8;
-  word crc = modbus_crc16(command1, 5);
+  word crc = modbus_crc16(command1, 6);
   command1[6] = lowByte(crc);
   command1[7] = highByte(crc);
   // put your setup code here, to run once:
