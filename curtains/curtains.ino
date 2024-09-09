@@ -6,20 +6,20 @@ Curtains Curtains(5);
 #include <button.h>
 
 
-Button Open_LR(PB5, 1);
-Button Close_LR(PB8, 1);
+Button Open_LR(PB0, 1);   //PB5
+Button Close_LR(PA7, 1);  //PB8
 
-Button Open_MR(PB9, 1);
-Button Close_MR(PA0, 1);
+Button Open_MR(PA6, 1);   //PB9
+Button Close_MR(PA5, 1);  //PA0
 
-Button Open_K(PA1, 1);
-Button Close_K(PA2, 1);
+Button Open_K(PA4, 1);   //PA1
+Button Close_K(PA3, 1);  //PA2
 
-Button Open_BR(PA3, 1);
-Button Close_BR(PA4, 1);
+Button Open_BR(PA2, 1);   //PA3
+Button Close_BR(PA1, 1);  //PA4
 
-Button select_BR_4(PA5, 0);
-Button select_BR_5(PA6, 0);
+Button select_BR_4(PA0, 0);  //PA5
+Button select_BR_5(PB9, 0);  //PA6
 
 #include <Little_Room.h>
 #include <Middle_Room.h>
