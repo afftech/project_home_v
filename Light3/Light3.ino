@@ -4,7 +4,7 @@
 #define MiddleRoom PB15
 #define MiddleRBra PA8
 #define LoggiaB PA11
-#define ToiletB PA12
+#define ToiletB PB12
 #define BathroomB PA15
 #define Miror PB3
 #define Sensor_1 PB4
@@ -90,7 +90,7 @@ void loop() {
   toilet.run();
   Control_Kitchen.run();
   // put your main code here, to run repeatedly:
-  Button1.check();
+ Button1.check();
   Button2.check();
   Button3.check();
   Button4.check();
@@ -99,7 +99,7 @@ void loop() {
   Button7.check();
   Button8.check();
   Button9.check();
-  //Button10.check();
+  //не надо //Button10.check();
   Button11.check();
   loop_CAN_Net();
 
@@ -107,87 +107,87 @@ void loop() {
 
     if (Button11.click()) {
       Control_Kitchen.clickApron();
-      Serial.println("click1 Apron");
+      Serial.println("click Apron");
     }
     if (Button11.hold1() || Button11.hold2()) {
       Control_Kitchen.OffKitchen();
-      Serial.println("hold1_2 Apron");
+      Serial.println("hold Apron");
     }
   }
   {  //малая комната
     if (Button1.click()) {
-      Serial.println("click1 LitleRoomLight");
+      Serial.println("click LitleRoomLight");
       little_Room.clickLitleRoom();
     }
     if (Button1.hold1() || Button1.hold2()) {
-      Serial.println("hold1_2 LitleRoomLight Off");
+      Serial.println("hold LitleRoomLight Off");
       little_Room.Off_or_ONRoom();
     }
     if (Button2.click()) {
-      Serial.println("click2 LitleRBra");
+      Serial.println("click LitleRBra");
       little_Room.ClickLitleRBra();
     }
     if (Button2.hold1() || Button2.hold2()) {
-      Serial.println("hold2_2 LitleRBra Off");
+      Serial.println("hold LitleRBra Off");
       little_Room.Off_or_ONRoom();
     }
   }
   {  //средняя комната
     if (Button3.click()) {
-      Serial.println("click1 MiddleRoomLight");
+      Serial.println("click MiddleRoomLight");
       middle_Room.clickRoom();
     }
     if (Button3.hold1() || Button3.hold2()) {
-      Serial.println("hold1_2 MiddleRoomLight Off");
+      Serial.println("hold MiddleRoomLight Off");
       middle_Room.Off_or_ONRoom();
     }
     if (Button4.click()) {
-      Serial.println("click2 MiddleRoomBra");
+      Serial.println("click MiddleRoomBra");
       middle_Room.ClickBra();
     }
     if (Button4.hold1() || Button4.hold2()) {
-      Serial.println("hold2_2 MiddleRoomBra Off");
+      Serial.println("hold MiddleRoomBra Off");
       middle_Room.Off_or_ONRoom();
     }
   }
   {  //лоджия
     if (Button5.click()) {
-      Serial.println("click1 loggia");
+      Serial.println("click loggia");
       loggia.clickLoggia();
     }
     if (Button5.hold1() || Button5.hold2()) {
-      Serial.println("hold1_2 loggia Off");
+      Serial.println("hold loggia Off");
       loggia.Off_or_ONRoom();
     }
-    if (Button6.click()) {
-      Serial.println("click2 Toilet");
+    if (Button6.click()) {  //Button6
+      Serial.println("click Toilet");
       toilet.clickToilet();
     }
-    if (Button6.hold1() || Button6.hold2()) {
-      Serial.println("hold2_2 Toilet Off");
+    if (Button6.hold1() || Button6.hold2()) {  //Button6
+      Serial.println("hold Toilet Off");
       toilet.Off_or_ONRoom();
     }
   }
-  {  //Ванна и зеркало
-    if (Button7.click()) {
-      Serial.println("click1 Bathroom");
+  {  //Ванна и зеркало Button7
+      if (Button7.click()) {//Временно 
+      Serial.println("click Bathroom");
       bathroom.clickBathroom();
     }
     if (Button7.hold2() || Button7.hold1()) {
-      Serial.println("hold1_2 Bathroom Off");
+      Serial.println("hold Bathroom Off");
       bathroom.Off_or_ONRoom();
     }
     if (Button8.click()) {
-      Serial.println("click2 Mirror");
+      Serial.println("click Mirror");
       bathroom.clickMirror();
     }
     if (Button8.hold2() || Button8.hold1()) {
-      Serial.println("hold2_2 Mirror Off");
+      Serial.println("hold Mirror Off");
       bathroom.Off_or_ONRoom();
     }
   }
   if (Button9.click()) {  //Лента туалета по датчику
-    Serial.println("click1 clickRibbon On");
+    Serial.println("click clickRibbon On");
     bathroom.clickRibbon();
   }
   /*if (Button10.click()) {  //Лента туалета по датчику

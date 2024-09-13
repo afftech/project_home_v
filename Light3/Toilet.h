@@ -21,6 +21,7 @@ public:
       } else {
         StateToilet = 0;
         OnToilet = false;
+        //Serial.println("clickToilet_off  ");
       }
     } else {
       StateToilet = 0;
@@ -32,6 +33,7 @@ public:
     if (OnToilet) {
       OnToilet = false;  //4
       StateToilet = 0;
+      //Serial.println("Off_**_ONRoom");
     } else {
       OnToilet = true;  //4
       StateToilet = 1;
@@ -39,6 +41,7 @@ public:
   }
   void OffRoom() {
     OnToilet = false;  //4
+    //Serial.println("OffRoom");
     StateToilet = 0;
   }
 private:
