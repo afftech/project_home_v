@@ -16,25 +16,34 @@ public:
         state = WAIT_DATA;
         break;
     }
-    for (int addres = 0; addres < numberCurtains; addres++) {
-      curtainsObj[addres]->loop();
-      //this->state = curtainsObj[addres]->getState();
+    if (millis() - Time_Wait >= 100) {
+      Time_Wait = millis();
+      curtainsObj[addres_Pos]->loop();
+      addres_Pos++;
+      if (addres_Pos == numberCurtains) {
+        addres_Pos = 0;
+      }
     }
   }
   void send(int addres, char message) {
     state = SEND_DATA;
     addres = addres - 1;
+    Serial.print(addres);
+    Serial.print(":");
     switch (message) {
       /*case 'p':
         curtainsObj[addres]->setterBlinds(data);
         break;*/
       case 's':
+        Serial.println("stop");
         curtainsObj[addres]->Stop();
         break;
       case 'u':
+        Serial.println("open");
         curtainsObj[addres]->setterBlinds(99);
         break;
       case 'd':
+        Serial.println("close");
         curtainsObj[addres]->setterBlinds(0);
         break;
       default:
@@ -54,6 +63,8 @@ public:
     }
   }
 private:
+  uint32_t Time_Wait;
+  int addres_Pos = 0;
   int numberCurtains = 1;
   CurtainsObj* curtainsObj[32];  // Изменить
   byte bytesCount = 0;

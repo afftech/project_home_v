@@ -26,7 +26,8 @@
 #define RibbonWBrightly PA3   //5
 #define Apron PA2             //PB12            //19              //A5
 
-#define TimeOffDT 90  //Время в секундах выключения управления освещением комнаты
+#define TimeOffDT 90       //Время в секундах выключения управления освещением комнаты
+#define TimeOffRibbon 600  //Время в секундах выключения управления освещением комнаты
 
 #define BtnGroupTime1 100  //программная задержка от помех для кликов
 #define BtnGroupTime2 250  //время для средней длинны нажатия
@@ -90,7 +91,7 @@ void loop() {
   toilet.run();
   Control_Kitchen.run();
   // put your main code here, to run repeatedly:
- Button1.check();
+  Button1.check();
   Button2.check();
   Button3.check();
   Button4.check();
@@ -168,8 +169,8 @@ void loop() {
       toilet.Off_or_ONRoom();
     }
   }
-  {  //Ванна и зеркало Button7
-      if (Button7.click()) {//Временно 
+  {                         //Ванна и зеркало Button7
+    if (Button7.click()) {  //Временно
       Serial.println("click Bathroom");
       bathroom.clickBathroom();
     }

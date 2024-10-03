@@ -40,29 +40,44 @@ public:
     if (millis() - TimeClickMirror <= 3000) {
       if (StateBathMirorLight == 0) {
         StateBathMirorLight = 1;
+        StateBathroomLight = 1;
         OnBathMirorLight = true;
       } else {
         StateBathMirorLight = 0;
+        if (StateBathroomLight == 1) {
+          StateBathroomLight = 0;
+        }
         OnBathMirorLight = false;
       }
     } else {
       StateBathMirorLight = 0;
+      if (StateBathroomLight == 1) {
+        StateBathroomLight = 0;
+      }
       OnBathMirorLight = false;
     }
     TimeClickMirror = millis();
   }
   void clickBathroom() {
     if (millis() - TimeClickBathroom <= 3000) {
-      if (StateBathroomLight == 0) {
+      if (StateBathroomLight == 0) {  //вкл зеркало
         StateBathroomLight = 1;
+        StateBathMirorLight = 1;
+        OnBathMirorLight = true;
+      } else if (StateBathroomLight == 1) {  //вкл свет
+        StateBathroomLight = 2;
         OnBathroomLight = true;
       } else {
         StateBathroomLight = 0;
+        StateBathMirorLight = 0;
         OnBathroomLight = false;
+        OnBathMirorLight = false;
       }
     } else {
       StateBathroomLight = 0;
+      StateBathMirorLight = 0;
       OnBathroomLight = false;
+      OnBathMirorLight = false;
     }
     TimeClickBathroom = millis();
   }
@@ -92,7 +107,7 @@ public:
     StateBathMirorLight = 0;
   }
 private:
-  Timer TimerControlState{ TimeOffDT };
+  Timer TimerControlState{ TimeOffRibbon };
   bool OnBathroomLight, OnBathMirorLight, OnRibbonWBrightly;
   int StateBathroomLight, StateBathMirorLight;
   long TimeClickBathroom, TimeClickMirror;

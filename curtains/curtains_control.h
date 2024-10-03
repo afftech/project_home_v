@@ -71,11 +71,13 @@ private:
       command[6] = highByte(crc);
       len = 7;
     }
+    //delay(5);  // надо будет убрать и заменить!!!
     for (byte i = 0; i < len; i++) {
       Serial.print(command[i], HEX);
       Serial2.write(command[i]);
     }
     Serial.println();
+    // delay(5);  // надо будет убрать и заменить!!!
   }
   word modbus_crc16(byte* buf, int len) {
     word crc = 0xFFFF;
