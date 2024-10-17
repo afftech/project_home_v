@@ -1,3 +1,4 @@
+
 #include <curtains_control.h>
 class Curtains {
 public:
@@ -7,24 +8,21 @@ public:
   }
 
   void loop() {
-
-    switch (state) {
-      case WAIT_DATA:
-        //getDataFromUART();
-        break;
-      case SEND_DATA:
-        state = WAIT_DATA;
-        break;
+    for (int addres = 0; addres < numberCurtains; addres++) {
+      curtainsObj[addres]->loop();
+      //this->state = curtainsObj[addres]->getState();
     }
-    if (millis() - Time_Wait >= 100) {
-      Time_Wait = millis();
-      curtainsObj[addres_Pos]->loop();
+
+    if (curtainsObj[addres_Pos]->State() == 1) {
+      curtainsObj[addres_Pos]->send_and_receiv();
+    } else {
       addres_Pos++;
       if (addres_Pos == numberCurtains) {
         addres_Pos = 0;
       }
     }
   }
+
   void send(int addres, char message) {
     state = SEND_DATA;
     addres = addres - 1;

@@ -3,8 +3,10 @@ Curtains Curtains(5);
 #define BtnGroupTime1 200  //программная задержка от помех для кликов
 #define BtnGroupTime2 390  //время для средней длинны нажатия
 #define BtnGroupTime3 500  //время для длинного нажатия
-#include <button.h>
 
+#include <button.h>
+#include <Serial_slave.h>
+SerialSlave Slave;
 
 Button Open_LR(PB0, 1);   //PB5
 Button Close_LR(PA7, 1);  //PB8
@@ -35,6 +37,7 @@ void setup() {
   Serial2.begin(9600);
 }
 void loop() {
+  Slave.Listner();
   loop_LR();
   loop_MR();
   loop_BR();

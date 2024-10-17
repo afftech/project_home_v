@@ -17,7 +17,8 @@
 enum States {
   WAIT_DATA,
   PARSING_DATA,
-  SEND_DATA
+  SEND_DATA,
+  WAIT_CHANGE,
 };
 
 //byte* command;
@@ -26,21 +27,75 @@ public:
   CurtainsObj(byte i) {  //номер/адрес двигателя
     command[2] = i;
   }
-  void loop() {
-    if (state == SEND_DATA) {
-      sendDataToUART();
-      //Serial.println("SEND_DATA");
-      state = WAIT_DATA;
+  void loop() {  //здесь гоняем время до следующей команды
+                 /* if (state == PARSING_DATA) {
+      PARSING(size_data);
+      state = WAIT_CHANGE;
+    }*/
+    /*if (state == WAIT_CHANGE) {
+      if (counter != Old_counter) {
+      }
+    }*/
+  }
+  int State() {
+    bool status;
+    if (state != WAIT_CHANGE) {
+      status = 1;
+    } else {
+      Time_Next_Command = millis();
+      status = 0;
+    }
+    return status;
+  }
+  void send_and_receiv() {
+    switch (state) {
+      case SEND_DATA:
+        if (millis() - Time_Next_Command >= 30) {//30
+          Time_Next_Command = millis();
+          Time_Wait_Data = Time_Next_Command;
+          sendDataToUART();
+          state = WAIT_DATA;
+        }
+        break;
+      case WAIT_DATA:
+        if (millis() - Time_Wait_Data >= 60) {//60
+          Time_Wait_Data = millis();
+          size_data = available();
+          state = PARSING_DATA;
+        }
+        break;
+      case PARSING_DATA:
+        PARSING(size_data);
+        if (New_Command) {
+          state = SEND_DATA;
+          New_Command = 0;
+          Time_Next_Command = millis();
+          Serial.println("SEND_DATA2_ok");
+        } else {
+          state = WAIT_CHANGE;
+        }
+        break;
     }
   }
   void Stop() {
+    if (state == WAIT_CHANGE) {
+      state = SEND_DATA;
+    } else {
+      New_Command = 1;
+    }
+    Time_Next_Command = millis();
     state = SEND_DATA;
     command[3] = CONTROL;
     command[4] = STOP;
     //Serial.print(command[4], HEX);
   }
   void setterBlinds(byte level) {
-    state = SEND_DATA;
+    if (state == WAIT_CHANGE) {
+      state = SEND_DATA;
+    } else {
+      New_Command = 1;
+    }
+
     command[3] = CONTROL;
     if (level == 0) {
       command[4] = DOWN;
@@ -53,12 +108,18 @@ public:
     //Serial.print(command[4], HEX);
   }
 private:
-  byte state = WAIT_DATA;
+  uint32_t counter;  //4 294 967 295
+  uint32_t Time_Next_Command, Time_Wait_Data;
+  int New_Command;
+  byte state = WAIT_CHANGE;
   ////////////////////////////////////
   byte command[8] = { 0x55, 0x01, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 };
+  byte command1[8] = { 0x55, 0x01, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+  int size_data;
+  byte response[30] = {};
   //ModBus Command1;
-  void
-  sendDataToUART() {
+  void sendDataToUART() {
     byte len;
     if (command[4] == PERCENTAGE || command[3] == READ) {
       word crc = modbus_crc16(command, 6);
@@ -71,13 +132,38 @@ private:
       command[6] = highByte(crc);
       len = 7;
     }
-    //delay(5);  // надо будет убрать и заменить!!!
+    Serial.print("request: ");
     for (byte i = 0; i < len; i++) {
+      Serial.print(" ");
       Serial.print(command[i], HEX);
       Serial2.write(command[i]);
     }
     Serial.println();
-    // delay(5);  // надо будет убрать и заменить!!!
+  }
+  int available() {
+    int size = 0;
+    while (Serial2.available() > 0) {
+      uint8_t buf;
+      buf = Serial2.read();
+      //Serial.print(test, HEX);
+      response[size++] = buf;
+    }
+    if (size != 0) {
+      return size;
+    }
+    return 0;
+  }
+
+  void PARSING(int size) {
+    word crc = modbus_crc16(response, size - 2);
+    if ((lowByte(crc) == response[size - 2]) && (highByte(crc) == response[size - 1])) {  //проверка сообщения
+      Serial.print("response:");
+      for (byte i = 0; i < size; i++) {
+        Serial.print(" ");
+        Serial.print(response[i], HEX);
+      }
+      Serial.println();
+    }
   }
   word modbus_crc16(byte* buf, int len) {
     word crc = 0xFFFF;

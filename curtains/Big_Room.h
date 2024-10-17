@@ -10,14 +10,14 @@ void loop_BR() {
   select_BR_4.check();
   select_BR_5.check();
 
-  if (select_BR_4.click() && !select_BR_5.click()) {
-    state_btn = 1;
+  if (select_BR_4.click() && !select_BR_5.click()) {  //две клавиши для упр. чем управлять
+    state_btn = 1;                                    // едет 1
   } else if (!select_BR_4.click() && select_BR_5.click()) {
-    state_btn = 2;
+    state_btn = 2;  // едет 2
   } else if (select_BR_4.click() && select_BR_5.click()) {
-    state_btn = 3;
+    state_btn = 3;  // едут оба
   } else {
-    state_btn = 3;
+    state_btn = 3;  // едут оба
   }
 
   if (Open_BR.click()) {
@@ -54,7 +54,7 @@ void loop_BR() {
     PlayBR('s');  //стоп
   }
   if (Close_BR.hold2() || Close_BR.hold2()) {
-    PlayBR('s');  //Быдло за чем то 'S'
+    PlayBR('s');
   }
   //Serial.println(select_BR_4.click());
 }
