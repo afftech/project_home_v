@@ -32,7 +32,7 @@ public:
   }
   void loop() {  //здесь гоняем время до следующей команды
     if (state == WAIT_CHANGE) {
-      //AutoRequest();
+      AutoRequest();
     }
   }
   int State() {

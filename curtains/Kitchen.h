@@ -43,7 +43,7 @@ void loop_K() {
     Curtains.send(3, 's', 0);
     Serial.println("K_Stop2");
   }
-  if (Close_LR.hold2()) {
+  if (Close_K.hold2()) {
     Curtains.send(3, 's', 0);
     Serial.println("K_Stop3");
   }
