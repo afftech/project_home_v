@@ -5,7 +5,7 @@
 #define S4 9
 class Voice {
 public:
-  voice() {
+  Voice(uint32_t T2) {
     pinMode(S1, OUTPUT);  //открыть кухню
     pinMode(S2, OUTPUT);  //закрыть кухню
     pinMode(S3, OUTPUT);  //открыть кухню
@@ -15,6 +15,7 @@ public:
     digitalWrite(S2, false);
     digitalWrite(S3, false);
     digitalWrite(S4, false);
+    _T2 = T2;
   }
   void process() {
     if (PlayState) {
@@ -28,7 +29,7 @@ public:
     }
   }
   bool Play(int i) {
-    Serial.print(F("Voice:"));
+    /*Serial.print(F("Voice:"));
     Serial.println(i);
     i = i - 1;
     digitalWrite(S1, SoundSelection[i][0]);
@@ -36,13 +37,11 @@ public:
     digitalWrite(S3, SoundSelection[i][2]);
     digitalWrite(S4, SoundSelection[i][3]);
     PlayState = true;
-    T1 = millis();
+    T1 = millis();*/
     return true;
   }
   bool timer() {
-    if (millis() - T1 >= 1200) {
-      /*Serial.println("millis() - T1");
-      Serial.println(millis() - T1);*/
+    if (millis() - T1 >= _T2) {
       return true;
     }
     return false;
@@ -67,5 +66,5 @@ private:
     { 1, 1, 1, 1 }   //15) Не удалось обновить время и дату, после включения.
   };
   bool PlayState;
-  long T1;
+  long T1, _T2;
 };

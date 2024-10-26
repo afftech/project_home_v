@@ -12,11 +12,11 @@
 
 #include "Strait.h"
 
-strait Strait_Bathroom{ Valve1Open, Valve1Close, 3 };//30
-strait Strait_Kitchen{ Valve2Open, Valve2Close, 3 };//30
+strait Strait_Bathroom{ Valve2Open, Valve2Close, 3 };  //30
+strait Strait_Kitchen{ Valve1Open, Valve1Close, 3 };   //30
 
 #include "Voice.h"
-Voice voice;
+Voice voice(1200);  // время удержания выбора звука
 
 //Кнопка реагирует через 6 секунд
 #define BtnGroupTime1 200   //программная задержка от помех для кликов

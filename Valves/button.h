@@ -11,10 +11,10 @@ public:
     //Serial.println(analogRead(_pin));
     if (dataBtn <= 20) {
       _flag = true;
-     // Serial.println("_flag = true;");
+      // Serial.println("_flag = true;");
     } else if (dataBtn >= 21) {
       _flag = false;
-     // Serial.println("_flag = false;");
+      // Serial.println("_flag = false;");
     }
   }
   bool click() {
@@ -23,6 +23,9 @@ public:
         BtnState = true;
         TimerClick1 = millis();
         holdOn = true;
+        reactionOn = true;
+        Serial.print("reactionOn:");
+        Serial.println(reactionOn);
       }
       if (!holdStop && _flag && BtnState && millis() - TimerClick1 >= BtnGroupTime3) {
         TimerClick1 = millis();
@@ -55,6 +58,13 @@ public:
       return false;
     }
   }
+  bool reaction() {
+    if (reactionOn) {
+      reactionOn = false;
+      return true;
+    }
+    return false;
+  }
   bool hold1() {
     if (holdClick1) {
       holdClick1 = false;
@@ -80,7 +90,7 @@ public:
     return false;
   }
 private:
-  bool holdOn, holdClick1, holdClick2, holdStop;
+  bool holdOn, holdClick1, holdClick2, holdStop, reactionOn;
   bool _flag, BtnState;
   int _BtnMode;
   char _pin;

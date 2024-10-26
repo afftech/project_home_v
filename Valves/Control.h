@@ -13,78 +13,98 @@ public:
     _sec = sec;
   }
   void buttons() {
-    if (ButtonValve1.click()) {
+    ButtonValve1.click();
+    if (ButtonValve1.reaction()) {
       Serial.println("ButtonValve1.click()");
       voice.Play(2);
     }
-    if (ButtonValve2.click()) {
+    ButtonValve2.click();
+    if (ButtonValve2.reaction()) {
       Serial.println("ButtonValve2.click()");
       voice.Play(10);
     }
     if (ButtonValve1.hold2()) {
-      Serial.println("ButtonValve1.hold2()");
-      if (ValveKitchen != 0) {
-        digitalWrite(Valve1Open, false);
-        digitalWrite(Valve1Close, false);
-        CurrentStateKitchen = !CurrentStateKitchen;
-        increment = 0;
-      }
-      /*  */
-      switch (CurrentStateKitchen) {
-        case 0:
-          ValveKitchen = 1;  //Закрытие кранов
-          voice.Play(3);
-          onStait_Kitchen = 1;
-          break;
-        case 1:  //Открытие вида 2 сообщения
-          ValveKitchen = 2;
-          onStait_Kitchen = 0;
-          if (LeakKitchen) {
-            LeakKitchen = false;
-            ManualKitchenControl = true;  // открываем в ручнуом реджиме, откл авто до снятия сигналов
-            voice.Play(8);
-          } else {
-            if (OldSignalKitchen) {
-              voice.Play(6);
-              OldSignalKitchen = false;  //снимаем состояние протечки после сообщения о ней и открытия
-            } else {
-              voice.Play(5);  //Протечек не было просто открываем
-            }
-          }
-          break;
+      funcKitchen(0);
+      if (!CurrentStateKitchen) {
+        funcBathroom(1);
       }
     }
     if (ButtonValve2.hold2()) {
-      Serial.println("ButtonValve2.hold2()");
-      if (ValveBathroom != 0) {
-        digitalWrite(Valve2Open, false);
-        digitalWrite(Valve2Close, false);
-        CurrentStateBathroom = !CurrentStateBathroom;
-        increment1 = 0;
+      funcBathroom(0);
+      if (!CurrentStateBathroom) {
+        funcKitchen(1);
       }
-      switch (CurrentStateBathroom) {
-        case 0:  //Закрытие кранов
-          ValveBathroom = 1;
-          voice.Play(11);
-          onStait_Bathroom = 1;
-          break;
-        case 1:  //Открытие кранов
-          ValveBathroom = 2;
-          onStait_Bathroom = 0;
-          if (LeakBathroom) {
-            LeakBathroom = false;
-            ManualBathroomControl = true;  // открываем в ручнуом реджиме, откл авто до снятия сигналов
-            voice.Play(8);
+    }
+  }
+  void funcKitchen(bool close) {
+    Serial.println("ButtonValve1.hold2()");
+    if (ValveKitchen != 0) {  //если отк или закр уже проиcх
+      digitalWrite(Valve1Open, false);
+      digitalWrite(Valve1Close, false);
+      CurrentStateKitchen = !CurrentStateKitchen;
+      increment = 0;
+    }
+    if (close) {
+      CurrentStateKitchen = 0;
+    }
+    /*  */
+    switch (CurrentStateKitchen) {
+      case 0:
+        ValveKitchen = 1;  //Закрытие кранов
+        voice.Play(3);
+        onStait_Kitchen = 1;
+        break;
+      case 1:  //Открытие вида 2 сообщения
+        ValveKitchen = 2;
+        onStait_Kitchen = 0;
+        if (LeakKitchen) {
+          LeakKitchen = false;
+          ManualKitchenControl = true;  // открываем в ручнуом реджиме, откл авто до снятия сигналов
+          voice.Play(8);
+        } else {
+          if (OldSignalKitchen) {
+            voice.Play(6);
+            OldSignalKitchen = false;  //снимаем состояние протечки после сообщения о ней и открытия
           } else {
-            if (OldSignalBathroom) {
-              voice.Play(13);
-              OldSignalBathroom = false;  //снимаем состояние протечки после сообщения о ней и открытия
-            } else {
-              voice.Play(12);  //Протечек не было просто открываем
-            }
+            voice.Play(5);  //Протечек не было просто открываем
           }
-          break;
-      }
+        }
+        break;
+    }
+  }
+  void funcBathroom(bool close) {
+    Serial.println("ButtonValve2.hold2()");
+    if (ValveBathroom != 0) {  //если отк или закр уже проиcх
+      digitalWrite(Valve2Open, false);
+      digitalWrite(Valve2Close, false);
+      CurrentStateBathroom = !CurrentStateBathroom;
+      increment1 = 0;
+    }
+    if (close) {
+      CurrentStateBathroom = 0;
+    }
+    switch (CurrentStateBathroom) {
+      case 0:  //Закрытие кранов
+        ValveBathroom = 1;
+        voice.Play(11);
+        onStait_Bathroom = 1;
+        break;
+      case 1:  //Открытие кранов
+        ValveBathroom = 2;
+        onStait_Bathroom = 0;
+        if (LeakBathroom) {
+          LeakBathroom = false;
+          ManualBathroomControl = true;  // открываем в ручнуом реджиме, откл авто до снятия сигналов
+          voice.Play(8);
+        } else {
+          if (OldSignalBathroom) {
+            voice.Play(13);
+            OldSignalBathroom = false;  //снимаем состояние протечки после сообщения о ней и открытия
+          } else {
+            voice.Play(12);  //Протечек не было просто открываем
+          }
+        }
+        break;
     }
   }
   void AutoBathroom() {
@@ -119,7 +139,7 @@ public:
       }
     }
     Strait_Bathroom.loop();
-    if (onStait_Bathroom && !LeakBathroom) {  //если включено от кнопки и не было протечки
+    if (onStait_Bathroom && !LeakBathroom) {  //если (включено) открыто от кнопки и не было протечки
       if (!OldSignalBathroom) {
         Strait_Bathroom.set_State(1);
       } else {
