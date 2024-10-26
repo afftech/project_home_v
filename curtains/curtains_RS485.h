@@ -23,7 +23,7 @@ public:
     }
   }
 
-  void send(int addres, char message) {
+  void send(int addres, char message, int value) {
     state = SEND_DATA;
     addres = addres - 1;
     Serial.print(addres);
@@ -44,6 +44,15 @@ public:
         Serial.println("close");
         curtainsObj[addres]->setterBlinds(0);
         break;
+      case 'b':  //изм направление
+        Serial.println("set_direction");
+        curtainsObj[addres]->set_direction(value);
+        //curtainsObj[addres]->Procent();
+        break;
+      case 'a':  //проценты
+        Serial.println("Procent");
+        curtainsObj[addres]->Procent();
+        break;
       default:
         break;
     }
@@ -52,8 +61,6 @@ public:
     byte incomingBytesRead = 0;
     while (Serial2.available() > 0) {
       incomingData[incomingBytesRead++] = Serial2.read();
-      ;
-      //delay(5);
     }
     if (incomingBytesRead) {
       bytesCount = incomingBytesRead;

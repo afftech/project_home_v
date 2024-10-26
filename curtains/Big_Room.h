@@ -9,7 +9,7 @@ void loop_BR() {
   Close_BR.check();
   select_BR_4.check();
   select_BR_5.check();
-
+  //длинное удержание 2х клавишь напрпр вкл реж прогр. Далее в реж репев мотор м наж кнопку в нужном помещ
   if (select_BR_4.click() && !select_BR_5.click()) {  //две клавиши для упр. чем управлять
     state_btn = 1;                                    // едет 1
   } else if (!select_BR_4.click() && select_BR_5.click()) {
@@ -60,25 +60,13 @@ void loop_BR() {
 }
 void PlayBR(char message) {
   if (state_btn == 1) {  // для 4 //едет
-    Curtains.send(4, message);
+    Curtains.send(4, message, 0);
   }
   if (state_btn == 2) {  // для 5
-    if (message == 's') {
-      Curtains.send(5, 's');
-    } else if (message == 'd') {
-      Curtains.send(5, 'u');
-    } else if (message == 'u') {
-      Curtains.send(5, 'd');
-    }
+    Curtains.send(5, message, 0);
   }
   if (state_btn == 3) {  // для 4 и 5
-    Curtains.send(4, message);
-    if (message == 's') {
-      Curtains.send(5, 's');
-    } else if (message == 'd') {
-      Curtains.send(5, 'u');
-    } else if (message == 'u') {
-      Curtains.send(5, 'd');
-    }
+    Curtains.send(4, message, 0);
+    Curtains.send(5, message, 0);
   }
 }

@@ -19,32 +19,32 @@ void loop_LR() {
   }
   if (millis() - LR_Tmr_Open >= 200) {
     if (LR_Btn_Close) {
-      Curtains.send(1, 's');
+      Curtains.send(1, 's', 0);
       Serial.println("LR_Stop0");
       LR_Btn_Close = false;
     } else {
-      Curtains.send(1, 'd');
+      Curtains.send(1, 'u', 0);
       Serial.println("LR_Open");
     }
     LR_Btn_Open = false;
   }
   if (millis() - LR_Tmr_Close >= 200) {
     if (LR_Btn_Open) {
-      Curtains.send(1, 's');
+      Curtains.send(1, 's', 0);
       Serial.println("LR_Stop1");
       LR_Btn_Open = false;
     } else {
-      Curtains.send(1, 'u');
+      Curtains.send(1, 'd', 0);
       Serial.println("LR_Close");
     }
     LR_Btn_Close = false;
   }
   if (Open_LR.hold2()) {
-    Curtains.send(1, 's');
+    Curtains.send(1, 's', 0);
     Serial.println("LR_Stop2");
   }
   if (Close_LR.hold2()) {
-    Curtains.send(1, 's');
+    Curtains.send(1, 's', 0);
     Serial.println("LR_Stop3");
   }
 }

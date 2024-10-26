@@ -1,8 +1,8 @@
 #include <curtains_RS485.h>
 Curtains Curtains(5);
-#define BtnGroupTime1 200  //программная задержка от помех для кликов
-#define BtnGroupTime2 390  //время для средней длинны нажатия
-#define BtnGroupTime3 500  //время для длинного нажатия
+#define BtnGroupTime1 300  //программная задержка от помех для кликов
+#define BtnGroupTime2 490  //время для средней длинны нажатия
+#define BtnGroupTime3 600  //время для длинного нажатия
 
 #include <button.h>
 #include <Serial_slave.h>
