@@ -32,8 +32,11 @@ public:
   }
   void loop() {  //здесь гоняем время до следующей команды
     if (state == WAIT_CHANGE) {
-      AutoRequest();
+      if (!Silent) { AutoRequest(); }
     }
+  }
+  void install_Mod(bool data) {
+    Silent = data;
   }
   int State() {
     bool status;
@@ -73,7 +76,7 @@ public:
           autoReq--;
           WAIT_AutoReq = millis();
           if (autoReq == 0) {
-            if (manualReq || Change_Command) {
+            if (manualReq) {
               state = SEND_DATA;  //если были получены команды
             } else {
               state = WAIT_CHANGE;
@@ -135,21 +138,24 @@ public:
     }
   }
   void setterBlinds(byte level) {
-    if (go) {
-      Stop();
-    } else {
-      check_state();
-      manualReq = 1;
-
-      command[3] = CONTROL;
-      if (level == 0) {
-        command[4] = DOWN;
-      } else if (level == 99 || level == 255) {
-        command[4] = UP;
+    if (!Silent) {
+      if (go) {
+        Stop();
       } else {
-        command[4] = PERCENTAGE;
-        command[5] = level;
+        check_state();
+        manualReq = 1;
+        command[3] = CONTROL;
+        if (level == 0) {
+          command[4] = DOWN;
+        } else if (level == 99 || level == 255) {
+          command[4] = UP;
+        } else {
+          command[4] = PERCENTAGE;
+          command[5] = level;
+        }
       }
+    } else {
+      installM();
     }
   }
   void installM() {
@@ -171,10 +177,10 @@ public:
     Serial.println();
   }
 private:
-  bool go=0;
+  bool go = 0;
   uint32_t counter;  //4 294 967 295
   uint32_t Time_Next_Command, Time_Wait_Data, WAIT_AutoReq;
-  int Change_Command, Number, autoReq = 0, manualReq;
+  int Change_Command = 0, Number, autoReq = 0, manualReq, Silent = 0;
   byte state = WAIT_CHANGE;
   ////////////////////////////////////
   byte command[8] = { 0x55, 0x01, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -310,7 +316,7 @@ private:
     }*/
     if (state == WAIT_CHANGE) {
       state = SEND_DATA;  //2
-      Serial.println("SerialD:");
+      Serial.print("SerialD:");
       Serial.println(SEND_DATA);
     } else {  //|| state == WAIT_DATA
       if (state == PARSING_DATA) {

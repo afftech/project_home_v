@@ -53,6 +53,10 @@ public:
         Serial.println("Procent");
         curtainsObj[addres]->Procent();
         break;
+      case 'm':  //проценты
+        Serial.println("Silent");
+        curtainsObj[addres]->install_Mod(value);
+        break;
       default:
         break;
     }

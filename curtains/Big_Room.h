@@ -1,8 +1,8 @@
 //моторы 4 и 5
 
-bool BR_Btn_Open, BR_Btn_Close;
+bool BR_Btn_Open, BR_Btn_Close, ModInstall;
 int state_btn;
-uint32_t BR_Tmr_Open, BR_Tmr_Close;
+uint32_t BR_Tmr_Open, BR_Tmr_Close, holdModInstall;
 void PlayBR(char message);
 void loop_BR() {
   Open_BR.check();
@@ -19,7 +19,15 @@ void loop_BR() {
   } else {
     state_btn = 3;  // едут оба
   }
-
+  if ((Open_BR.stateBtn() & Close_BR.stateBtn()) & millis() - holdModInstall >= 5000) {
+    holdModInstall = millis();
+    ModInstall = !ModInstall;
+    Curtains.send(1, 'm', ModInstall);
+    Curtains.send(2, 'm', ModInstall);
+    Curtains.send(3, 'm', ModInstall);
+    Curtains.send(4, 'm', ModInstall);
+    Curtains.send(5, 'm', ModInstall);
+  }
   if (Open_BR.click()) {
     BR_Btn_Open = true;
   }

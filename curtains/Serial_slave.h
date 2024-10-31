@@ -29,10 +29,11 @@ public:
       Serial.println(value);
       controlDevice(key1, key2, key3, value);
     }
+    a = 0;
   }
   int available() {
     int size = 0;
-    if (millis() - T >= 100) {
+    if (millis() - T >= 200) {
       T = millis();
       while (Serial.available() > 0) {
         char buf;
@@ -52,15 +53,21 @@ private:
   byte response[30] = {};
   void controlDevice(char key1, int key2, char key3, int value) {  //a12a22a32a42a52 //a13a23a33a43a53
     switch (key1) {                                                // s - stop u - open d - закр b - изм направл
-      case 'a': //a2u
-        Curtains.send(1, key3, 0);
+      case 'a':                                                    //a2u
+        /*Curtains.send(1, key3, 0);
         Curtains.send(2, key3, 0);
         Curtains.send(3, key3, 0);
         Curtains.send(4, key3, 0);
-        Curtains.send(5, key3, 0);
+        Curtains.send(5, key3, 0);*/
       case 'b':  //c2a
-        //Serial.println("Err2");
-        Curtains.send(key2, key3, 0);
+                 //Serial.println("Err2");
+                 //Curtains.send(key2, key3, 0);
+
+        /*Curtains.send(1, 'm', 1);
+        Curtains.send(2, 'm', 1);
+        Curtains.send(3, 'm', 1);
+        Curtains.send(4, 'm', 1);
+        Curtains.send(5, 'm', 1);*/
         break;
       case 'c':  //с_N_b_v c2b1 c2a
         Curtains.send(key2, key3, value);
