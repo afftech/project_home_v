@@ -12,7 +12,6 @@ public:
       curtainsObj[addres]->loop();
       //this->state = curtainsObj[addres]->getState();
     }
-
     if (curtainsObj[addres_Pos]->State() == 1) {
       curtainsObj[addres_Pos]->send_and_receiv();
     } else {
@@ -33,15 +32,15 @@ public:
         curtainsObj[addres]->setterBlinds(data);
         break;*/
       case 's':
-        Serial.println("stop");
+        //Serial.println("stop");
         curtainsObj[addres]->Stop();
         break;
       case 'u':
-        Serial.println("open");
+        //Serial.println("open");
         curtainsObj[addres]->setterBlinds(99);
         break;
       case 'd':
-        Serial.println("close");
+        //Serial.println("close");
         curtainsObj[addres]->setterBlinds(0);
         break;
       case 'b':  //изм направление

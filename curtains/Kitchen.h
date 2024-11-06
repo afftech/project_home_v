@@ -17,7 +17,7 @@ void loop_K() {
   if (!K_Btn_Close) {
     K_Tmr_Close = millis();
   }
-  if (millis() - K_Tmr_Open >= 200) {
+  if (millis() - K_Tmr_Open >= 100) {
     if (K_Btn_Close) {
       Curtains.send(3, 's',0);
       Serial.println("K_Stop0");
@@ -28,7 +28,7 @@ void loop_K() {
     }
     K_Btn_Open = false;
   }
-  if (millis() - K_Tmr_Close >= 200) {
+  if (millis() - K_Tmr_Close >= 100) {
     if (K_Btn_Open) {
       Curtains.send(3, 's', 0);
       Serial.println("K_Stop1");

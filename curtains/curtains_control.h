@@ -32,7 +32,9 @@ public:
   }
   void loop() {  //здесь гоняем время до следующей команды
     if (state == WAIT_CHANGE) {
-      if (!Silent) { AutoRequest(); }
+      if (!Silent) {
+        AutoRequest();
+      }
     }
   }
   void install_Mod(bool data) {
@@ -51,14 +53,22 @@ public:
   void send_and_receiv() {
     switch (state) {
       case SEND_DATA:
-
-        if (millis() - Time_Next_Command >= 70) {  //30
+        for (int i = 0; i < 3; i++) {
+          if (waiting_send[i]) {
+            state = SEND_DATA;  //если были получены команды
+            point = i;
+            break;
+          }
+        }
+        if (millis() - Time_Next_Command >= 100) {  //30
           Time_Next_Command = millis();
           Time_Wait_Data = Time_Next_Command;
-          if (autoReq) {
-            sendDataToUART(true);
-          } else {
-            sendDataToUART(false);
+          if (waiting_send[point]) {
+            if (point == 0) {
+              sendDataToUART(true);  //auto
+            } else {
+              sendDataToUART(false);  //manual
+            }
           }
           state = WAIT_DATA;
         }
@@ -71,29 +81,28 @@ public:
         }
         break;
       case PARSING_DATA:
-        if (autoReq) {
+        if (point == 0) {
           PARSING(size_data, true);  // запись в рег
-          autoReq--;
+          waiting_send[point] = 0;
           WAIT_AutoReq = millis();
-          if (autoReq == 0) {
-            if (manualReq) {
-              state = SEND_DATA;  //если были получены команды
-            } else {
-              state = WAIT_CHANGE;
-            }
-          }
-        } else {
+        } else if (point == 1) {
           PARSING(size_data, false);
-          if (Change_Command) {
-            state = SEND_DATA;
-            Change_Command = 0;
-            manualReq = 0;
-            Time_Next_Command = millis();
-            Serial.println("SEND_DATA2_ok");
+          waiting_send[point] = 0;
+        } else if (point == 2) {
+          PARSING(size_data, false);
+          waiting_send[point] = 0;
+        }
+        for (int i = 0; i < 3; i++) {
+          if (waiting_send[i]) {
+            state = SEND_DATA;  //если были получены команды
+            break;
           } else {
-            manualReq = 0;
             state = WAIT_CHANGE;
           }
+        }
+        point++;
+        if (point == 3) {
+          point = 0;
         }
         break;
     }
@@ -105,6 +114,7 @@ public:
     command[3] = CONTROL;
     command[4] = STOP;
     //Serial.print(command[4], HEX);
+    go = 0;
   }
   void Procent() {
     check_state();
@@ -114,13 +124,7 @@ public:
     command[5] = READ;
   }
   void set_direction(bool direction) {
-    if (state == WAIT_CHANGE) {
-      state = SEND_DATA;
-    } else {
-      Change_Command = 1;
-    }
-    Time_Next_Command = millis();
-    state = SEND_DATA;
+    check_state();
     command[3] = WRITE;
     command[4] = SET_direction;
     command[5] = 0x01;
@@ -134,7 +138,7 @@ public:
   void AutoRequest() {
     if (millis() - WAIT_AutoReq >= 400) {
       state = SEND_DATA;
-      autoReq = 1;
+      waiting_send[0] = 1;
     }
   }
   void setterBlinds(byte level) {
@@ -143,8 +147,8 @@ public:
         Stop();
       } else {
         check_state();
-        manualReq = 1;
         command[3] = CONTROL;
+        go = 1;
         if (level == 0) {
           command[4] = DOWN;
         } else if (level == 99 || level == 255) {
@@ -159,7 +163,7 @@ public:
     }
   }
   void installM() {
-    Serial.println();
+    check_state();
     command1[7] = Number;
     byte len = 10;
     word crc = modbus_crc16(command1, 8);
@@ -177,12 +181,14 @@ public:
     Serial.println();
   }
 private:
+  int point;
   bool go = 0;
-  uint32_t counter;  //4 294 967 295
   uint32_t Time_Next_Command, Time_Wait_Data, WAIT_AutoReq;
-  int Change_Command = 0, Number, autoReq = 0, manualReq, Silent = 0;
+  int Change_Command = 0, Number, Silent = 0;
   byte state = WAIT_CHANGE;
   ////////////////////////////////////
+  //manual manual-new auto
+  byte waiting_send[3] = { 0, 0, 0 };
   byte command[8] = { 0x55, 0x01, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00 };
   byte command1[10] = { 0x55, 0x00, 0x00, 0x02, 0x00, 0x02, 0x01, 0x00, 0x00, 0x00 };
   byte command2_AutoReq[1][8] = { { 0x55, 0x01, 0xfe, 0x01, 0x05, 0x01, 0x00, 0x00 } };  //1 запрос сост движения
@@ -196,7 +202,7 @@ private:
     byte buf_arr[8];
     if (Auto) {
       len = 8;
-      for (int row = 0; row < autoReq; row++) {
+      for (int row = 0; row < waiting_send[0]; row++) {
         for (int col = 0; col < len; col++) {
           buf_arr[col] = command2_AutoReq[row][col];
         }
@@ -222,19 +228,19 @@ private:
         len = 7;
       }
     }
-    Serial.print("request: ");
+    //Serial.print("request: ");
     for (byte i = 0; i < len; i++) {
       if (Auto) {
-        Serial.print(" ");
-        Serial.print(buf_arr[i], HEX);
+        //Serial.print(" ");
+        //Serial.print(buf_arr[i], HEX);
         Serial2.write(buf_arr[i]);
       } else {
-        Serial.print(" ");
-        Serial.print(command[i], HEX);
+        // Serial.print(" ");
+        // Serial.print(command[i], HEX);
         Serial2.write(command[i]);
       }
     }
-    Serial.println();
+    //Serial.println();
   }
   int available() {
     int size = 0;
@@ -253,29 +259,29 @@ private:
   void PARSING(int size, bool save) {
     word crc = modbus_crc16(response, size - 2);
     if ((lowByte(crc) == response[size - 2]) && (highByte(crc) == response[size - 1])) {  //проверка сообщения
-      Serial.print("response:");
-      for (byte i = 0; i < size; i++) {
-        Serial.print(" ");
-        Serial.print(response[i], HEX);
-      }
-      Serial.println();
-    }
-    if (save) {
-      if (response[5]) {
-        go = 1;
-        Serial.print("Go ");
-        Serial.print(response[2]);
-        Serial.print(" :");
-        Serial.println(response[5]);
+      if (save) {
+        if (response[5]) {
+          go = 1;
+          Serial.print("Go ");
+          Serial.print(response[2]);
+          Serial.print(" :");
+          Serial.println(response[5]);
+        } else {
+          go = 0;
+        }
       } else {
-        go = 0;
+        Serial.print("response:");
+        for (byte i = 0; i < size; i++) {
+          Serial.print(" ");
+          Serial.print(response[i], HEX);
+        }
+        Serial.println();
       }
     }
   }
   word
   modbus_crc16(byte* buf, int len) {
     word crc = 0xFFFF;
-
     for (int pos = 0; pos < len; pos++) {
       crc ^= (word)buf[pos];  // XOR byte into least sig. byte of crc
 
@@ -290,49 +296,26 @@ private:
     // Note, this number has low and high bytes swapped, so use it accordingly (or swap bytes)
     return crc;
   }
-  void install(int n) {
-    Serial.println();
-    command1[7] = n;
-    byte len = 10;
-    word crc = modbus_crc16(command1, 8);
-    command1[8] = lowByte(crc);
-    command1[9] = highByte(crc);
-    // put your setup code here, to run once:
-    Serial.print("Install:");
-    for (byte i = 0; i < len; i++) {
-      Serial2.write(command1[i]);
-    }
-    for (byte i = 0; i < len; i++) {
-      Serial.print(" ");
-      Serial.print(command1[i], HEX);
-    }
-    Serial.println();
-  }
   void check_state() {
-    /*if (state == WAIT_CHANGE) {
-      state = SEND_DATA;
-    } else {
-      Change_Command = 1;
-    }*/
+    Serial.print("It was:");
     if (state == WAIT_CHANGE) {
       state = SEND_DATA;  //2
-      Serial.print("SerialD:");
-      Serial.println(SEND_DATA);
-    } else {  //|| state == WAIT_DATA
+      waiting_send[1] = 1;
+      Serial.println("WAIT_CHANGE");
+    } else {
       if (state == PARSING_DATA) {
-        Serial.println("state == PARSING_DATA");
+        Serial.println("PARSING_DATA");
       } else if (state == WAIT_DATA) {
-        Serial.println("state == WAIT_DATA");
+        Serial.println("WAIT_DATA");
       } else if (state == SEND_DATA) {
-        Serial.println("state == SEND_DATA");
+        Serial.println("SEND_DATA");
       }
-      /*  WAIT_DATA,
-  PARSING_DATA,
-  SEND_DATA,
-  WAIT_CHANGE,*/
-      Change_Command = 1;
-      Serial.println("SerialDErr:");
-      Serial.println(SEND_DATA);
+      waiting_send[2] = 1;
+      /*if (point == 1) {
+        waiting_send[2] = 1;
+      } else if (point == 2) {
+        waiting_send[1] = 1;
+      }*/
     }
     Time_Next_Command = millis();
   }

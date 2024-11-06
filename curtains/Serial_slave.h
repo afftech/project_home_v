@@ -56,9 +56,9 @@ private:
       case 'a':                                                    //a2u
         /*Curtains.send(1, key3, 0);
         Curtains.send(2, key3, 0);
-        Curtains.send(3, key3, 0);
+        Curtains.send(3, key3, 0);*/
         Curtains.send(4, key3, 0);
-        Curtains.send(5, key3, 0);*/
+        Curtains.send(5, key3, 0);
       case 'b':  //c2a
                  //Serial.println("Err2");
                  //Curtains.send(key2, key3, 0);
@@ -70,7 +70,7 @@ private:
         Curtains.send(5, 'm', 1);*/
         break;
       case 'c':  //с_N_b_v c2b1 c2a
-        Curtains.send(key2, key3, value);
+        //Curtains.send(key2, key3, value);
         break;
       default:
         break;

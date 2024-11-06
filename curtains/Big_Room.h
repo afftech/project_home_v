@@ -1,14 +1,37 @@
 //моторы 4 и 5
 
-bool BR_Btn_Open, BR_Btn_Close, ModInstall;
+bool BR_Btn_Open, BR_Btn_Close, ModInstall, OldState, StateInstall = 0, StateInstallBTN;
 int state_btn;
 uint32_t BR_Tmr_Open, BR_Tmr_Close, holdModInstall;
 void PlayBR(char message);
+void InstallModOn() {
+  if (StateInstall & millis() - holdModInstall >= 10000) {
+    StateInstall = 0;
+    ModInstall = !ModInstall;
+    Serial.print("StateInstall:");
+    Serial.println(ModInstall);
+    Curtains.send(1, 'm', ModInstall);
+    Curtains.send(2, 'm', ModInstall);
+    Curtains.send(3, 'm', ModInstall);
+    Curtains.send(4, 'm', ModInstall);
+    Curtains.send(5, 'm', ModInstall);
+  }
+  StateInstallBTN = (Open_BR.stateBtn() & Close_BR.stateBtn());
+  if (StateInstallBTN != OldState) {
+    OldState = StateInstallBTN;
+    if (StateInstallBTN) {
+      StateInstall = true;
+      holdModInstall = millis();
+    } else {
+    }
+  }
+}
 void loop_BR() {
   Open_BR.check();
   Close_BR.check();
   select_BR_4.check();
   select_BR_5.check();
+  InstallModOn();
   //длинное удержание 2х клавишь напрпр вкл реж прогр. Далее в реж репев мотор м наж кнопку в нужном помещ
   if (select_BR_4.click() && !select_BR_5.click()) {  //две клавиши для упр. чем управлять
     state_btn = 1;                                    // едет 1
@@ -19,15 +42,7 @@ void loop_BR() {
   } else {
     state_btn = 3;  // едут оба
   }
-  if ((Open_BR.stateBtn() & Close_BR.stateBtn()) & millis() - holdModInstall >= 5000) {
-    holdModInstall = millis();
-    ModInstall = !ModInstall;
-    Curtains.send(1, 'm', ModInstall);
-    Curtains.send(2, 'm', ModInstall);
-    Curtains.send(3, 'm', ModInstall);
-    Curtains.send(4, 'm', ModInstall);
-    Curtains.send(5, 'm', ModInstall);
-  }
+
   if (Open_BR.click()) {
     BR_Btn_Open = true;
   }
@@ -40,7 +55,7 @@ void loop_BR() {
   if (!BR_Btn_Close) {
     BR_Tmr_Close = millis();
   }
-  if (millis() - BR_Tmr_Open >= 200) {
+  if (millis() - BR_Tmr_Open >= 100) {
     if (BR_Btn_Close) {
       PlayBR('s');  //стоп
       BR_Btn_Close = false;
@@ -49,7 +64,7 @@ void loop_BR() {
     }
     BR_Btn_Open = false;
   }
-  if (millis() - BR_Tmr_Close >= 200) {
+  if (millis() - BR_Tmr_Close >= 100) {
     if (BR_Btn_Open) {
       PlayBR('s');  //стоп
       BR_Btn_Open = false;
