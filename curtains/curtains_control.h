@@ -36,6 +36,7 @@ public:
         AutoRequest();
       }
     }
+    message();
   }
   void install_Mod(bool data) {
     Silent = data;
@@ -60,7 +61,7 @@ public:
             break;
           }
         }
-        if (millis() - Time_Next_Command >= 100) {  //30
+        if (millis() - Time_Next_Command >= 30) {  //30
           Time_Next_Command = millis();
           Time_Wait_Data = Time_Next_Command;
           if (waiting_send[point]) {
@@ -114,7 +115,7 @@ public:
     command[3] = CONTROL;
     command[4] = STOP;
     //Serial.print(command[4], HEX);
-    go = 0;
+    //go = 0;
   }
   void Procent() {
     check_state();
@@ -182,7 +183,7 @@ public:
   }
 private:
   int point;
-  bool go = 0;
+  bool go = 0, OldGo;
   uint32_t Time_Next_Command, Time_Wait_Data, WAIT_AutoReq;
   int Change_Command = 0, Number, Silent = 0;
   byte state = WAIT_CHANGE;
@@ -262,10 +263,6 @@ private:
       if (save) {
         if (response[5]) {
           go = 1;
-          Serial.print("Go ");
-          Serial.print(response[2]);
-          Serial.print(" :");
-          Serial.println(response[5]);
         } else {
           go = 0;
         }
@@ -318,5 +315,18 @@ private:
       }*/
     }
     Time_Next_Command = millis();
+  }
+  void message() {
+    if (go != OldGo) {
+      OldGo = go;
+      Serial.print(Number);
+      Serial.print(" ");
+      if (go) {
+        Serial.print("Go ");
+      } else {
+        Serial.print("Stop ");
+      }
+      Serial.println();
+    }
   }
 };
